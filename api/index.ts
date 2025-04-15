@@ -34,6 +34,13 @@ class _Api {
       token,
     })
   }
+
+  public async loginAccount(email: string, password: string) {
+    return await this._instance.post("/api/loginaccount", {
+      email,
+      password,
+    });
+  }
 }
 
 const Api = new _Api("http://localhost:3001/"); //https://invest-api-rose.vercel.app/

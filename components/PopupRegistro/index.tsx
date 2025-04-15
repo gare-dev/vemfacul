@@ -49,10 +49,35 @@ export default function PopupRegistro(props: props) {
                     return setError(error.response?.data.message)
                 }
             }
-        } finally {
+        }
+    }
 
+    const handleSubmitLogin = async () => {
+        if (!email || !password) {
+            setError('Preencha todos os campos')
+            return
         }
 
+        try {
+            setStep('loading')
+            const response = await Api.loginAccount(email, password)
+
+            if (response.data.code === "LOGIN_SUCCESS") {
+                setError('')
+                props.setClose()
+                return
+            }
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                if (error.response?.data.code === "INVALID_EMAIL_OR_PASSWORD") {
+                    setError(error.response?.data.message)
+                    console.log("AQUI")
+                    return
+                }
+            }
+        } finally {
+            setStep('unshown')
+        }
     }
 
 
@@ -67,16 +92,21 @@ export default function PopupRegistro(props: props) {
                         <span className={styles.welcomeToText}>Bem vindo de volta ao</span> <span className={styles.vemfaculText}>VemFacul!</span>
                     </div>
                 </div>
+                {error &&
+                    <div className={styles.errorDiv}>
+                        <span className={styles.errorText}>{error}</span>
+                    </div>
+                }
 
                 <div className={styles.mainFormDiv}>
                     <div className={styles.emailDiv}>
                         <label className={styles.emailLabel}>E-MAIL</label>
-                        <input onChange={(e) => setEmail(e.target.value)} className={styles.emailInput} type="text" />
+                        <input value={email} onChange={(e) => setEmail(e.target.value)} className={styles.emailInput} type="text" />
                     </div>
 
                     <div className={styles.passwordDiv}>
                         <label className={styles.passwordLabel}>SENHA</label>
-                        <input onChange={(e) => setPassword(e.target.value)} className={styles.passwordInput} type="text" />
+                        <input value={password} onChange={(e) => setPassword(e.target.value)} className={styles.passwordInput} type="text" />
                     </div>
 
                     <div className={styles.forgotPasswordDiv}>
@@ -84,7 +114,7 @@ export default function PopupRegistro(props: props) {
                     </div>
 
                     <div className={styles.buttonDiv}>
-                        <button className={`${styles.buttonEntrar}`}>ENTRAR COM O EMAIL</button>
+                        <button onClick={handleSubmitLogin} className={`${styles.buttonEntrar}`}>{step === "unshown" ? "ENTRAR COM O EMAIL" : <ButtonLoadingComponent />}</button>
                     </div>
 
                     <div className={styles.noAccountDiv}>
