@@ -22,16 +22,20 @@ class _Api {
     });
   }
 
-  public async teste() {
-    try {
-      const response = this._instance.get("/");
-      return response;
-    } catch (error) {
-      console.log(error);
-    }
+  public async registerAccount(email: string, password: string) {
+    return await this._instance.post("/api/createaccount", {
+      email,
+      password,
+    });
+  }
+
+  public async confirmAccount(token: string) {
+    return await this._instance.post('/api/confirmaccount', {
+      token,
+    })
   }
 }
 
-const Api = new _Api("https://invest-api-rose.vercel.app/");
+const Api = new _Api("http://localhost:3001/"); //https://invest-api-rose.vercel.app/
 
 export default Api;
