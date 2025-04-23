@@ -5,7 +5,8 @@ type InputText = {
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     title?: string
     subtitle?: string;
-    niveis?: string[];
+    opcoes?: string[];
+    level?: string;
 
 }
 
