@@ -41,6 +41,15 @@ class _Api {
       password,
     });
   }
+
+  public async createAccount(formData: any) {
+    console.log(formData)
+    return await this._instance.post("/api/registeraccount", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    })
+  }
 }
 
 const Api = new _Api("http://localhost:3001/"); //https://invest-api-rose.vercel.app/

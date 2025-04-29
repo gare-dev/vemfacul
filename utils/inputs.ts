@@ -5,8 +5,6 @@ const inputs: InputText[] = [
     {
         placeholder: "Nome",
         type: "textName",
-        value: "",
-        onChange: (e) => { },
         title: "Qual seu nome?",
         subtitle: "Esse nome ficará exposto para outros usuários.",
         level: "initialLogin"
@@ -14,8 +12,6 @@ const inputs: InputText[] = [
     {
         placeholder: "",
         type: "selectImage",
-        value: "",
-        onChange: (e) => { },
         title: "Coloque uma foto de perfil!",
         subtitle: "Ela será exibida no seu perfi, então escolhe uma bem bonita!",
         level: "initialLogin"
@@ -23,8 +19,6 @@ const inputs: InputText[] = [
     {
         placeholder: "",
         type: "selectEstado",
-        value: "",
-        onChange: (e) => { },
         title: "Você mora em qual estado?",
         subtitle: "Ajude-nos a te direcionar à Instituições próximas",
         level: "initialLogin",
@@ -33,8 +27,6 @@ const inputs: InputText[] = [
     {
         placeholder: "",
         type: "optionsNivel",
-        value: "",
-        onChange: (e) => { },
         title: "Qual seu nível?",
         subtitle: "Já se formou? Vai se formar? Está lecionando?",
         level: "initialLogin",
@@ -46,8 +38,6 @@ export const universitarioInputs: InputText[] = [
     {
         placeholder: "",
         type: "selectProcesso",
-        value: "",
-        onChange: (e) => { },
         title: "Você já passou por um processo de vestibular?",
         subtitle: "",
         level: "vestibulando",
@@ -70,6 +60,11 @@ export const universitarioInputs: InputText[] = [
         subtitle: "",
         level: "vestibulando",
     },
+    {
+        onChange: (e) => { },
+        level: "vestibulando",
+        type: "finished",
+    }
 
 ]
 
@@ -103,13 +98,17 @@ export const vestibulandoInputs: InputText[] = [
         subtitle: "",
         level: "vestibulando",
         opcoes: ["FUVEST", "ITA", "ENEM", "VUNESP", "UNICAMP", "Outros..."]
+    },
+    {
+        type: "finished",
+
     }
 ]
 
 export const professorInputs: InputText[] = [
 
     {
-        placeholder: "",
+        placeholder: "Instituição",
         type: "textEscola",
         value: "",
         onChange: (e) => { },
@@ -127,6 +126,9 @@ export const professorInputs: InputText[] = [
         level: "professor",
         opcoes: ["Linguagens", "Exatas", "Naturezas", "Biológicas", "Humanas", "Técnicas", "Outros..."]
     },
+    {
+        type: "finished",
+    }
 
 ]
 
@@ -154,6 +156,10 @@ export const inputAlunoEM: InputText[] = [
         onChange: (e) => { },
         level: "alunoEM",
         opcoes: ["FUVEST", "ITA", "ENEM", "VUNESP", "UNICAMP", "Outros..."]
+    },
+    {
+        type: "finished",
+
     }
 ]
 
@@ -182,6 +188,9 @@ export const inputVestibulando: InputText[] = [
         onChange: (e) => { },
         level: "vestibulando",
         opcoes: ["FUVEST", "ITA", "ENEM", "VUNESP", "UNICAMP", "Outros..."]
+    },
+    {
+        type: "finished",
     }
 
 ]

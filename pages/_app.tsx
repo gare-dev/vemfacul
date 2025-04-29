@@ -1,5 +1,11 @@
+import { EmailProvider } from "@/context/EmailContext";
 import type { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+  return (
+    <EmailProvider>
+      <Component {...pageProps} />
+    </EmailProvider>
+  )
+
 }
