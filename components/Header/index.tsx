@@ -6,10 +6,9 @@ const Header: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState<string>('');
 
-
     return (
         <header className={styles.header}>
-            {isOpen && <PopupRegistro selectedOption={selectedOption} setSelectedOption={() => setSelectedOption(selectedOption)} setClose={() => setIsOpen(false)} />}
+            {isOpen && <PopupRegistro changeOption={(option) => setSelectedOption(option)} selectedOption={selectedOption} setSelectedOption={() => setSelectedOption(selectedOption)} setClose={() => setIsOpen(false)} />}
 
             <div className={styles.header__logo}>
                 <img src="/assets/img/logo.png" alt="Logo" className={styles.header__image} />

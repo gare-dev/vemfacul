@@ -8,6 +8,7 @@ interface props {
     setClose: () => void;
     setSelectedOption: () => void
     selectedOption: string
+    changeOption: (option: string) => void
 }
 
 export default function PopupRegistro(props: props) {
@@ -16,6 +17,9 @@ export default function PopupRegistro(props: props) {
     const [isClosing, setIsClosing] = useState(false);
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+
+
+
 
     const handleClose = () => {
         setIsClosing(true);
@@ -30,6 +34,8 @@ export default function PopupRegistro(props: props) {
             setError('Preencha todos os campos')
             return
         }
+
+        if (!validatePasswordInput()) return
 
         try {
             setStep('loading')
@@ -80,6 +86,21 @@ export default function PopupRegistro(props: props) {
         }
     }
 
+    const validatePasswordInput = () => {
+        const mandatoryCharacters = /[0-9@#$]/;
+        if (password.length <= 6) {
+            setError("A senha deve ter mais de 6 caracteres.");
+            return false;
+        }
+        if (!mandatoryCharacters.test(password)) {
+            setError("A senha deve conter pelo menos um número ou um caracter especial.");
+            return false;
+        }
+
+        return true;
+    }
+
+
 
     return (
         <div
@@ -101,7 +122,7 @@ export default function PopupRegistro(props: props) {
                 <div className={styles.mainFormDiv}>
                     <div className={styles.emailDiv}>
                         <label className={styles.emailLabel}>E-MAIL</label>
-                        <input value={email} onChange={(e) => setEmail(e.target.value)} className={styles.emailInput} type="text" />
+                        <input value={email} onChange={(e) => setEmail(e.target.value)} className={styles.emailInput} type="email" />
                     </div>
 
                     <div className={styles.passwordDiv}>
@@ -119,7 +140,7 @@ export default function PopupRegistro(props: props) {
 
                     <div className={styles.noAccountDiv}>
                         <span className={styles.noAccountText}>Não tem uma conta? </span>
-                        <span className={styles.createAccountText}>Cadastre-se</span>
+                        <span onClick={() => props.changeOption("Cadastro")} className={styles.createAccountText}>Cadastre-se</span>
                     </div>
                     <div className={styles.closeDiv}>
                         <span onClick={() => props.setClose()} className={styles.closetext}>X</span>
@@ -171,7 +192,7 @@ export default function PopupRegistro(props: props) {
 
                                 <div className={styles.noAccountDiv}>
                                     <span className={styles.noAccountText}>Já tem uma conta? </span>
-                                    <span className={styles.createAccountText}>Entrar</span>
+                                    <span onClick={() => props.changeOption("Entrar")} className={styles.createAccountText}>Entrar</span>
                                 </div>
 
                                 <div className={styles.closeDiv}>
@@ -199,8 +220,9 @@ export default function PopupRegistro(props: props) {
                         </div>)
                     }
                 </div>
-            )}
+            )
+            }
 
-        </div>
+        </div >
     );
 }

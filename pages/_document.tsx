@@ -1,3 +1,4 @@
+
 import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
@@ -6,8 +7,9 @@ export default function Document() {
       <Head />
       <body style={{ margin: 0, padding: 0 }}>
         <Main />
+
         <NextScript />
       </body>
     </Html>
   );
-}
+}           
