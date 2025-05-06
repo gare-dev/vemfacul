@@ -1,35 +1,97 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from "@/styles/header.module.scss";
 import PopupRegistro from '../PopupRegistro';
+import getCookieValue from '@/utils/getCookie';
+import AuthDataType from '@/types/authDataType';
+import decodeJwt from '@/utils/decodeJwt';
+import { IoMdArrowDropdown } from 'react-icons/io';
 
 const Header: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState<string>('');
+    const [authData, setAuthData] = useState<AuthDataType>()
+    const [profileOptionsVisible, setProfileOptionsVisible] = useState<boolean>(true)
+
+
+    useEffect(() => {
+        if (getCookieValue("auth")) {
+            const token: { email: string, image: string, name: string, iat: number, exp: number } = decodeJwt(getCookieValue("auth") ?? "")
+            setAuthData({
+                email: token.email,
+                image: token.image,
+                name: token.name
+            })
+        }
+    }, [])
 
     return (
         <header className={styles.header}>
-            {isOpen && <PopupRegistro changeOption={(option) => setSelectedOption(option)} selectedOption={selectedOption} setSelectedOption={() => setSelectedOption(selectedOption)} setClose={() => setIsOpen(false)} />}
+            {isOpen && <PopupRegistro
+                changeOption={(option) => setSelectedOption(option)}
+                selectedOption={selectedOption}
+                setSelectedOption={() => setSelectedOption(selectedOption)}
+                setClose={() => setIsOpen(false)}
+            />}
 
             <div className={styles.header__logo}>
                 <img src="/assets/img/logo.png" alt="Logo" className={styles.header__image} />
             </div>
             <div className={styles.header__nav}>
-                <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
+                {authData === undefined ? (<>
+                    <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
 
-                    <button onClick={() => {
-                        setSelectedOption("Cadastro")
-                        setIsOpen(true)
-                    }
-                    } className={styles.header__button__cadastrar}>Cadastre-se Agora</button>
+                        <button onClick={() => {
+                            setSelectedOption("Cadastro")
+                            setIsOpen(true)
+                        }
+                        } className={styles.header__button__cadastrar}>Cadastre-se Agora</button>
 
-                </div>
-                <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
+                    </div>
+                    <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
 
-                    <button onClick={() => {
-                        setIsOpen(true)
-                        setSelectedOption('Entrar')
-                    }} className={styles.header__button__entrar}>Entrar</button>
-                </div>
+                        <button onClick={() => {
+                            setIsOpen(true)
+                            setSelectedOption('Entrar')
+                        }} className={styles.header__button__entrar}>Entrar</button>
+                    </div>
+                </>) : (
+                    <>
+                        <div style={{ display: "flex", justifyContent: "center", gap: "5px", alignItems: "center" }}>
+                            <div style={{ height: "auto", width: "auto" }}>
+                                <img className={styles.imageProfile} style={{ borderRadius: "50%", height: "60px", width: "60px", objectFit: "cover" }} src={authData.image} alt="Logo" />
+                            </div>
+                            <div className="flex gap-1 justify-center">
+                                <p className={styles.textHello}>Olá, </p><p className={styles.textName}>{authData.name}</p>
+                            </div>
+                            <div><IoMdArrowDropdown size={"1.5em"} color='#001ECB' onClick={() => setProfileOptionsVisible(!profileOptionsVisible)} /></div>
+                        </div>
+                        {profileOptionsVisible && (
+                            <div className={styles.overlay} onClick={() => setProfileOptionsVisible(false)}>
+                                <div className={styles.popupProfileOptions} onClick={(e) => e.stopPropagation()} >
+                                    <div className={styles.miniProfileDiv}>
+                                        <div style={{ height: "auto", width: "auto" }}>
+                                            <img className={styles.imageProfile} style={{ borderRadius: "50%", height: "60px", width: "60px", objectFit: "cover" }} src={authData.image} alt="Logo" />
+                                        </div>
+                                        <div className={styles.nameDiv}>
+                                            <p>{authData.name}</p>
+                                        </div>
+                                        <div className={styles.options}>
+                                            <div>
+                                                <p>Sair</p>
+                                            </div>
+                                            <div>
+                                                <p>Sair</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        )}
+                    </>
+                )}
             </div>
 
         </header >
