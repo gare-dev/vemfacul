@@ -5,12 +5,22 @@ import getCookieValue from '@/utils/getCookie';
 import AuthDataType from '@/types/authDataType';
 import decodeJwt from '@/utils/decodeJwt';
 import { IoMdArrowDropdown } from 'react-icons/io';
+import { useRouter } from 'next/router';
 
 const Header: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState<string>('');
     const [authData, setAuthData] = useState<AuthDataType>()
-    const [profileOptionsVisible, setProfileOptionsVisible] = useState<boolean>(true)
+    const [profileOptionsVisible, setProfileOptionsVisible] = useState<boolean>(false)
+    const router = useRouter()
+
+    function handleSignout() {
+        if (getCookieValue("auth")) {
+            document.cookie = "auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+            router.push('/')
+        }
+
+    }
 
 
     useEffect(() => {
@@ -21,7 +31,9 @@ const Header: React.FC = () => {
                 image: token.image,
                 name: token.name
             })
+            return
         }
+        router.push('/')
     }, [])
 
     return (
@@ -68,23 +80,25 @@ const Header: React.FC = () => {
                         {profileOptionsVisible && (
                             <div className={styles.overlay} onClick={() => setProfileOptionsVisible(false)}>
                                 <div className={styles.popupProfileOptions} onClick={(e) => e.stopPropagation()} >
-                                    <div className={styles.miniProfileDiv}>
-                                        <div style={{ height: "auto", width: "auto" }}>
-                                            <img className={styles.imageProfile} style={{ borderRadius: "50%", height: "60px", width: "60px", objectFit: "cover" }} src={authData.image} alt="Logo" />
-                                        </div>
-                                        <div className={styles.nameDiv}>
-                                            <p>{authData.name}</p>
-                                        </div>
-                                        <div className={styles.options}>
-                                            <div>
-                                                <p>Sair</p>
+                                    <div className={styles.almostMainDiv}>
+                                        <div className={styles.miniProfileDiv}>
+                                            <div style={{ height: "auto", width: "auto", padding: 10 }}>
+                                                <img className={styles.imageProfile} style={{ borderRadius: "50%", height: "60px", width: "60px", objectFit: "cover" }} src={authData.image} alt="Logo" />
                                             </div>
-                                            <div>
-                                                <p>Sair</p>
+                                            <div className={styles.nameDiv}>
+                                                <p>{authData.name}</p>
+                                            </div>
+                                            <div className={styles.options}>
+                                                <div onClick={handleSignout}>
+                                                    <p >Sair</p>
+                                                </div>
+                                                <div>
+                                                    <p>Teste</p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
+                                    </div>
 
                                 </div>
                             </div>
