@@ -3,6 +3,7 @@ import styles from "@/styles/popupregistro.module.scss";
 import { useState } from "react";
 import ButtonLoadingComponent from "../ButtonLoadingComponent";
 import { AxiosError } from "axios";
+import { useRouter } from "next/router";
 
 interface props {
     setClose: () => void;
@@ -17,9 +18,7 @@ export default function PopupRegistro(props: props) {
     const [isClosing, setIsClosing] = useState(false);
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-
-
-
+    const router = useRouter()
 
     const handleClose = () => {
         setIsClosing(true);
@@ -43,7 +42,6 @@ export default function PopupRegistro(props: props) {
 
             if (response.data.code === "ACCOUNT_CREATED_CHECK_EMAIL") {
                 setStep('checkemail')
-                console.log('aqui')
                 setError('')
                 return
             }
@@ -71,6 +69,7 @@ export default function PopupRegistro(props: props) {
             if (response.data.code === "LOGIN_SUCCESS") {
                 setError('')
                 props.setClose()
+                router.push('/feed')
                 return
             }
         } catch (error) {

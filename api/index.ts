@@ -11,6 +11,7 @@ class _Api {
     this._instance = axios.create({
       timeout: 30000,
       baseURL: this._baseUrl,
+      withCredentials: true,
       headers: {
         "Content-Type": "application/json",
       },
