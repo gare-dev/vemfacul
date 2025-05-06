@@ -1,0 +1,442 @@
+.mainDiv {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100dvh;
+
+    .formDiv {
+        background-color: #333333;
+        width: 35%;
+        height: 100%;
+        position: relative;
+
+        .image {
+            width: auto;
+            height: 20%;
+        }
+
+        .titleDiv {
+            margin-top: 5%;
+            margin-left: 5%;
+
+
+            .titleText {
+                color: #FFFFFF;
+                font-size: 2rem;
+                font-weight: 700;
+                font-family: "Kantumruy Pro", sans-serif;
+                font-weight: 500;
+
+            }
+        }
+
+        .vestibulandoDiv {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 30px;
+
+            div {
+                border: #777CFE solid 2px;
+                height: 50px;
+                width: 200px;
+                border-radius: 10px;
+
+                p {
+                    color: #fff;
+                    font-family: "Kantumruy Pro", sans-serif;
+                    font-weight: 500;
+                    font-size: 16px;
+                    text-align: center;
+                }
+            }
+        }
+
+        .subtitleDiv {
+            margin-top: 5%;
+            margin-left: 5%;
+
+
+            .subtitleText {
+                color: #778CFE;
+                font-size: 1.2rem;
+                font-weight: 500;
+                font-family: "Kantumruy Pro", sans-serif;
+            }
+        }
+
+        .divAlunoEMLoading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+
+        .divAlunoEMFinalizar {
+            display: flex;
+            justify-content: center;
+
+
+            p {
+                color: #fff;
+                font-family: "Kantumruy Pro", sans-serif;
+                font-weight: 500;
+                font-size: 20px;
+                text-align: center;
+            }
+        }
+
+        .inputProfessorOpcoesDiv {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 30px;
+
+            div {
+                border: #777CFE solid 2px;
+                height: 50px;
+                width: 200px;
+                border-radius: 10px;
+            }
+
+            p {
+                color: #fff;
+                font-family: "Kantumruy Pro", sans-serif;
+                font-weight: 500;
+                font-size: 16px;
+                text-align: center;
+            }
+        }
+
+        .inputVestibulando {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 30px;
+
+            div {
+                border: #777CFE solid 2px;
+                height: 50px;
+                width: 200px;
+                border-radius: 10px;
+            }
+
+            p {
+                color: #fff;
+                font-family: "Kantumruy Pro", sans-serif;
+                font-weight: 500;
+                font-size: 16px;
+                text-align: center;
+            }
+
+        }
+
+        .inputDivAluno {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+
+            input {
+
+                width: 85%;
+                height: 50px;
+                border-radius: 10px;
+                background-color: transparent;
+                border: 1px solid #9D9D9D;
+                padding-left: 20px;
+                font-family: "Kantumruy Pro", sans-serif;
+                font-weight: 500;
+                font-size: 16px;
+                outline: none;
+                color: #fff;
+            }
+        }
+
+        .inputDivAluno {
+            .inputAlunoEscola {
+                margin-top: 5%;
+                margin-left: 5%;
+                width: 85%;
+                height: 50px;
+                border-radius: 10px;
+                background-color: transparent;
+                border: 1px solid #9D9D9D;
+                padding-left: 20px;
+                font-family: "Kantumruy Pro", sans-serif;
+                font-weight: 500;
+                font-size: 16px;
+                outline: none;
+                color: #fff;
+            }
+        }
+
+        .select {
+            margin-top: 5%;
+            margin-left: 5%;
+            width: 85%;
+            height: 50px;
+            border-radius: 10px;
+            background-color: transparent;
+            border: 1px solid #9D9D9D;
+            padding-left: 20px;
+            font-family: "Kantumruy Pro", sans-serif;
+            font-weight: 500;
+            font-size: 16px;
+            outline: none;
+            color: #fff;
+            text-align: center;
+
+            option {
+                color: #fff;
+                background-color: #333333;
+                font-family: "Kantumruy Pro", sans-serif;
+                font-weight: 500;
+                font-size: 16px;
+                text-align: center;
+
+            }
+        }
+
+        .optionsDiv {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding-top: 30px;
+
+            .optionDiv {
+
+                cursor: pointer;
+                flex: 0 0 calc(50% - 8px);
+                width: 100%;
+                height: 50px;
+                background-color: transparent;
+                border: #777CFE solid 2px;
+                border-radius: 10px;
+
+                &:hover {
+                    background-color: #5c6fd9;
+                }
+
+                p {
+                    text-align: center;
+                    color: #fff;
+                    font-family: "Kantumruy Pro", sans-serif;
+                    font-weight: 500;
+                    font-size: 16px;
+                }
+            }
+
+        }
+
+        .universitarioSimNaoDiv {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 30px;
+
+            div {
+                border: #777CFE solid 2px;
+                height: 50px;
+                width: 200px;
+                border-radius: 10px;
+                cursor: pointer;
+            }
+
+            p {
+                color: #fff;
+                font-family: "Kantumruy Pro", sans-serif;
+                font-weight: 500;
+                font-size: 16px;
+                text-align: center;
+            }
+        }
+
+        .optionsDiv {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding-top: 30px;
+
+            .optionDiv {
+
+                cursor: pointer;
+                flex: 0 0 calc(50% - 8px);
+                width: 100%;
+                height: 50px;
+                background-color: transparent;
+                border: #777CFE solid 2px;
+                border-radius: 10px;
+
+
+                p {
+                    text-align: center;
+                    color: #fff;
+                    font-family: "Kantumruy Pro", sans-serif;
+                    font-weight: 500;
+                    font-size: 16px;
+
+                }
+            }
+
+
+        }
+
+        .select {
+            margin-top: 5%;
+            margin-left: 5%;
+            width: 85%;
+            height: 50px;
+            border-radius: 10px;
+            background-color: transparent;
+            border: 1px solid #9D9D9D;
+            padding-left: 20px;
+            font-family: "Kantumruy Pro", sans-serif;
+            font-weight: 500;
+            font-size: 16px;
+            outline: none;
+            color: #fff;
+
+            option {
+                color: #fff;
+                background-color: #333333;
+                font-family: "Kantumruy Pro", sans-serif;
+                font-weight: 500;
+                font-size: 16px;
+            }
+        }
+
+        .selectDiv {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .customFileLabel {
+                display: inline-block;
+                background-color: #778cfe;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: background 0.2s ease;
+                font-family: "Kantumruy Pro", sans-serif;
+                font-weight: 500;
+                font-size: 16px;
+
+                &:hover {
+                    background-color: #5c6fd9;
+                }
+            }
+
+        }
+
+        .inputDiv {
+
+
+            .input {
+                margin-top: 5%;
+                margin-left: 5%;
+                width: 85%;
+                height: 50px;
+                border-radius: 10px;
+                background-color: transparent;
+                border: 1px solid #9D9D9D;
+                padding-left: 20px;
+                font-family: "Kantumruy Pro", sans-serif;
+                font-weight: 500;
+                font-size: 16px;
+                outline: none;
+                color: #fff;
+            }
+        }
+
+        .nextDiv {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            padding-bottom: 60px;
+            padding-right: 38px;
+
+
+            .button {
+                width: 150px;
+                height: 50px;
+                border-radius: 10px;
+                background-color: #778CFE;
+                border: none;
+                font-family: "Kantumruy Pro", sans-serif;
+                font-weight: 500;
+                font-size: 16px;
+                color: #fff;
+            }
+
+            .buttonBack {
+                width: 150px;
+                height: 50px;
+                border-radius: 10px;
+                background-color: transparent;
+                border: #777CFE solid 2px;
+                margin-left: 10px;
+                font-family: "Kantumruy Pro", sans-serif;
+                font-weight: 500;
+                font-size: 16px;
+                color: #fff;
+
+                cursor: pointer;
+            }
+
+            .button:hover {
+                background-color: #777CFE;
+                cursor: pointer;
+            }
+        }
+
+        .barDiv {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            padding-bottom: 60px;
+            width: 25%;
+            padding-left: 25px;
+
+            .barDiv2 {
+                width: 200px;
+                height: 10px;
+                background-color: #eee;
+                border-radius: 10px;
+                overflow: hidden;
+                position: relative;
+
+                .bar {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    height: 100%;
+                    width: 30%;
+                    background-color: #778CFE;
+                    transition: width 0.3s ease;
+                }
+            }
+        }
+
+
+    }
+
+    .profileDiv {
+        background-color: #778CFE;
+        width: 65%;
+        height: 100dvh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}

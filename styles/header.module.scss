@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&display=swap');
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f9fa;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    height: 80px;
+
+}
+
+.header__logo {
+    display: flex;
+    align-items: center;
+
+}
+
+.header__image {
+    height: 80px;
+    width: auto;
+}
+
+.header__nav {
+    display: flex;
+    gap: 15px;
+    padding-right: 20px;
+    height: 100%;
+    border-left: 2px solid #D0D7FF;
+    padding-left: 20px;
+
+}
+
+.header__button__cadastrar {
+    background: none;
+    border: none;
+    color: #333333;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: "Kantumruy Pro", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+
+
+}
+
+.header__button__entrar {
+    background: none;
+    border: none;
+    color: #001ECB;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: "Kantumruy Pro", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.imageProfile {
+    cursor: pointer;
+}
+
+.textHello {
+    color: #000;
+    font-size: 18px;
+    font-family: "Kantumruy Pro", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.textName {
+    color: #001ECB;
+    font-size: 18px;
+    font-family: "Kantumruy Pro", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 60px 20px 0 0;
+    z-index: 1000;
+
+    .popupProfileOptions {
+        position: absolute;
+        right: 0;
+        margin-right: 20px;
+        margin-top: 30px;
+        height: 300px;
+        width: 200px;
+        background-color: rgb(255, 255, 255);
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        z-index: 99999999;
+        border-radius: 5px;
+
+        .almostMainDiv {
+
+            .miniProfileDiv {
+                display: flex;
+                justify-content: left;
+                align-items: center;
+                gap: 10px;
+
+                .nameDiv {
+
+
+                    p {
+                        color: #000;
+                        font-size: 18px;
+                        font-family: "Kantumruy Pro", sans-serif;
+                        font-optical-sizing: auto;
+                        font-weight: 600;
+                        font-style: normal;
+                    }
+                }
+
+                .options {
+                    position: absolute;
+                    display: flex;
+                    bottom: 0;
+                    flex-direction: column;
+
+                    width: 100%;
+
+                    div {
+                        width: 100%;
+                        height: 30px;
+                        cursor: pointer;
+
+                        &:hover {
+                            background-color: #e2e2e2;
+                        }
+
+                        p {
+                            text-align: center;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

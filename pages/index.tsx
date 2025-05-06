@@ -1,12 +1,7 @@
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+
+import LandingPage from "./landingPage";
 
 export default function Home() {
-  const router = useRouter();
 
-  useEffect(() => {
-    router.replace("/login");
-  }, []);
-
-  return <></>;
+  return <LandingPage />;
 }

@@ -1,5 +1,18 @@
+import { EmailProvider } from "@/context/EmailContext";
 import type { AppProps } from "next/app";
+import '@/styles/globals.css'
+import { SnackProvider } from "@/hooks/SnackProvider";
+import { CalendarDataProvider } from "@/context/CalendarDataContext";
 
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+  return (
+    <EmailProvider>
+      <SnackProvider>
+        <CalendarDataProvider>
+          <Component {...pageProps} />
+        </CalendarDataProvider>
+      </SnackProvider>
+    </EmailProvider>
+  )
+
 }

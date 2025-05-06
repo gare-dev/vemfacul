@@ -11,6 +11,7 @@ class _Api {
     this._instance = axios.create({
       timeout: 30000,
       baseURL: this._baseUrl,
+      withCredentials: true,
       headers: {
         "Content-Type": "application/json",
       },
@@ -22,16 +23,36 @@ class _Api {
     });
   }
 
-  public async teste() {
-    try {
-      const response = this._instance.get("/");
-      return response;
-    } catch (error) {
-      console.log(error);
-    }
+  public async registerAccount(email: string, password: string) {
+    return await this._instance.post("/api/createaccount", {
+      email,
+      password,
+    });
+  }
+
+  public async confirmAccount(token: string) {
+    return await this._instance.post('/api/confirmaccount', {
+      token,
+    })
+  }
+
+  public async loginAccount(email: string, password: string) {
+    return await this._instance.post("/api/loginaccount", {
+      email,
+      password,
+    });
+  }
+
+  public async createAccount(formData: any) {
+    console.log(formData)
+    return await this._instance.post("/api/registeraccount", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    })
   }
 }
 
-const Api = new _Api("https://invest-api-rose.vercel.app/");
+const Api = new _Api("http://localhost:3001/"); //https://invest-api-rose.vercel.app/
 
 export default Api;
