@@ -1,8 +1,6 @@
 import { EmailContext } from "@/context/EmailContext"
 import { useContext } from "react"
 
-
-
 const useEmail = () => {
     const context = useContext(EmailContext)
     if (!context) {

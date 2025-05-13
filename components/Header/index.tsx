@@ -6,10 +6,14 @@ import AuthDataType from '@/types/authDataType';
 import decodeJwt from '@/utils/decodeJwt';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { useRouter } from 'next/router';
+import useOpenPopup from '@/hooks/useOpenPopup';
 
-const Header: React.FC = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [selectedOption, setSelectedOption] = useState<string>('');
+
+
+
+export default function Header() {
+    const { isOpen, setIsOpen } = useOpenPopup()
+    const [selectedOption, setSelectedOption] = useState<string>('Cadastro');
     const [authData, setAuthData] = useState<AuthDataType>()
     const [profileOptionsVisible, setProfileOptionsVisible] = useState<boolean>(false)
     const router = useRouter()
@@ -17,11 +21,13 @@ const Header: React.FC = () => {
     function handleSignout() {
         if (getCookieValue("auth")) {
             document.cookie = "auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
-            router.push('/')
+            if (router.pathname === '/') {
+                router.reload(); // força o reload da página atual
+            } else {
+                router.push('/');
+            }
         }
-
     }
-
 
     useEffect(() => {
         if (getCookieValue("auth")) {
@@ -36,14 +42,19 @@ const Header: React.FC = () => {
         router.push('/')
     }, [])
 
+
     return (
+
         <header className={styles.header}>
-            {isOpen && <PopupRegistro
-                changeOption={(option) => setSelectedOption(option)}
-                selectedOption={selectedOption}
-                setSelectedOption={() => setSelectedOption(selectedOption)}
-                setClose={() => setIsOpen(false)}
-            />}
+
+
+            {isOpen &&
+                <PopupRegistro
+                    changeOption={(option) => setSelectedOption(option)}
+                    selectedOption={selectedOption}
+                    setSelectedOption={() => setSelectedOption(selectedOption)}
+                    setClose={() => setIsOpen(false)}
+                />}
 
             <div className={styles.header__logo}>
                 <img src="/assets/img/logo.png" alt="Logo" className={styles.header__image} />
@@ -89,12 +100,13 @@ const Header: React.FC = () => {
                                                 <p>{authData.name}</p>
                                             </div>
                                             <div className={styles.options}>
+                                                <div onClick={() => router.push('/calendario')}>
+                                                    <p>Calendário Pessoal</p>
+                                                </div>
                                                 <div onClick={handleSignout}>
                                                     <p >Sair</p>
                                                 </div>
-                                                <div>
-                                                    <p>Teste</p>
-                                                </div>
+
                                             </div>
                                         </div>
 
@@ -107,9 +119,7 @@ const Header: React.FC = () => {
                     </>
                 )}
             </div>
-
         </header >
     );
 };
 
-export default Header;
