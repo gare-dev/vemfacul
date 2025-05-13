@@ -44,11 +44,34 @@ class _Api {
   }
 
   public async createAccount(formData: any) {
-    console.log(formData)
     return await this._instance.post("/api/registeraccount", formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       }
+    })
+  }
+
+  public async getEvents() {
+    return await this._instance.post('/api/getevents')
+  }
+
+  public async getPersonalEvents() {
+    return await this._instance.post('/api/getpevents')
+  }
+
+  public async insertPersonalEvent(day: number, month: number, year: number, title: string, cursinho: string, descricao: string, foto: string, link: string, type: string, color: string, main_title: string) {
+    return await this._instance.post("/api/insertpevennts", {
+      day,
+      month,
+      year,
+      title,
+      cursinho,
+      descricao,
+      foto,
+      link,
+      type,
+      color,
+      main_title
     })
   }
 }
