@@ -1,5 +1,6 @@
 import Api from "@/api";
 import Header from "@/components/Header";
+import MainCard from "@/components/Cards";
 import Popup from "@/components/Popup";
 import DemoWrapper from "@/hooks/DemoWrapper";
 import useCalendarData from "@/hooks/useCalendarData";
@@ -62,8 +63,10 @@ export default function LandingPage() {
                 setIsVisible={() => setIsVisible(false)}
             />
 
-
             <Header />
+            <MainCard 
+                 img=".">
+            </MainCard>
             <main className="flex items-center justify-center">
                 <DemoWrapper eventos={events} popUpClick={() => setIsVisible(true)} />
             </main>

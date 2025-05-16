@@ -1,0 +1,84 @@
+.content:root , .button:root {
+    --primary-blue: #001ECB;
+    --second-bg: #778CFE;
+    --tird-bg: #d0d7ff;
+    --uswithe: #f5f5f5;
+    --button-radius: 1.5rem;
+}
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 15rem;
+    margin: 10rem 0 10rem 0;
+
+
+    .card {
+        width: 80%;
+        background-color: #f5f5f5;
+        padding: 2rem 5rem;
+        border-radius: 0.5rem;
+        box-shadow: -.5rem .5rem .3rem #3333;
+        border: 0.1rem solid #3333;
+    }
+
+    .title {
+        display: flex;
+        align-self: center;
+        justify-self: center;
+        font-size: 3rem;
+        width: 100%;
+
+        .text {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 40%;
+
+            h1 {
+                max-width: 20rem;
+                font-size: 1em;
+                font-weight: 500;
+                line-height: 1.4;
+            }
+
+            .txtBlue {
+                color: #778CFE;
+            }
+
+        }
+
+        .button {
+            margin: 2rem 0;
+        }
+
+        .img {
+            width: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .button {
+            height: 3rem;
+            margin: 1rem 0;
+            width: 70%;
+            border-radius: 1.5rem;
+            background-color: #778CFE;
+            font-size: 1.2rem;
+            color: #333;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            color: #778CFE;
+            background-color: #f5f5f5;
+            border: .2em solid #778CFE;
+        }
+    }
+}
