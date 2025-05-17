@@ -1,0 +1,11 @@
+.tituloCards::after {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    width: 70%;
+    height: .5rem;
+    border-radius: .5rem;
+    background-color: #3333;
+    margin-top: 10px;
+}
