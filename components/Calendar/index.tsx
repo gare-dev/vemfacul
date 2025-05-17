@@ -12,9 +12,10 @@ interface ContinuousCalendarProps {
     onClick?: (_day: number, _month: number, _year: number) => void;
     eventos?: PopupType[]
     popUpClick?: () => void
+    popupFilterClick?: () => void
 }
 
-export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick, popUpClick, eventos }) => {
+export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick, popUpClick, eventos, popupFilterClick }) => {
     const today = new Date();
     const dayRefs = useRef<(HTMLDivElement | null)[]>([]);
     const { setCalendarData } = useCalendarData()
@@ -22,9 +23,7 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
     const [selectedMonth, setSelectedMonth] = useState<number>(0);
     const monthOptions = monthNames.map((month, index) => ({ name: month, value: `${index}` }));
 
-    useEffect(() => {
-        console.log(eventos)
-    }, [eventos])
+
     // const eventos: PopupType[] = [
     //     {
     //         day: 1,
@@ -49,6 +48,7 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
     //         foto: "https://www3.santoandre.sp.gov.br/parquetecnologico/wp-content/uploads/2021/11/ufabc.jpg"
     //     },
     // ]
+
 
 
 
@@ -106,6 +106,8 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
             onClick(day, month, year);
         }
     }
+
+
 
     const generateCalendar = useMemo(() => {
         const today = new Date();
@@ -200,6 +202,8 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
             )
         }
 
+
+
         const calendar = calendarWeeks.map((week, weekIndex) => (
             <div className="flex w-full" key={`week-${weekIndex}`}>
 
@@ -221,7 +225,7 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
 
                             {getEventsRender(day, month)}
 
-                            <span className={`absolute left-1 top-1 flex size-5 items-center justify-center rounded-full text-xs sm:size-6 sm:text-sm lg:left-2 lg:top-2 lg:size-8 lg:text-base ${isToday ? 'bg-blue-500 font-semibold text-white' : ''} ${month < 0 ? 'text-slate-400' : 'text-slate-800'}`}>
+                            <span style={{ fontSize: 30 }} className={`absolute left-1 top-1 flex size-5 items-center justify-center rounded-full text-2xl sm:size-6 sm:text-sm lg:left-2 lg:top-2 lg:size-8 lg:text-base ${isToday ? 'bg-blue-500 font-semibold text-white' : ''} ${month < 0 ? 'text-slate-400' : 'text-slate-800'}`}>
                                 {day}
                             </span>
                             {
@@ -276,6 +280,10 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
         };
     }, []);
 
+
+
+
+
     return (
         <div className="no-scrollbar calendar-container max-h-full overflow-y-scroll rounded-t-2xl bg-white pb-10 text-slate-800 shadow-xl">
             <div className="sticky -top-px z-50 w-full rounded-t-2xl bg-white px-5 pt-7 sm:px-8 sm:pt-8">
@@ -284,6 +292,9 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
                         <Select name="month" value={`${selectedMonth}`} options={monthOptions} onChange={handleMonthChange} />
                         <button onClick={handleTodayClick} type="button" className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-900 hover:bg-gray-100 lg:px-5 lg:py-2.5">
                             Hoje
+                        </button>
+                        <button style={{ cursor: "pointer" }} onClick={popupFilterClick} type="button" className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-900 hover:bg-gray-100 lg:px-5 lg:py-2.5">
+                            Filtro
                         </button>
                         {/* <button type="button" className="whitespace-nowrap rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 px-3 py-1.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl focus:outline-none focus:ring-4 focus:ring-cyan-300 sm:rounded-xl lg:px-5 lg:py-2.5">
                             + Add Event
@@ -361,3 +372,4 @@ export const Select = ({ name, value, label, options = [], onChange, className }
         </span>
     </div>
 );
+
