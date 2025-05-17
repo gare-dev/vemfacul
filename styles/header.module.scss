@@ -103,31 +103,55 @@
         z-index: 99999999;
         border-radius: 5px;
 
-        .miniProfileDiv {
-            position: relative;
-            display: flex;
-            justify-content: left;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
+        .almostMainDiv {
 
-            .nameDiv {
-
-                p {
-                    color: #000;
-                    font-size: 18px;
-                    font-family: "Kantumruy Pro", sans-serif;
-                    font-optical-sizing: auto;
-                    font-weight: 600;
-                    font-style: normal;
-                }
-            }
-
-            .options {
-                position: absolute;
+            .miniProfileDiv {
                 display: flex;
-                bottom: 0;
-                flex-direction: column;
+                justify-content: left;
+                align-items: center;
+                gap: 10px;
+
+                .nameDiv {
+
+
+                    p {
+                        color: #000;
+                        font-size: 18px;
+                        font-family: "Kantumruy Pro", sans-serif;
+                        font-optical-sizing: auto;
+                        font-weight: 600;
+                        font-style: normal;
+                    }
+                }
+
+                .options {
+                    position: absolute;
+                    display: flex;
+                    bottom: 0;
+                    flex-direction: column;
+
+                    width: 100%;
+
+                    div {
+                        width: 100%;
+                        height: 30px;
+                        cursor: pointer;
+
+                        &:hover {
+                            background-color: #e2e2e2;
+                        }
+
+                        p {
+                            text-align: center;
+                            color: #001ECB;
+                            font-size: 18px;
+                            font-family: "Kantumruy Pro", sans-serif;
+                            font-optical-sizing: auto;
+                            font-weight: 500;
+                            font-style: normal;
+                        }
+                    }
+                }
             }
         }
     }

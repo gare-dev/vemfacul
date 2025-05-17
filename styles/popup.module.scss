@@ -6,13 +6,148 @@
     justify-content: center;
     align-items: center;
     position: fixed;
-    z-index: 99999999;
+    z-index: 999;
 
     .popupBox {
-        width: 500px;
+        width: 900px;
         height: 300px;
         background-color: #fff;
         border-radius: 10px;
+        position: relative;
+
+        .divBox {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+
+            gap: 30px;
+            padding-left: 30px;
+
+            .dateAndImageDiv {
+
+                .imageDiv {
+                    height: 150px;
+                    width: 150px;
+                    border: 2px solid black;
+                    display: flex;
+                    align-items: center;
+
+
+                    img {
+                        height: auto;
+
+                        width: 150px;
+                        background-repeat: no-repeat;
+                        background-size: cover;
+                        background-position: center;
+                    }
+                }
+
+                p {
+                    text-align: center;
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                    font-family: "Kantumruy Pro", sans-serif;
+                    color: #000;
+                }
+            }
+
+            .titleAndDescDiv {
+
+                display: flex;
+                padding-top: 40px;
+                flex-direction: column;
+                height: 100%;
+
+                .titleDiv {
+                    display: flex;
+                    justify-content: start;
+                    align-items: center;
+                    gap: 10px;
+
+                    .title {
+                        font-size: 2.5rem;
+                        font-weight: 700;
+                        font-family: "Kantumruy Pro", sans-serif;
+                    }
+
+
+                    .type {
+                        font-size: 1.5rem;
+                        font-weight: 700;
+                        font-family: "Kantumruy Pro", sans-serif;
+                        color: #000;
+                    }
+                }
+
+                .descDiv {
+
+                    p {
+                        font-size: 1.3rem;
+                        font-weight: 500;
+                        font-family: "Kantumruy Pro", sans-serif;
+                        color: #000;
+                    }
+                }
+
+            }
+        }
+
+        .closeDiv {
+
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 5px 15px 10px 10px;
+
+            p {
+
+                font-weight: 600;
+                font-size: 20px;
+                cursor: pointer;
+            }
+        }
+
+        .addDiv {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            margin: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #001ECB;
+            height: 40px;
+            width: 40px;
+            text-align: center;
+            border-radius: 50%;
+            cursor: pointer;
+
+
+            &:hover {
+                background-color: #3c59ff;
+
+            }
+
+            p {
+                font-weight: 500;
+                font-size: 2em; // Reduz um pouco para caber melhor
+                color: #fff;
+                margin: 0;
+
+                font-family: "Kantumruy Pro", sans-serif;
+
+            }
+
+
+        }
+
+
+
     }
+
+
 
 }

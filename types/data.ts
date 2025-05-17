@@ -5,6 +5,11 @@ type PopupType = {
     title: string
     cursinho: string
     descricao: string
+    foto: string
+    type: string
+    color: string
+    main_title: string
+    link: string
 }
 
 export default PopupType

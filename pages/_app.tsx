@@ -3,16 +3,20 @@ import type { AppProps } from "next/app";
 import '@/styles/globals.css'
 import { SnackProvider } from "@/hooks/SnackProvider";
 import { CalendarDataProvider } from "@/context/CalendarDataContext";
+import { OpenPopupProvider } from "@/context/OpenPopupContext";
+
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <EmailProvider>
       <SnackProvider>
-        <CalendarDataProvider>
-          <Component {...pageProps} />
-        </CalendarDataProvider>
+        <OpenPopupProvider>
+          <CalendarDataProvider>
+            <Component {...pageProps} />
+          </CalendarDataProvider>
+        </OpenPopupProvider>
       </SnackProvider>
-    </EmailProvider>
+    </EmailProvider >
   )
 
 }

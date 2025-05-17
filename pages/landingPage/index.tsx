@@ -1,33 +1,141 @@
+import styles from "@/styles/landinpage.module.scss";
+import Api from "@/api";
 import Header from "@/components/Header";
+import Card from "@/components/Cards";
 import Popup from "@/components/Popup";
+import PopupFilter from "@/components/PopupFilter";
 import DemoWrapper from "@/hooks/DemoWrapper";
 import useCalendarData from "@/hooks/useCalendarData";
+import PopupType from "@/types/data";
+import { FiltrosType } from "@/types/filtrosType";
 import { useEffect, useState } from "react";
 
 
 
+
 export default function LandingPage() {
+
     const [isVisible, setIsVisible] = useState<boolean>(false)
     const { calendarData } = useCalendarData()
     const [hasOpened, setHasOpened] = useState<boolean>(false)
-    // const [isLogged, setIsLogged] = useState<boolean>(false)
+    const [events, setEvents] = useState<PopupType[]>([])
+    const [originalEvents, setOriginalEvents] = useState<PopupType[]>([])
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [popupVisible, setPopupVisible] = useState<boolean>(false)
+    const [filtroEventos, setFiltroEventos] = useState<FiltrosType[]>([{
+        tipoDeEvento: [],
+        tipodeCursinho: []
+    }]);
+
+
+    const getEvents = async () => {
+        try {
+            setIsLoading(true)
+            const response = await Api.getEvents()
+
+            if (response.data.code === "EVENTS_SUCCESSFULLY") {
+                setEvents(response.data.data)
+                setOriginalEvents(response.data.data)
+            }
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
 
     useEffect(() => {
         if (!hasOpened) return setHasOpened(true)
         setIsVisible(true)
     }, [calendarData])
 
+    useEffect(() => {
+        getEvents()
+    }, [])
+
+
+    useEffect(() => {
+        console.log("filtroEventos", filtroEventos)
+    }, [filtroEventos])
+
+
+    function getFilter() {
+        if (
+            filtroEventos[0].tipoDeEvento.length === 0 &&
+            filtroEventos[0].tipodeCursinho.length === 0
+        ) {
+            setPopupVisible(false);
+            console.log("VOLTOU")
+            return setEvents(originalEvents);
+        }
+
+        const retorno = originalEvents.filter((dado) => {
+            return filtroEventos.some((f) => {
+                const tipoOk = f.tipoDeEvento.length === 0 || f.tipoDeEvento.includes(dado.type);
+                const cursinhoOk = f.tipodeCursinho.length === 0 || f.tipodeCursinho.includes(dado.cursinho.toLowerCase());
+                return tipoOk && cursinhoOk;
+            });
+        });
+
+        setPopupVisible(false);
+        setEvents(retorno);
+    }
+
+
+    if (isLoading) {
+        return (
+            <div style={{
+                position: "fixed",
+                height: "100%",
+                width: "100%"
+            }}>
+            </div>
+        )
+    }
 
     return (
         <div className="pb-24">
             <Popup
                 isVisible={isVisible}
-                setIsVisible={() => setIsVisible(!isVisible)}
+                setIsVisible={() => setIsVisible(false)}
             />
+            <PopupFilter
+                setFiltroEventos={setFiltroEventos}
+                filtroEventos={filtroEventos}
+                isVisible={popupVisible}
+                callFilter={() => getFilter()} />
 
             <Header />
+            <Card title img="/assets/img/cardMain_img.png" />
+
+            <h1 className={styles.tituloCards} style={{
+                width: "80%",
+                fontSize: "2rem",
+                fontWeight: "bold",
+                textAlign: "left",
+                position: "relative",
+                left: '2rem',
+                margin: ".2rem 0 0 0",
+                color: "#333"
+            }}>Principais cursos</h1>
+
+            <div className="cardcursos" style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-around",
+                alignItems: "center",
+                width: "100%",
+                margin: " 0",
+                padding: "2rem 1rem",
+
+            }}>
+                <Card curso="Etapa" img="/assets/img/etapa.png" />
+                <Card curso="EPUFABC" img="/assets/img/anglo.png" />
+                <Card curso="Anglo" img="/assets/img/epufabc.png" />
+            </div>
             <main className="flex items-center justify-center">
-                <DemoWrapper />
+                <DemoWrapper eventos={events} popUpClick={() => setIsVisible(true)} popupFilterClick={() => setPopupVisible(true)} />
             </main>
         </div>
     )
