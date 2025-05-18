@@ -1,0 +1,184 @@
+.container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 2222;
+    margin-top: 2rem;
+
+
+
+    .btnCalendarioP {
+        animation-delay: 0s;
+    }
+
+    .btnComunidade {
+        animation-delay: 0.5s;
+    }
+
+    .btnQuestoes {
+        animation-delay: 1s;
+    }
+
+    .btnCalendario {
+        animation-delay: 1.5s;
+    }
+
+    .btnCursosAvaliados {
+        animation-delay: 2s;
+    }
+
+}
+
+.container_button {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 2222;
+
+}
+
+.btn {
+    position: absolute;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 10rem;
+    height: 5rem;
+    overflow: hidden;
+    background-color: #778CFE;
+    color: #f5f5f5;
+    border-radius: .5rem;
+    transition: width 0.3s ease;
+    transform: rotate(0deg);
+    animation: btnMove 4.5s ease-in-out infinite;
+    animation-fill-mode: forwards;
+    animation-play-state: running;
+
+    .icon {
+        position: absolute;
+        width: 10rem;
+        height: 2rem;
+    }
+
+    .txtButton {
+        position: absolute;
+        font-size: large;
+        bottom: 254;
+        left: 25%;
+        opacity: 0;
+        white-space: nowrap;
+        transition: opacity 0.2s ease;
+    }
+
+    &:hover {
+        width: 10rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        .icon {
+            position: relative;
+            width: 10rem;
+            height: 2rem;
+            opacity: 0;
+        }
+
+        .txtButton {
+            opacity: 1;
+            font-weight: 500;
+        }
+    }
+
+    &.btnCalendarioP {
+        top: 5rem;
+        left: 70%;
+        transition: all 0.3s ease;
+    }
+
+    &.btnCalendarioP:hover {
+        animation-play-state: paused;
+        transform: rotate(0deg);
+    }
+
+    &.btnCalendario {
+        top: 15rem;
+        left: 20%;
+        transition: all 0.3s ease;
+    }
+
+    &.btnCalendario:hover {
+        animation-play-state: paused;
+        transform: rotate(0deg);
+    }
+
+    &.btnComunidade {
+        top: 5rem;
+        left: 30%;
+        transition: all 0.3s ease;
+    }
+
+    &.btnComunidade:hover {
+        animation-play-state: paused;
+        transform: rotate(0deg);
+    }
+
+    &.btnQuestoes {
+        top: 3rem;
+        left: 50%;
+        transition: all 0.3s ease;
+    }
+
+    &.btnQuestoes:hover {
+        animation-play-state: paused;
+        transform: rotate(0deg);
+    }
+
+    &.btnCursosAvaliados {
+        top: 15rem;
+        left: 80%;
+
+        transition: all 0.3s ease;
+    }
+
+    &.btnCursosAvaliados:hover {
+        animation-play-state: paused;
+        transform: rotate(0deg);
+    }
+}
+
+
+
+.img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+
+    img {
+        width: 20rem;
+        object-fit: cover;
+    }
+}
+
+
+@keyframes btnMove {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    25% {
+        transform: translate(-0.3rem, -0.6rem) rotate(-2deg);
+    }
+
+    50% {
+        transform: translate(0.4rem, -0.8rem) rotate(2deg);
+    }
+
+    75% {
+        transform: translate(-0.2rem, -0.5rem) rotate(-1deg);
+    }
+
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+}

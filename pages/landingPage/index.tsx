@@ -2,6 +2,7 @@ import styles from "@/styles/landinpage.module.scss";
 import Api from "@/api";
 import Header from "@/components/Header";
 import Card from "@/components/Cards";
+import Funcionalidades from "@/components/Funcionalidades";
 import Popup from "@/components/Popup";
 import PopupFilter from "@/components/PopupFilter";
 import DemoWrapper from "@/hooks/DemoWrapper";
@@ -134,6 +135,17 @@ export default function LandingPage() {
                 <Card curso="EPUFABC" img="/assets/img/anglo.png" />
                 <Card curso="Anglo" img="/assets/img/epufabc.png" />
             </div>
+            <h1 className={styles.tituloFuncionalidades} style={{
+                width: "auto",
+                fontSize: "2rem",
+                fontWeight: "bold",
+                textAlign: "right",
+                position: "relative",
+                right: '2rem',
+                margin: ".2rem 0 0 0",
+                color: "#333"
+            }}>Funcionalidades</h1>
+            <Funcionalidades />
             <main className="flex items-center justify-center">
                 <DemoWrapper eventos={events} popUpClick={() => setIsVisible(true)} popupFilterClick={() => setPopupVisible(true)} />
             </main>

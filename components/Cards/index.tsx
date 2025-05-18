@@ -1,5 +1,6 @@
 import styles from '@/styles/cardlandingpagecomponent.module.scss';
 
+
 interface CardProps {
     title?: boolean;
     curso?: string;
