@@ -1,4 +1,5 @@
 import styles from '@/styles/cardlandingpagecomponent.module.scss';
+import { IoLocationSharp } from 'react-icons/io5';
 
 interface CardProps {
     title?: boolean;
@@ -36,9 +37,9 @@ function secondCard(props: CardProps) {
                 <div className={styles.title}>
                     <h1>{props.curso}</h1>
                     <div className={styles.info}>
-                        <h2 className={styles.localizacao}>localização</h2>
+                        <h2 className={styles.localizacao}><IoLocationSharp />São Paulo</h2>
                         <button className={styles.button}>
-                            <p>Saiba Mais</p>
+                            <p>VER MAIS</p>
                         </button>
                     </div>
                 </div>
