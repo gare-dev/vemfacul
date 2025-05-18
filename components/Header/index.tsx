@@ -57,7 +57,9 @@ export default function Header() {
                 />}
 
             <div className={styles.header__logo}>
-                <img src="/assets/img/logo.png" alt="Logo" className={styles.header__image} />
+                <img onClick={() => {
+                    router.push('/')
+                }} style={{ cursor: "pointer" }} src="/assets/img/logo.png" alt="Logo" className={styles.header__image} />
             </div>
             <div className={styles.header__nav}>
                 {authData === undefined ? (<>
