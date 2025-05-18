@@ -31,7 +31,7 @@ export default function Funcionalidades() {
 
             </div>
             <div className={styles.img}>
-                <img src="/assets/img/head_funcionalidades.png" alt="" />
+                <img src="/assets/img/funcionalidadesPage.png" alt="" />
             </div>
         </div>
     )

@@ -155,7 +155,7 @@ export default function LandingPage() {
                 fontWeight: "bold",
                 textAlign: "right",
                 position: "relative",
-                right: '2rem',
+                right: '10%',
                 margin: ".2rem 0 0 0",
                 color: "#333"
             }}>Funcionalidades</h1>
