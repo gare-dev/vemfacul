@@ -96,7 +96,7 @@ export default function LandingPage() {
     }
 
     return (
-        <div className="pb-24">
+        <div className="pb-24" style={{ backgroundColor: "#D0D7FF" }}>
             <Popup
                 isVisible={isVisible}
                 setIsVisible={() => setIsVisible(false)}
@@ -105,7 +105,8 @@ export default function LandingPage() {
                 setFiltroEventos={setFiltroEventos}
                 filtroEventos={filtroEventos}
                 isVisible={popupVisible}
-                callFilter={() => getFilter()} />
+                callFilter={() => getFilter()}
+            />
 
             <Header />
             <Card title img="/assets/img/cardMain_img.png" />
@@ -116,24 +117,37 @@ export default function LandingPage() {
                 fontWeight: "bold",
                 textAlign: "left",
                 position: "relative",
-                left: '2rem',
+                left: '14.2rem',
                 margin: ".2rem 0 0 0",
                 color: "#333"
             }}>Principais cursos</h1>
 
-            <div className="cardcursos" style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-around",
-                alignItems: "center",
+
+            <div style={{
                 width: "100%",
-                margin: " 0",
-                padding: "2rem 1rem",
+                height: "auto",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                flexWrap: "wrap",
 
             }}>
-                <Card curso="Etapa" img="/assets/img/etapa.png" />
-                <Card curso="EPUFABC" img="/assets/img/anglo.png" />
-                <Card curso="Anglo" img="/assets/img/epufabc.png" />
+                <div className="cardcursos" style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                    width: "80%",
+                    margin: " 0",
+                    padding: "2rem 1rem",
+                    flexWrap: "wrap",
+
+                }}>
+                    <Card curso="ETAPA" img="/assets/img/etapa.png" />
+                    <Card curso="EPUFABC" img="/assets/img/anglo.png" />
+                    <Card curso="ANGLO" img="/assets/img/epufabc.png" />
+                </div>
             </div>
             <h1 className={styles.tituloFuncionalidades} style={{
                 width: "auto",
@@ -147,7 +161,11 @@ export default function LandingPage() {
             }}>Funcionalidades</h1>
             <Funcionalidades />
             <main className="flex items-center justify-center">
-                <DemoWrapper eventos={events} popUpClick={() => setIsVisible(true)} popupFilterClick={() => setPopupVisible(true)} />
+                <DemoWrapper
+                    isEditable={false}
+                    eventos={events}
+                    popUpClick={() => setIsVisible(true)}
+                    popupFilterClick={() => setPopupVisible(true)} />
             </main>
         </div>
     )
