@@ -4,6 +4,8 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import PopupType from '@/types/data';
 import useCalendarData from '@/hooks/useCalendarData';
 
+import { IoSettingsOutline, IoSettingsSharp } from 'react-icons/io5';
+
 const daysOfWeek = ['DOMINGO', 'SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'];
 const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
 
@@ -13,15 +15,18 @@ interface ContinuousCalendarProps {
     eventos?: PopupType[]
     popUpClick?: () => void
     popupFilterClick?: () => void
+    isEditable: boolean
 }
 
-export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick, popUpClick, eventos, popupFilterClick }) => {
+export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick, popUpClick, eventos, popupFilterClick, isEditable }) => {
     const today = new Date();
     const dayRefs = useRef<(HTMLDivElement | null)[]>([]);
     const { setCalendarData } = useCalendarData()
     const [year, setYear] = useState<number>(new Date().getFullYear());
     const [selectedMonth, setSelectedMonth] = useState<number>(0);
     const monthOptions = monthNames.map((month, index) => ({ name: month, value: `${index}` }));
+    const [hovered, setHovered] = useState(false);
+
 
 
     // const eventos: PopupType[] = [
@@ -296,6 +301,17 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
                         <button style={{ cursor: "pointer" }} onClick={popupFilterClick} type="button" className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-900 hover:bg-gray-100 lg:px-5 lg:py-2.5">
                             Filtro
                         </button>
+
+                        {isEditable && <button
+                            style={{ cursor: "pointer", background: "none", border: "none" }}
+                            onClick={popupFilterClick}
+                            onMouseEnter={() => setHovered(true)}
+                            onMouseLeave={() => setHovered(false)}
+                            type="button"
+                        >
+                            {hovered ? <IoSettingsSharp size="2em" /> : <IoSettingsOutline size="2em" />
+                            }
+                        </button>}
                         {/* <button type="button" className="whitespace-nowrap rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 px-3 py-1.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl focus:outline-none focus:ring-4 focus:ring-cyan-300 sm:rounded-xl lg:px-5 lg:py-2.5">
                             + Add Event
                         </button> */}
@@ -320,7 +336,7 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
                         </button>
                     </div>
                 </div>
-                <div className="grid w-full grid-cols-7 justify-between text-slate-500">
+                <div className="grid w-full grid-cols-7 justify-between text-slate-700 text-xl">
                     {daysOfWeek.map((day, index) => (
                         <div key={index} className="w-full border-b border-slate-200 py-2 text-center font-semibold">
                             {day}

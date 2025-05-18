@@ -1,0 +1,48 @@
+.eventosCountDiv {
+    display: flex;
+    justify-self: center;
+    align-items: center;
+    width: 70%;
+
+    .eventosBox {
+
+        width: 100%;
+        height: 200px;
+        background-color: #D0D7FF;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+
+
+        div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+
+            p {
+                text-align: center;
+                font-size: 60px;
+                font-family: "Kantumruy Pro", sans-serif;
+                font-optical-sizing: auto;
+                font-weight: 600;
+                font-style: normal;
+                color: #001ECB;
+
+            }
+
+
+            h1 {
+                width: 80%;
+                text-align: center;
+                font-family: "Kantumruy Pro", sans-serif;
+                font-optical-sizing: auto;
+                font-weight: 800;
+                font-style: normal;
+            }
+        }
+
+    }
+}
