@@ -97,6 +97,7 @@ export default function LandingPage() {
     return (
         <div className="pb-24" style={{ backgroundColor: "#D0D7FF" }}>
             <Popup
+                canAdd
                 isVisible={isVisible}
                 setIsVisible={() => setIsVisible(false)}
             />

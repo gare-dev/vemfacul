@@ -161,8 +161,7 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
                     alignItems: "center",
                     flexDirection: "column",
                     height: "100%",
-
-                    zIndex: "9999999",
+                    zIndex: "999999999999999999",
                     width: "100%",
                     position: "relative"
                 }}>
@@ -181,16 +180,16 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
                                         backgroundColor: opcao.color,
                                         backgroundImage: `url(${opcao.foto})`,
                                         backgroundRepeat: "no-repeat",
-                                        backgroundSize: "cover", // ou "cover", dependendo do efeito desejado
+                                        backgroundSize: "cover",
                                         backgroundPosition: "center",
+                                        zIndex: 999999999999999,
                                     }}>
                                     <p
-                                        onClick={() => { setCalendarData(opcao); popUpClick?.() }}
+                                        onClick={(e) => { e.stopPropagation(); setCalendarData(opcao); popUpClick?.() }}
                                         style={{
                                             width: "100%",
                                             color: "#fff",
                                             textAlign: "center",
-
                                             backgroundColor: "rgba(0, 0, 0, 0.5)",
                                             height: "100%"
 
@@ -207,10 +206,9 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
             )
         }
 
-
-
         const calendar = calendarWeeks.map((week, weekIndex) => (
-            <div className="flex w-full" key={`week-${weekIndex}`}>
+            <div
+                className="flex w-full" key={`week-${weekIndex}`}>
 
                 {week.map(({ month, day }, dayIndex) => {
                     const index = weekIndex * 7 + dayIndex;

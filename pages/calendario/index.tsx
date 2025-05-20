@@ -2,8 +2,10 @@ import Api from "@/api"
 import Header from "@/components/Header"
 import Popup from "@/components/Popup"
 import PopupFilter from "@/components/PopupFilter"
+import PopupPersonalEvents from "@/components/PopupPersonalEvents"
 import DemoWrapper from "@/hooks/DemoWrapper"
 import useCalendarData from "@/hooks/useCalendarData"
+import usePersonalEvents from "@/hooks/usePersonalEvents"
 import styles from "@/styles/calendario.module.scss"
 import PopupType from "@/types/data"
 import { FiltrosType } from "@/types/filtrosType"
@@ -13,12 +15,14 @@ import { useEffect, useState } from "react"
 
 export default function Calendario() {
     const [isVisible, setIsVisible] = useState<boolean>(false)
+    const [isClose, setIsClose] = useState<boolean>(false)
     const [hasOpened, setHasOpened] = useState<boolean>(false)
     const { calendarData } = useCalendarData()
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [popupVisible, setPopupVisible] = useState<boolean>(false)
     const [events, setEvents] = useState<PopupType[]>([])
     const [originalEvents, setOriginalEvents] = useState<PopupType[]>([])
+    const { setPersonalEventsData } = usePersonalEvents()
     const [filtroEventos, setFiltroEventos] = useState<FiltrosType[]>([{
         tipoDeEvento: [],
         tipodeCursinho: []
@@ -34,8 +38,6 @@ export default function Calendario() {
             getRedacao: getType("redacao"),
             getSimulado: getType("simulado"),
             getTodayEvents: getTodayEvents()
-
-
         }
 
         return overview[info as keyof typeof overview]
@@ -164,30 +166,23 @@ export default function Calendario() {
         return count
     }
 
-
-
-    useEffect(() => {
-        console.log(events)
-
-    }, [events])
-
     if (isLoading) {
         return (
             <div style={{
                 position: "fixed",
                 height: "100%",
                 width: "100%",
-
             }}>
-
             </div>
         )
     }
     return (
         <>
+            <PopupPersonalEvents onClose={() => setIsClose(!isClose)} isVisible={isClose} />
             <Popup
                 isVisible={isVisible}
                 setIsVisible={() => setIsVisible(false)}
+                canAdd={false}
             />
             <PopupFilter
                 setFiltroEventos={setFiltroEventos}
@@ -233,6 +228,15 @@ export default function Calendario() {
                     eventos={events}
                     popUpClick={() => setIsVisible(true)}
                     popupFilterClick={() => setPopupVisible(true)}
+                    onDateClick={(day, month, year) => {
+                        setIsClose(true)
+                        setPersonalEventsData((prev) => ({
+                            ...prev,
+                            day: String(day),
+                            month: String(month),
+                            year: String(year),
+                        }))
+                    }}
                 />
 
             </div>
