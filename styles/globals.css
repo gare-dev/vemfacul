@@ -25,3 +25,8 @@ select {
         /* Firefox */
     }
 }
+
+:root {
+    --primary-font: "Kantumruy Pro", sans-serif;
+    --prymary-blue: #778CFE;
+}

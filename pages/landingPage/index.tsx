@@ -145,7 +145,7 @@ export default function LandingPage() {
 
                 }}>
                     <Card curso="ETAPA" img="/assets/img/etapa.png" />
-                    <Card curso="EPUFABC" img="/assets/img/anglo.png" />
+                    <Card curso="EPUFABC" img="/assets/img/anglo.png" /> 
                     <Card curso="ANGLO" img="/assets/img/epufabc.png" />
                 </div>
             </div>

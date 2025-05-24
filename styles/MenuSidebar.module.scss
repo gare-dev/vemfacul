@@ -1,0 +1,151 @@
+/* Página */
+.page {
+  background: #95a9ee;
+  color: #f9f9f9;
+}
+
+/* Botões genéricos */
+.button {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Sidebar */
+.sidebar {
+  overflow: hidden;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  bottom: 20px;
+  width: 64px;
+  border-radius: 16px;
+  background: #778CFE;
+  transition: width 0.3s;
+
+  &:hover {
+    width: 260px;
+
+    .header {
+      width: 260px;
+    }
+
+    button {
+      width: 260px;
+    }
+
+    .active {
+      cursor: default;
+    }
+
+    .menu button > span {
+      opacity: 1;
+    }
+
+    :is(.menu button p, .header h1) {
+      opacity: 1;
+    }
+  }
+}
+
+/* Inner container */
+.inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  padding: 0 18px;
+  height: 72px;
+  width: 64px;
+  background: rgba(0, 0, 0, 0.05);
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  transition: 0.3s;
+
+  h1 {
+    color: #f5f5ff;
+    margin-left: 12px;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 2px;
+    opacity: 0;
+    transition: 0.3s;
+  }
+}
+
+/* Logo */
+.logo {
+  height: 28px;
+}
+
+/* Menu */
+.menu {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 56px;
+    width: 6px;
+    background: #4368e4;
+    transform: translateY(0); // Valor fixo, ajuste conforme necessário
+    transition: 0.3s;
+  }
+
+  button {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    height: 56px;
+    width: 64px;
+    font-size: 16px;
+    padding: 0 22px;
+    color: #afb3bf;
+    cursor: pointer;
+    opacity: 0.8;
+    transition-property: background, width;
+    transition-duration: 0.3s;
+
+    &:hover {
+      p {
+        transition: 0.1s;
+        opacity: 1;
+      }
+
+      > span {
+        opacity: 1;
+      }
+    }
+
+    &.active {
+      color: #f9f9f9;
+      background: #2a3048;
+      opacity: 1;
+    }
+
+    &:not(.active):hover {
+      background: #242940;
+      opacity: 0.9;
+    }
+
+    p {
+      opacity: 0;
+      transition: 0.3s;
+    }
+  }
+}
