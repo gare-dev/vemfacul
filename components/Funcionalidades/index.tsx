@@ -8,11 +8,11 @@ import { useState } from 'react';
 export default function Funcionalidades() {
 const [activeIndex, setActiveIndex] = useState(0);
 const buttons = [
-    { key:1, icon: <FaCalendarAlt />, text: "Calendário Pessoal", classname: "calendario" },
-    { key:2, icon: <FaPeopleGroup />, text: "Comunidade", classname: "comunidade" },
-    { key:3, icon: <LuNotebookPen />, text: "Correção de Redação", classname: "correcaoRedacao" },
-    { key:4, icon: <IoSchoolSharp />, text: "Exercícios", classname: "exercicios" },
-    { key:5, icon: <FaRegUser />, text: "Perfil", classname: "perfil" }
+    { icon: <FaCalendarAlt className={styles.icon}/>, text: "Calendário Pessoal", classname: "btnCalendario" },
+    { icon: <FaPeopleGroup className={styles.icon}/>, text: "Comunidade", classname: "btnComunidade" },
+    { icon: <LuNotebookPen className={styles.icon}/>, text: "Correção de Redação", classname: "btnCursosAvaliados" },
+    { icon: <IoSchoolSharp className={styles.icon}/>, text: "Exercícios", classname: "btnQuestoes" },
+    { icon: <FaRegUser className={styles.icon}/>, text: "Perfil", classname: "btnCalendarioP" }
 ]
     return (
         <div className={styles.pageWrapper}>

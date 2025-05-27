@@ -94,7 +94,6 @@ export default function LandingPage() {
             </div>
         )
     }
-<<<<<<< HEAD
     const cardCursos = [
         {
             title: "ETAPA",
@@ -112,22 +111,6 @@ export default function LandingPage() {
     return (
 
         <div className="pb-24" style={{ backgroundColor: "#D0D7FF" }}>
-=======
-    const CardCursos = [{
-        titulo: 'Etapa',
-        img: '/assets/img/etapa.png'
-    },
-    {
-        titulo: 'EPUFABC',
-        img: '/assets/img/epufabc.png'
-    }, {
-        titulo: 'ANGLO',
-        img: '/assets/img/anglo.png'
-    },
-    ]
-    return (
-        <div className="pb-24" style={{ backgroundColor: "#d0d7ff" }}>
->>>>>>> 84f7d4d9028464aecc527baa010f53bd21de125a
             <Popup
                 canAdd
                 isVisible={isVisible}
@@ -179,19 +162,13 @@ export default function LandingPage() {
                     flexWrap: "wrap",
 
                 }}>
-<<<<<<< HEAD
-                    {cardCursos.map((item, index) => (
-                        <Card key={index} curso={item.title} img={item.img} />
-                    ))}
-=======
-                    {CardCursos.map((curso, index) => (
-                        <Card key={index} curso={curso.titulo} img={curso.img} />
-                    ))}
-
-
->>>>>>> 84f7d4d9028464aecc527baa010f53bd21de125a
-                </div>
-            </div>
+    {
+        cardCursos.map((item, index) => (
+            <Card key={index} curso={item.title} img={item.img} />
+        ))
+    }
+                </div >
+            </div >
             <h1 className={styles.tituloFuncionalidades} style={{
                 width: "auto",
                 fontSize: "2rem",
@@ -210,6 +187,6 @@ export default function LandingPage() {
                     popUpClick={() => setIsVisible(true)}
                     popupFilterClick={() => setPopupVisible(true)} />
             </main>
-        </div>
+        </div >
     )
 }
