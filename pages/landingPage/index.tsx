@@ -94,8 +94,22 @@ export default function LandingPage() {
             </div>
         )
     }
-
+    const cardCursos = [
+        {
+            title: "ETAPA",
+            img: "/assets/img/etapa.png"
+        },
+        {
+            title: "EPUFABC",
+            img: "/assets/img/anglo.png"
+        },
+        {
+            title: "ANGLO",
+            img: "/assets/img/epufabc.png"
+        }
+    ]
     return (
+
         <div className="pb-24" style={{ backgroundColor: "#D0D7FF" }}>
             <Popup
                 isVisible={isVisible}
@@ -144,9 +158,9 @@ export default function LandingPage() {
                     flexWrap: "wrap",
 
                 }}>
-                    <Card curso="ETAPA" img="/assets/img/etapa.png" />
-                    <Card curso="EPUFABC" img="/assets/img/anglo.png" /> 
-                    <Card curso="ANGLO" img="/assets/img/epufabc.png" />
+                    {cardCursos.map((item, index) => (
+                        <Card key={index} curso={item.title} img={item.img} />
+                    ))}
                 </div>
             </div>
             <h1 className={styles.tituloFuncionalidades} style={{

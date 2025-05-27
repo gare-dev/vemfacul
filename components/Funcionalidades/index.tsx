@@ -3,36 +3,60 @@ import { FaCalendarAlt, FaRegUser } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { LuNotebookPen } from "react-icons/lu";
 import { IoSchoolSharp } from "react-icons/io5";
+import { useState } from 'react';
 
 export default function Funcionalidades() {
-    return (
-        <div className={styles.container}>
-            <div className={styles.container_button}>
-                <button className={`${styles.btn} ${styles.btnCalendario}`}>
-                    <FaCalendarAlt className={styles.icon} />
-                    <span className={styles.txtButton}>Calendario</span>
-                </button>
-                <button className={`${styles.btn} ${styles.btnComunidade}`}>
-                    <FaPeopleGroup className={styles.icon} />
-                    <span className={styles.txtButton}>Comunidade</span>
-                </button>
-                <button className={`${styles.btn} ${styles.btnQuestoes}`}>
-                    <LuNotebookPen className={styles.icon} />
-                    <span className={styles.txtButton}>Questoes</span>
-                </button>
-                <button className={`${styles.btn} ${styles.btnCursosAvaliados}`}>
-                    <IoSchoolSharp className={styles.icon} />
-                    <span className={styles.txtButton}>Cursos <br /> Avaliados </span>
-                </button>
-                <button className={`${styles.btn} ${styles.btnCalendarioP}`}>
-                    <FaRegUser className={styles.icon} />
-                    <span className={styles.txtButton}>Calendario <br />Pessoal</span>
-                </button>
+    const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-            </div>
-            <div className={styles.img}>
-                <img src="/assets/img/funcionalidadesPage.png" alt="" />
+    const buttons = [
+        {
+            classname: 'btnCalendario',
+            icon: <FaCalendarAlt className={styles.icon} />,
+            text: 'Calendario'},
+        {
+            classname: 'btnComunidade',
+            icon: <FaPeopleGroup className={styles.icon} />,
+            text: 'Comunidade'
+        },
+        {
+            classname: 'btnQuestoes',
+            icon: <LuNotebookPen className={styles.icon} />,
+            text: 'Questoes'
+        },
+        {
+            classname: 'btnCursosAvaliados',
+            icon: <IoSchoolSharp className={styles.icon} />,
+            text: <>Cursos <br /> Avaliados</>
+        },
+        {
+            classname: 'btnCalendarioP',
+            icon: <FaRegUser className={styles.icon} />,
+            text: <>Calendario <br /> Pessoal</>
+        }
+    ];
+
+    return (
+        <div className={styles.pageWrapper}>
+            <div className={styles.container}>
+                <div className={styles.container_button}>
+                    {buttons.map((button, index) => {
+                        const isActive = index === activeIndex;
+                        return (
+                            <button
+                                key={index}
+                                className={`${styles.btn} ${styles[button.classname]} ${isActive ? styles.active : ''}`}
+                                onClick={() => setActiveIndex(index)}
+                            >
+                                {button.icon}
+                                <span className={styles.txtButton}>{button.text}</span>
+                            </button>
+                        )
+                    })}
+                </div>
+                <div className={styles.img}>
+                    <img src="/assets/img/mascoteFuncionalidades.png" alt="" />
+                </div>
             </div>
         </div>
-    )
+    );
 }
