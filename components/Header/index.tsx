@@ -31,11 +31,12 @@ export default function Header() {
 
     useEffect(() => {
         if (getCookieValue("auth")) {
-            const token: { email: string, image: string, name: string, iat: number, exp: number } = decodeJwt(getCookieValue("auth") ?? "")
+            const token: { email: string, image: string, name: string, username: string, iat: number, exp: number } = decodeJwt(getCookieValue("auth") ?? "")
             setAuthData({
                 email: token.email,
                 image: token.image,
-                name: token.name
+                name: token.name,
+                username: token.username
             })
             return
         }

@@ -106,47 +106,48 @@ export default function PopupRegistro(props: props) {
             className={`${styles.mainDiv} ${isClosing ? styles.fadeOut : styles.fadeIn
                 }`}
         >
-            {props.selectedOption === "Entrar" && (<div className={styles.popupBox}>
-                <div className={styles.welcomeDiv}>
-                    <div>
-                        <span className={styles.welcomeToText}>Bem vindo de volta ao</span> <span className={styles.vemfaculText}>VemFacul!</span>
+            {props.selectedOption === "Entrar" && (
+                <div className={styles.popupBox}>
+                    <div className={styles.welcomeDiv}>
+                        <div>
+                            <span className={styles.welcomeToText}>Bem vindo de volta ao</span> <span className={styles.vemfaculText}>VemFacul!</span>
+                        </div>
+                    </div>
+                    {error &&
+                        <div className={styles.errorDiv}>
+                            <span className={styles.errorText}>{error}</span>
+                        </div>
+                    }
+
+                    <div className={styles.mainFormDiv}>
+                        <div className={styles.emailDiv}>
+                            <label className={styles.emailLabel}>E-MAIL</label>
+                            <input value={email} onChange={(e) => setEmail(e.target.value)} className={styles.emailInput} type="email" />
+                        </div>
+
+                        <div className={styles.passwordDiv}>
+                            <label className={styles.passwordLabel}>SENHA</label>
+                            <input value={password} onChange={(e) => setPassword(e.target.value)} className={styles.passwordInput} type="password" />
+                        </div>
+
+                        <div className={styles.forgotPasswordDiv}>
+                            <span onClick={() => setStep("fgtpwd")} className={styles.forgotPasswordText}>Esqueci minha senha</span>
+                        </div>
+
+                        <div className={styles.buttonDiv}>
+                            <button onClick={handleSubmitLogin} className={`${styles.buttonEntrar}`}>{step === "unshown" ? "ENTRAR COM O EMAIL" : <ButtonLoadingComponent />}</button>
+                        </div>
+
+                        <div className={styles.noAccountDiv}>
+                            <span className={styles.noAccountText}>Não tem uma conta? </span>
+                            <span onClick={() => props.changeOption("Cadastro")} className={styles.createAccountText}>Cadastre-se</span>
+                        </div>
+                        <div className={styles.closeDiv}>
+                            <span onClick={() => props.setClose()} className={styles.closetext}>X</span>
+                        </div>
+
                     </div>
                 </div>
-                {error &&
-                    <div className={styles.errorDiv}>
-                        <span className={styles.errorText}>{error}</span>
-                    </div>
-                }
-
-                <div className={styles.mainFormDiv}>
-                    <div className={styles.emailDiv}>
-                        <label className={styles.emailLabel}>E-MAIL</label>
-                        <input value={email} onChange={(e) => setEmail(e.target.value)} className={styles.emailInput} type="email" />
-                    </div>
-
-                    <div className={styles.passwordDiv}>
-                        <label className={styles.passwordLabel}>SENHA</label>
-                        <input value={password} onChange={(e) => setPassword(e.target.value)} className={styles.passwordInput} type="text" />
-                    </div>
-
-                    <div className={styles.forgotPasswordDiv}>
-                        <span className={styles.forgotPasswordText}>Esqueci minha senha</span>
-                    </div>
-
-                    <div className={styles.buttonDiv}>
-                        <button onClick={handleSubmitLogin} className={`${styles.buttonEntrar}`}>{step === "unshown" ? "ENTRAR COM O EMAIL" : <ButtonLoadingComponent />}</button>
-                    </div>
-
-                    <div className={styles.noAccountDiv}>
-                        <span className={styles.noAccountText}>Não tem uma conta? </span>
-                        <span onClick={() => props.changeOption("Cadastro")} className={styles.createAccountText}>Cadastre-se</span>
-                    </div>
-                    <div className={styles.closeDiv}>
-                        <span onClick={() => props.setClose()} className={styles.closetext}>X</span>
-                    </div>
-
-                </div>
-            </div>
             )}
             {props.selectedOption === "Cadastro" && (
                 <div className={styles.popupBox}>
@@ -155,22 +156,18 @@ export default function PopupRegistro(props: props) {
                             <span className={styles.errorText}>{error}</span>
                         </div>
                     }
-
                     {step !== "checkemail" ? (
                         <>
                             <div className={styles.welcomeDiv}>
-
                                 <div>
                                     <span className={styles.welcomeToText}>Boas-vindas ao</span> <span className={styles.vemfaculText}>VemFacul!</span>
                                 </div>
                             </div>
-
                             <div className={styles.mainFormDiv}>
                                 <div className={styles.emailDiv}>
                                     <label className={styles.emailLabel}>E-MAIL</label>
                                     <input onChange={(e) => setEmail(e.target.value)} className={styles.emailInput} type="text" />
                                 </div>
-
                                 {(step === 'shown' || step === 'loading') &&
                                     <div className={styles.passwordDiv}>
                                         <label className={styles.passwordLabel}>SENHA</label>
