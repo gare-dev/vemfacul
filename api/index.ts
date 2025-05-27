@@ -74,6 +74,32 @@ class _Api {
       main_title
     })
   }
+
+  public async insertPersonalLocalEvent(day: string, month: string, year: string, title: string, descricao: string, color: string, main_title: string, isImportant: boolean, hora: string) {
+    return await this._instance.post("/api/insertpelocal", {
+      day,
+      month,
+      year,
+      title,
+      descricao,
+      color,
+      main_title,
+      isImportant,
+      hora
+    })
+  }
+
+  public async deletePersonalEvent(id: string) {
+    return await this._instance.post("/api/deletepevents", {
+      id_pevent: id,
+    });
+  }
+
+  public async getUserProfile(username: string) {
+    return await this._instance.post("/api/getuserprofile", {
+      username,
+    });
+  }
 }
 
 const Api = new _Api("http://localhost:3001/"); //https://invest-api-rose.vercel.app/

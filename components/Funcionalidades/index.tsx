@@ -6,35 +6,14 @@ import { IoSchoolSharp } from "react-icons/io5";
 import { useState } from 'react';
 
 export default function Funcionalidades() {
-    const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
-    const buttons = [
-        {
-            classname: 'btnCalendario',
-            icon: <FaCalendarAlt className={styles.icon} />,
-            text: 'Calendario'},
-        {
-            classname: 'btnComunidade',
-            icon: <FaPeopleGroup className={styles.icon} />,
-            text: 'Comunidade'
-        },
-        {
-            classname: 'btnQuestoes',
-            icon: <LuNotebookPen className={styles.icon} />,
-            text: 'Questoes'
-        },
-        {
-            classname: 'btnCursosAvaliados',
-            icon: <IoSchoolSharp className={styles.icon} />,
-            text: <>Cursos <br /> Avaliados</>
-        },
-        {
-            classname: 'btnCalendarioP',
-            icon: <FaRegUser className={styles.icon} />,
-            text: <>Calendario <br /> Pessoal</>
-        }
-    ];
-
+const [activeIndex, setActiveIndex] = useState(0);
+const buttons = [
+    { key:1, icon: <FaCalendarAlt />, text: "Calendário Pessoal", classname: "calendario" },
+    { key:2, icon: <FaPeopleGroup />, text: "Comunidade", classname: "comunidade" },
+    { key:3, icon: <LuNotebookPen />, text: "Correção de Redação", classname: "correcaoRedacao" },
+    { key:4, icon: <IoSchoolSharp />, text: "Exercícios", classname: "exercicios" },
+    { key:5, icon: <FaRegUser />, text: "Perfil", classname: "perfil" }
+]
     return (
         <div className={styles.pageWrapper}>
             <div className={styles.container}>

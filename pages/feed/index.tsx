@@ -1,4 +1,5 @@
-import Header from "@/components/Header";
+
+import Sidebar from "@/components/Sidebar";
 // import DemoWrapper from "@/hooks/DemoWrapper";
 // import useCalendarData from "@/hooks/useCalendarData";
 
@@ -9,7 +10,8 @@ export default function Feed() {
 
     return (
         <div>
-            <Header />
+
+            <Sidebar />
             <main className="flex items-center justify-center">
                 {/* <DemoWrapper /> */}
             </main>

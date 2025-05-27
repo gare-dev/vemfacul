@@ -10,6 +10,8 @@ type PopupType = {
     color: string
     main_title: string
     link: string
+    hora: string
+    id_pevent: string
 }
 
 export default PopupType
