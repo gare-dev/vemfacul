@@ -144,6 +144,74 @@
 
         }
 
+        .removeDiv {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            margin: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #cb0000;
+            height: 40px;
+            width: 40px;
+            text-align: center;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-right: 60px;
+
+
+            &:hover {
+                background-color: #ff4e4e;
+
+            }
+
+            p {
+                font-weight: 500;
+                font-size: 2em; // Reduz um pouco para caber melhor
+                color: #fff;
+                margin: 0;
+                font-family: "Kantumruy Pro", sans-serif;
+
+            }
+
+
+        }
+
+        .editDiv {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            margin: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f3ff47;
+            height: 40px;
+            width: 40px;
+            text-align: center;
+            border-radius: 50%;
+            cursor: pointer;
+
+
+            &:hover {
+                background-color: #c7d31d;
+
+            }
+
+            p {
+                font-weight: 500;
+                font-size: 2em; // Reduz um pouco para caber melhor
+                color: #fff;
+                margin: 0;
+
+                font-family: "Kantumruy Pro", sans-serif;
+
+            }
+
+
+        }
+
 
 
     }

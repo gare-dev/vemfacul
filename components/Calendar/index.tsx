@@ -112,8 +112,6 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
         }
     }
 
-
-
     const generateCalendar = useMemo(() => {
         const today = new Date();
 
@@ -284,8 +282,9 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
     }, []);
 
 
-
-
+    useEffect(() => {
+        handleTodayClick()
+    }, [])
 
     return (
         <div className="no-scrollbar calendar-container max-h-full overflow-y-scroll rounded-t-2xl bg-white pb-10 text-slate-800 shadow-xl">

@@ -1,0 +1,157 @@
+.main {
+    display: flex;
+    justify-content: center;
+
+    .profileContainer {
+        width: 60%;
+        height: 700px;
+
+        background-color: #F5F5F5;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        border: 1px solid #778CFE;
+        border-top: none;
+        border-radius: 0 0 5px 5px;
+        position: relative;
+
+        .profileHeader {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+        }
+
+        .profileImage {
+            position: absolute;
+            top: 120px;
+            padding-left: 50px;
+
+            img {
+                height: 150px;
+                width: 150px;
+                object-fit: cover;
+
+                border-radius: 50%;
+            }
+        }
+
+        .profileName {
+            position: absolute;
+            top: 270px;
+            padding-left: 50px;
+
+            p {
+
+                font-size: 2rem;
+                font-weight: 600;
+                font-family: "Kantumruy Pro", sans-serif;
+                color: #000;
+            }
+        }
+
+        .profileUsername {
+            position: absolute;
+            top: 310px;
+            padding-left: 50px;
+
+            p {
+
+                font-size: 1rem;
+                font-weight: 600;
+                font-family: "Kantumruy Pro", sans-serif;
+                color: #778CFE;
+            }
+        }
+
+        .profileDescription {
+            position: absolute;
+            top: 350px;
+            padding-left: 50px;
+
+            p {
+
+                font-size: 1.2rem;
+                font-weight: 500;
+                font-family: "Kantumruy Pro", sans-serif;
+                color: #000;
+            }
+        }
+
+        .editProfile {
+            position: absolute;
+            top: 220px;
+            right: 0px;
+            padding-right: 20px;
+            padding-left: 50px;
+
+            button {
+                font-size: 1rem;
+                font-weight: 600;
+                font-family: "Kantumruy Pro", sans-serif;
+                color: #fff;
+                background-color: #778CFE;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                height: 30px;
+                width: 150px;
+
+                &:hover {
+                    background-color: #5a6bcf;
+                }
+            }
+        }
+
+        .interesses {
+            position: absolute;
+            bottom: 0;
+            padding-left: 50px;
+            padding-bottom: 20px;
+
+            p {
+                font-size: 1rem;
+                font-weight: 700;
+                font-family: "Kantumruy Pro", sans-serif;
+                color: #9D9D9D;
+            }
+        }
+
+        .profileStats {
+
+            left: 50px;
+            display: flex;
+            flex-direction: row;
+            padding-top: 40px;
+            gap: 80px;
+
+            .statsItem {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                p {
+                    font-size: 1.2rem;
+                    font-weight: 600;
+                    font-family: "Kantumruy Pro", sans-serif;
+                    color: #000;
+                }
+
+                span {
+                    font-size: 1rem;
+                    font-weight: 500;
+                    font-family: "Kantumruy Pro", sans-serif;
+                    color: #9D9D9D;
+                }
+            }
+
+
+        }
+    }
+}

@@ -3,12 +3,18 @@ import useCalendarData from "@/hooks/useCalendarData";
 import useOpenPopup from "@/hooks/useOpenPopup";
 import s from "@/styles/popup.module.scss"
 import getCookieValue from "@/utils/getCookie";
+import { IoMdAdd } from "react-icons/io";
+import { MdDeleteOutline, MdModeEdit } from "react-icons/md";
 
 
 interface props {
     isVisible: boolean
     setIsVisible: () => void
     canAdd: boolean
+    canRemove: boolean
+    canEdit: boolean
+    removeFunction?: () => void
+    editFunction?: () => void
 }
 
 export default function Popup(props: props) {
@@ -82,11 +88,24 @@ export default function Popup(props: props) {
                 <div className={s.closeDiv}>
                     <p onClick={() => props.setIsVisible()} className={s.closeText}>X</p>
                 </div>
-                {props.canAdd &&
-                    (<div onClick={() => saveEvent()} className={s.addDiv}>
-                        <p>+</p>
-                    </div>
-                    )}
+                <div className={s.bttsDiv}>
+                    {props.canAdd ?
+                        (<div onClick={() => saveEvent()} className={s.addDiv}>
+                            <p><IoMdAdd /></p>
+                        </div>
+                        ) : null}
+                    {props.canRemove ?
+                        (<div onClick={props.removeFunction} className={s.removeDiv}>
+                            <p><MdDeleteOutline />  </p>
+                        </div>
+                        ) : null}
+                    {props.canEdit ?
+                        (<div onClick={() => props.editFunction} className={s.editDiv}>
+                            <p><MdModeEdit /></p>
+                        </div>
+                        ) : null}
+                </div>
+
             </div>
 
 

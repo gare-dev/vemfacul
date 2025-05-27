@@ -3,7 +3,7 @@ import usePersonalEvents from "@/hooks/usePersonalEvents";
 import styles from "@/styles/popuuppersonalevents.module.scss"
 import padZero from "@/utils/padZero";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+
 
 
 type FormModalProps = {
@@ -14,12 +14,7 @@ type FormModalProps = {
 export default function FormModal({ onClose, isVisible }: FormModalProps) {
     const { setPersonalEventsData, personalEventsData } = usePersonalEvents()
     const router = useRouter()
-    useEffect(() => {
-        document.body.style.overflow = "hidden";
-        return () => {
-            document.body.style.overflow = "auto";
-        };
-    }, []);
+
 
     async function handleSubmit() {
         if (personalEventsData.title === "" || personalEventsData.main_title === "" || personalEventsData.descricao === "") {
@@ -63,7 +58,7 @@ export default function FormModal({ onClose, isVisible }: FormModalProps) {
                 </button>
                 <div className={styles.row}>
                     <label>
-                        TÍTULO
+                        Título
                         <input
                             onChange={(e) =>
                                 setPersonalEventsData((prev) => ({
@@ -75,7 +70,7 @@ export default function FormModal({ onClose, isVisible }: FormModalProps) {
                         />
                     </label>
                     <label>
-                        NOME
+                        Nome
                         <input onChange={(e) =>
                             setPersonalEventsData((prev) => ({
                                 ...prev,
@@ -86,7 +81,7 @@ export default function FormModal({ onClose, isVisible }: FormModalProps) {
                 </div>
                 <div className={styles.row}>
                     <label>
-                        DESCRIÇÃO
+                        Descrição
                         <textarea onChange={(e) =>
                             setPersonalEventsData((prev) => ({
                                 ...prev,
@@ -97,7 +92,7 @@ export default function FormModal({ onClose, isVisible }: FormModalProps) {
                 </div>
                 <div className={styles.row}>
                     <label>
-                        DATA
+                        Data
                         <input
                             readOnly
                             type="date"
@@ -105,7 +100,7 @@ export default function FormModal({ onClose, isVisible }: FormModalProps) {
                         />
                     </label>
                     <label>
-                        HORA
+                        Hora
                         <input
                             type="time"
                             onChange={(e) =>
@@ -118,7 +113,7 @@ export default function FormModal({ onClose, isVisible }: FormModalProps) {
                 </div>
                 <div className={styles.row}>
                     <label className={styles.colorPicker}>
-                        COR
+                        Cor
                         <input
                             onChange={(e) =>
                                 setPersonalEventsData((prev) => ({
@@ -133,7 +128,7 @@ export default function FormModal({ onClose, isVisible }: FormModalProps) {
                                     ...prev,
                                     isImportant: e.target.checked,
                                 }))} type="checkbox" />
-                        IMPORTANTE
+                        Importante
                     </label>
                 </div>
                 <div className={styles.actions}>
