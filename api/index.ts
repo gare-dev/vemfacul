@@ -51,6 +51,14 @@ class _Api {
     })
   }
 
+  public async editProfile(formData: any) {
+    return await this._instance.post('/api/editprofile', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    })
+  }
+
   public async getEvents() {
     return await this._instance.post('/api/getevents')
   }

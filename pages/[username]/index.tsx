@@ -24,6 +24,7 @@ export default function UserProfile() {
         materias_lecionadas: []
     });
     const [loading, setLoading] = useState(true);
+    const [isVisible, setIsVisible] = useState(false);
 
     const handleGetUserProfile = async () => {
         if (!username?.toString()) return router.push('/');
@@ -34,8 +35,6 @@ export default function UserProfile() {
             if (response.data.code === "USER_FOUND") {
                 setUserProfile(response.data.data);
             }
-
-
         } catch (error) {
             console.log(error)
         } finally {
@@ -45,20 +44,28 @@ export default function UserProfile() {
 
     useEffect(() => {
         if (username?.toString()) handleGetUserProfile()
-
     }, [username])
     return (
         <>
             {loading && <LoadingComponent />}
             {!loading && <Sidebar />}
-            {<EditProfilePopup />}
+            {isVisible &&
+                <EditProfilePopup
+                    closePopup={() => setIsVisible(false)}
+                    descricao={userProfile.descricao}
+                    foto={userProfile.foto}
+                    header={userProfile.header}
+                    name={userProfile.nome}
+                    refreshPage={() => router.reload()}
+                />
+            }
             <div className={styles.main}>
                 <div className={styles.profileContainer}>
                     <div className={styles.profileHeader}>
-                        <img src={userProfile.header} alt="" />
+                        {userProfile.header && <img src={userProfile.header} alt="" />}
                     </div>
                     <div className={styles.profileImage}>
-                        <img src={userProfile.foto} alt="" />
+                        {userProfile.foto && <img src={userProfile.foto} alt="User profile" />}
                     </div>
                     <div className={styles.profileName}>
                         <p>{userProfile.nome}</p>
@@ -84,21 +91,16 @@ export default function UserProfile() {
                         </div>
                     </div>
                     <div className={styles.editProfile}>
-                        <button>Editar Perfil</button>
+                        <button onClick={() => setIsVisible(true)}>Editar Perfil</button>
                     </div>
                     <div className={styles.interesses}>
-
                         <p>{Array.isArray(userProfile.vestibulares) ? userProfile.vestibulares?.map((interesse, index) => {
                             return (
                                 `${index > 0 ? ', ' : ''}${interesse}`
                             )
                         }) : userProfile.vestibulares}</p>
                     </div>
-
-
                 </div>
-
-
             </div>
         </>
     )
