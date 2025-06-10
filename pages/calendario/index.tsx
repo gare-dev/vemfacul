@@ -1,9 +1,11 @@
 import Api from "@/api"
-import Header from "@/components/Header"
 import Popup from "@/components/Popup"
 import PopupFilter from "@/components/PopupFilter"
+import PopupPersonalEvents from "@/components/PopupPersonalEvents"
+import Sidebar from "@/components/Sidebar"
 import DemoWrapper from "@/hooks/DemoWrapper"
 import useCalendarData from "@/hooks/useCalendarData"
+import usePersonalEvents from "@/hooks/usePersonalEvents"
 import styles from "@/styles/calendario.module.scss"
 import PopupType from "@/types/data"
 import { FiltrosType } from "@/types/filtrosType"
@@ -13,33 +15,18 @@ import { useEffect, useState } from "react"
 
 export default function Calendario() {
     const [isVisible, setIsVisible] = useState<boolean>(false)
+    const [isClose, setIsClose] = useState<boolean>(false)
     const [hasOpened, setHasOpened] = useState<boolean>(false)
     const { calendarData } = useCalendarData()
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [popupVisible, setPopupVisible] = useState<boolean>(false)
     const [events, setEvents] = useState<PopupType[]>([])
     const [originalEvents, setOriginalEvents] = useState<PopupType[]>([])
+    const { setPersonalEventsData } = usePersonalEvents()
     const [filtroEventos, setFiltroEventos] = useState<FiltrosType[]>([{
         tipoDeEvento: [],
         tipodeCursinho: []
     }]);
-
-
-    function getOverview(info: "totalEvents" | "next31Days" | "next7Days" | "getRedacao" | "getSimulado" | "getTodayEvents") {
-
-        const overview = {
-            totalEvents: events.length,
-            next31Days: getNext31DaysEvents(),
-            next7Days: getNext7DaysEvents(),
-            getRedacao: getType("redacao"),
-            getSimulado: getType("simulado"),
-            getTodayEvents: getTodayEvents()
-
-
-        }
-
-        return overview[info as keyof typeof overview]
-    }
 
 
     const handleGetPersonalEvents = async () => {
@@ -60,15 +47,33 @@ export default function Calendario() {
 
     }
 
-    useEffect(() => {
-        handleGetPersonalEvents()
+    const handleRemovePersonalEvents = async () => {
+        if (!calendarData.id_pevent) return
 
-    }, [])
+        try {
+            const response = await Api.deletePersonalEvent(calendarData.id_pevent)
+            if (response.data.code === "EVENT_DELETED") {
+                setIsVisible(false)
+                handleGetPersonalEvents()
+            }
+        } catch (error) {
+            console.log(error)
+        }
 
-    useEffect(() => {
-        if (!hasOpened) return setHasOpened(true)
-        setIsVisible(true)
-    }, [calendarData])
+    }
+    function getOverview(info: "totalEvents" | "next31Days" | "next7Days" | "getRedacao" | "getSimulado" | "getTodayEvents") {
+
+        const overview = {
+            totalEvents: events.length,
+            next31Days: getNext31DaysEvents(),
+            next7Days: getNext7DaysEvents(),
+            getRedacao: getType("redacao"),
+            getSimulado: getType("simulado"),
+            getTodayEvents: getTodayEvents()
+        }
+
+        return overview[info as keyof typeof overview]
+    }
 
     function getFilter() {
         if (
@@ -82,7 +87,7 @@ export default function Calendario() {
         const retorno = originalEvents.filter((dado) => {
             return filtroEventos.some((f) => {
                 const tipoOk = f.tipoDeEvento.length === 0 || f.tipoDeEvento.includes(dado.type);
-                const cursinhoOk = f.tipodeCursinho.length === 0 || f.tipodeCursinho.includes(dado.cursinho.toLowerCase());
+                const cursinhoOk = f.tipodeCursinho.length === 0 || f.tipodeCursinho.includes(dado.cursinho?.toLowerCase());
                 return tipoOk && cursinhoOk;
             });
         });
@@ -164,12 +169,15 @@ export default function Calendario() {
         return count
     }
 
+    useEffect(() => {
+        handleGetPersonalEvents()
 
+    }, [])
 
     useEffect(() => {
-        console.log(events)
-
-    }, [events])
+        if (!hasOpened) return setHasOpened(true)
+        setIsVisible(true)
+    }, [calendarData])
 
     if (isLoading) {
         return (
@@ -177,17 +185,21 @@ export default function Calendario() {
                 position: "fixed",
                 height: "100%",
                 width: "100%",
-
             }}>
-
             </div>
         )
     }
     return (
         <>
+            <PopupPersonalEvents onClose={() => setIsClose(!isClose)} isVisible={isClose} />
             <Popup
                 isVisible={isVisible}
                 setIsVisible={() => setIsVisible(false)}
+                canAdd={false}
+                canRemove={true}
+                canEdit={true}
+                removeFunction={handleRemovePersonalEvents}
+
             />
             <PopupFilter
                 setFiltroEventos={setFiltroEventos}
@@ -195,7 +207,8 @@ export default function Calendario() {
                 isVisible={popupVisible}
                 callFilter={() => getFilter()}
             />
-            <Header />
+            <Sidebar />
+
 
             <div className={`${styles.eventosCountDiv} pt-16`}>
                 <div className={styles.eventosBox}>
@@ -233,6 +246,15 @@ export default function Calendario() {
                     eventos={events}
                     popUpClick={() => setIsVisible(true)}
                     popupFilterClick={() => setPopupVisible(true)}
+                    onDateClick={(day, month, year) => {
+                        setIsClose(true)
+                        setPersonalEventsData((prev) => ({
+                            ...prev,
+                            day: String(day),
+                            month: String(month),
+                            year: String(year),
+                        }))
+                    }}
                 />
 
             </div>

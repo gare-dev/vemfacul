@@ -12,19 +12,14 @@ interface props {
   popUpClick?: () => void
   popupFilterClick?: () => void
   isEditable: boolean
+  onDateClick?: (day: number, month: number, year: number) => void
 }
 export default function DemoWrapper(props: props) {
-  const { createSnack } = useSnack();
-
-  const onClickHandler = (day: number, month: number, year: number) => {
-    const snackMessage = `Clicked on ${monthNames[month]} ${day}, ${year}`
-    createSnack(snackMessage, 'success');
-  }
 
   return (
     <div className="relative flex h-screen max-h-screen w-full flex-col gap-4 px-4 pt-4 items-center justify-center">
       <div className="relative h-full overflow-auto">
-        <ContinuousCalendar isEditable={props.isEditable} onClick={onClickHandler} eventos={props.eventos} popUpClick={props.popUpClick} popupFilterClick={props.popupFilterClick} />
+        <ContinuousCalendar isEditable={props.isEditable} onClick={props.onDateClick} eventos={props.eventos} popUpClick={props.popUpClick} popupFilterClick={props.popupFilterClick} />
       </div>
     </div>
   );

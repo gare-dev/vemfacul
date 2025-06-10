@@ -51,6 +51,14 @@ class _Api {
     })
   }
 
+  public async editProfile(formData: any) {
+    return await this._instance.post('/api/editprofile', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    })
+  }
+
   public async getEvents() {
     return await this._instance.post('/api/getevents')
   }
@@ -73,6 +81,32 @@ class _Api {
       color,
       main_title
     })
+  }
+
+  public async insertPersonalLocalEvent(day: string, month: string, year: string, title: string, descricao: string, color: string, main_title: string, isImportant: boolean, hora: string) {
+    return await this._instance.post("/api/insertpelocal", {
+      day,
+      month,
+      year,
+      title,
+      descricao,
+      color,
+      main_title,
+      isImportant,
+      hora
+    })
+  }
+
+  public async deletePersonalEvent(id: string) {
+    return await this._instance.post("/api/deletepevents", {
+      id_pevent: id,
+    });
+  }
+
+  public async getUserProfile(username: string) {
+    return await this._instance.post("/api/getuserprofile", {
+      username,
+    });
   }
 }
 

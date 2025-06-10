@@ -73,7 +73,7 @@ export default function LandingPage() {
         const retorno = originalEvents.filter((dado) => {
             return filtroEventos.some((f) => {
                 const tipoOk = f.tipoDeEvento.length === 0 || f.tipoDeEvento.includes(dado.type);
-                const cursinhoOk = f.tipodeCursinho.length === 0 || f.tipodeCursinho.includes(dado.cursinho.toLowerCase());
+                const cursinhoOk = f.tipodeCursinho.length === 0 || f.tipodeCursinho.includes(dado.cursinho?.toLowerCase());
                 return tipoOk && cursinhoOk;
             });
         });
@@ -95,11 +95,15 @@ export default function LandingPage() {
     }
 
     return (
-        <div className="pb-24" style={{ backgroundColor: "#D0D7FF" }}>
+        <div className="pb-24" style={{ backgroundColor: "#778CFE" }}>
             <Popup
+                canAdd
                 isVisible={isVisible}
                 setIsVisible={() => setIsVisible(false)}
+                canRemove={false}
+                canEdit={false}
             />
+
             <PopupFilter
                 setFiltroEventos={setFiltroEventos}
                 filtroEventos={filtroEventos}
