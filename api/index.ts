@@ -51,6 +51,17 @@ class _Api {
     })
   }
 
+  public async forgotPassword(email: string) {
+    return await this._instance.post("/api/forgotpassword", {
+      email,
+    });
+  }
+
+  public async resetPassword(password: string, email: string) {
+    return await this._instance.post("/api/resetpassword", {
+      password, email
+    });
+  }
   public async editProfile(formData: any) {
     return await this._instance.post('/api/editprofile', formData, {
       headers: {

@@ -131,7 +131,10 @@ export default function PopupRegistro(props: props) {
                         </div>
 
                         <div className={styles.forgotPasswordDiv}>
-                            <span onClick={() => setStep("fgtpwd")} className={styles.forgotPasswordText}>Esqueci minha senha</span>
+                            <span onClick={() => {
+                                props.changeOption("EsqueciSenha");
+                            }
+                            } className={styles.forgotPasswordText}>Esqueci minha senha</span><br />
                         </div>
 
                         <div className={styles.buttonDiv}>
@@ -217,7 +220,56 @@ export default function PopupRegistro(props: props) {
                     }
                 </div>
             )
-            }
+            };
+            {props.selectedOption === "EsqueciSenha" && (
+                <div className={styles.popupBox}>
+                    <div className={styles.welcomeDiv}>
+                        <div>
+                            <span className={styles.welcomeToText}>Recuperação de senha</span>
+                        </div>
+                    </div>
+                    {error &&
+                        <div className={styles.errorDiv}>
+                            <span className={styles.errorText}>{error}</span>
+                        </div>
+                    }
+
+                    <div className={styles.mainFormDiv}>
+                        <div className={styles.emailDiv}>
+                            <label className={styles.emailLabel}>E-MAIL</label>
+                            <input value={email} onChange={(e) => setEmail(e.target.value)} className={styles.emailInput} type="email" />
+                        </div>
+
+                        <div className={styles.buttonDiv}>
+                            <button onClick={() => {
+                                if (!email) return setError("Preencha o campo email");
+                                setStep('loading')
+
+                                Api.forgotPassword(email).then(() => {
+                                    setError('')
+                                    setStep('checkemail')
+                                }).catch((err) => {
+                                    if (err instanceof AxiosError) {
+                                        setError(err.response?.data.message)
+                                    }
+                                }).finally(() => {
+                                    setStep('unshown')
+                                })
+                                alert('Verifique seu e-mail para recuperar sua senha.')
+                            }} className={`${styles.buttonEntrar}`}>{step === "unshown" ? "RECUPERAR SENHA" : <ButtonLoadingComponent />}</button>
+                        </div>
+
+                        <div className={styles.noAccountDiv}>
+                            <span onClick={() => props.changeOption("Cadastro")} className={styles.createAccountText}>Voltar ao Cadastro</span>
+                        </div>
+
+                        <div className={styles.closeDiv}>
+                            <span onClick={() => props.setClose()} className={styles.closetext}>X</span>
+                        </div>
+
+                    </div>
+                </div>
+            )}
 
         </div >
     );

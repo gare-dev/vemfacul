@@ -2,6 +2,7 @@ import styles from "@/styles/landinpage.module.scss";
 import Api from "@/api";
 import Header from "@/components/Header";
 import Card from "@/components/Cards";
+import Funcionalidades from "@/components/Funcionalidades";
 import Popup from "@/components/Popup";
 import PopupFilter from "@/components/PopupFilter";
 import DemoWrapper from "@/hooks/DemoWrapper";
@@ -93,9 +94,23 @@ export default function LandingPage() {
             </div>
         )
     }
-
+    const cardCursos = [
+        {
+            title: "ETAPA",
+            img: "/assets/img/etapa.png"
+        },
+        {
+            title: "EPUFABC",
+            img: "/assets/img/anglo.png"
+        },
+        {
+            title: "ANGLO",
+            img: "/assets/img/epufabc.png"
+        }
+    ]
     return (
-        <div className="pb-24" style={{ backgroundColor: "#778CFE" }}>
+
+        <div className="pb-24" style={{ backgroundColor: "#D0D7FF" }}>
             <Popup
                 canAdd
                 isVisible={isVisible}
@@ -147,12 +162,24 @@ export default function LandingPage() {
                     flexWrap: "wrap",
 
                 }}>
-                    <Card curso="ETAPA" img="/assets/img/etapa.png" />
-                    <Card curso="EPUFABC" img="/assets/img/anglo.png" />
-                    <Card curso="ANGLO" img="/assets/img/epufabc.png" />
-                </div>
-            </div>
-
+    {
+        cardCursos.map((item, index) => (
+            <Card key={index} curso={item.title} img={item.img} />
+        ))
+    }
+                </div >
+            </div >
+            <h1 className={styles.tituloFuncionalidades} style={{
+                width: "auto",
+                fontSize: "2rem",
+                fontWeight: "bold",
+                textAlign: "right",
+                position: "relative",
+                right: '10%',
+                margin: ".2rem 0 0 0",
+                color: "#333"
+            }}>Funcionalidades</h1>
+            <Funcionalidades />
             <main className="flex items-center justify-center">
                 <DemoWrapper
                     isEditable={false}
@@ -160,6 +187,6 @@ export default function LandingPage() {
                     popUpClick={() => setIsVisible(true)}
                     popupFilterClick={() => setPopupVisible(true)} />
             </main>
-        </div>
+        </div >
     )
 }

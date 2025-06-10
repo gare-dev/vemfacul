@@ -1,6 +1,7 @@
 import styles from '@/styles/cardlandingpagecomponent.module.scss';
 import { IoLocationSharp } from 'react-icons/io5';
 
+
 interface CardProps {
     title?: boolean;
     curso?: string;
