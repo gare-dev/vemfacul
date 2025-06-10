@@ -61,6 +61,12 @@ class _Api {
     return await this._instance.post("/api/resetpassword", {
       password, email
     });
+  public async editProfile(formData: any) {
+    return await this._instance.post('/api/editprofile', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    })
   }
 
   public async getEvents() {
