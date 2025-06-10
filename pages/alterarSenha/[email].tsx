@@ -1,11 +1,11 @@
 import Api from "@/api";
 import Styles from "@/styles/alterarSenha.module.scss";
-import { verify } from "crypto";
+import { AxiosError } from "axios";
 import { useRouter } from "next/router";
 
-const alterarSenha = () => {
+const AlterarSenha = () => {
     const router = useRouter();
-    const {email} = router.query;
+    const { email } = router.query;
 
     if (!email || typeof email !== 'string') {
         return <div>Carregando...</div>;
@@ -23,8 +23,10 @@ const alterarSenha = () => {
                         await Api.resetPassword(password, email);
                         alert('Senha redefinida com sucesso.');
                         router.push('/');
-                    } catch (error: any) {
-                        alert(`Error ao redefinir senha: ${error?.response?.data?.message || error.message || error}`);
+                    } catch (error) {
+                        if (error instanceof AxiosError) {
+                            alert(`Error ao redefinir senha: ${error?.response?.data?.message || error.message || error}`);
+                        }
                     }
                 }}>
                     <p className={Styles.label}>NOVA SENHA</p>
@@ -38,4 +40,4 @@ const alterarSenha = () => {
     )
 }
 
-export default alterarSenha;
+export default AlterarSenha;

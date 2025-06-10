@@ -4,7 +4,6 @@ import { useState } from "react";
 import ButtonLoadingComponent from "../ButtonLoadingComponent";
 import { AxiosError } from "axios";
 import { useRouter } from "next/router";
-import useOpenPopup from "@/hooks/useOpenPopup";
 
 interface props {
     setClose: () => void;
