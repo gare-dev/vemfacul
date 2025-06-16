@@ -236,19 +236,28 @@
     right: 15px;
     cursor: pointer;
     font-size: 20px;
-    color: #000;
+    color: #ffff;
+    background-color: #001ECB;
     font-family: "Kantumruy Pro", sans-serif;
     font-weight: 300;
+    padding: .6rem;
+    border: .1rem solid;
+    border-radius: .5rem;
     transition: color 0.3s ease;
 
     .closeText {
         font-family: "Kantumruy Pro", sans-serif;
-        font-weight: 200;
-        font-size: 20px;
+        font-weight: bold;
+        font-size: 1rem;
         color: #000;
         cursor: pointer;
         transition: color 0.3s ease;
+    }
 
+    &:hover {
+        border-color: #001ECB;
+        background-color: white;
+        color: #001ECB;
     }
 
 

@@ -3,7 +3,7 @@
     display: block;
     position: absolute;
     left: 0;
-    width: 70%;
+    width: 80%;
     height: .5rem;
     border-radius: .5rem;
     background-color: #3333;
@@ -20,4 +20,32 @@
     border-radius: .5rem;
     background-color: #3333;
     margin-top: 10px;
+}
+
+.textInfo {
+    position: absolute;
+    display: flex;
+    right: 0;
+    top: 10%;
+    width: 60%;
+    height: 15rem;
+    outline: hidden;
+    box-sizing: border-box;
+    right: 0;
+    background-color: #778CFE;
+    padding: 0 1rem;
+    z-index: 0;
+    border-top-right-radius: .5rem;
+    border-bottom-right-radius: .5rem;
+
+    p {
+        font-family: "Kantumruy Pro", sans-serif;
+        align-self: center;
+        font-weight: bold;
+        font-size: 1.2rem;
+        text-align: justify;
+        line-height: 2.2;
+        color: #ffff;
+
+    }
 }
