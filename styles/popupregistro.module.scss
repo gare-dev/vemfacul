@@ -33,8 +33,23 @@
             .errorText {
                 font-family: "Kantumruy Pro", sans-serif;
                 font-weight: 500;
-                font-size: 15px;
+                font-size: 1rem;
                 color: #ff3535;
+                text-align: center;
+                margin: 0;
+            }
+        }
+
+        .sucessDiv {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+
+            .sucessText {
+                font-family: "Kantumruy Pro", sans-serif;
+                font-weight: 500;
+                font-size: 1rem;
+                color: #239a2f;
                 text-align: center;
                 margin: 0;
             }

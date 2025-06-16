@@ -143,8 +143,7 @@
     }
 
     .active {
-        animation: gira ease-in-out 1s 1;
-        animation-delay: 0ms;
+        background-color: #778CFE;
 
         .icon {
             display: none;
@@ -155,7 +154,7 @@
             font-weight: 500;
             transition: 1s ease;
             font-size: 1rem;
-            
+
         }
     }
 
@@ -199,13 +198,5 @@
 
     100% {
         transform: translate(0, 0) rotate(0deg);
-    }
-}
-
-
-@keyframes gira {
-    to {
-        perspective: 5rem;
-        transform: rotateY(180deg);
     }
 }

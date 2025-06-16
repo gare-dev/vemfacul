@@ -18,6 +18,8 @@ export default function PopupRegistro(props: props) {
     const [isClosing, setIsClosing] = useState(false);
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [sucess, setSucess] = useState(true)
+    const [value, setValue] = useState('')
     const router = useRouter()
 
     const handleClose = () => {
@@ -228,49 +230,78 @@ export default function PopupRegistro(props: props) {
                             <span className={styles.welcomeToText}>Recuperação de senha</span>
                         </div>
                     </div>
-                    {error &&
+                    {error && (
                         <div className={styles.errorDiv}>
                             <span className={styles.errorText}>{error}</span>
                         </div>
-                    }
-
+                    )}
+                    {sucess && (
+                        <div className={styles.sucessDiv}>
+                            <span className={styles.sucessText}>{value}</span>
+                        </div>
+                    )}
                     <div className={styles.mainFormDiv}>
                         <div className={styles.emailDiv}>
                             <label className={styles.emailLabel}>E-MAIL</label>
-                            <input value={email} onChange={(e) => setEmail(e.target.value)} className={styles.emailInput} type="email" />
+                            <input
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className={styles.emailInput}
+                                type="email"
+                            />
                         </div>
 
                         <div className={styles.buttonDiv}>
-                            <button onClick={() => {
-                                if (!email) return setError("Preencha o campo email");
-                                setStep('loading')
-
-                                Api.forgotPassword(email).then(() => {
-                                    setError('')
-                                    setStep('checkemail')
-                                }).catch((err) => {
-                                    if (err instanceof AxiosError) {
-                                        setError(err.response?.data.message)
+                            <button
+                                onClick={async () => {
+                                    if (!email) {
+                                        setError("Preencha o campo email");
+                                        return;
                                     }
-                                }).finally(() => {
-                                    setStep('unshown')
-                                })
-                                alert('Verifique seu e-mail para recuperar sua senha.')
-                            }} className={`${styles.buttonEntrar}`}>{step === "unshown" ? "RECUPERAR SENHA" : <ButtonLoadingComponent />}</button>
+                                    setStep("loading");
+                                    setSucess(false);
+                                    setError("");
+                                    try {
+                                        await Api.forgotPassword(email);
+                                        setSucess(true);
+                                        setValue("Email enviado");
+                                        setStep("checkemail");
+                                    } catch (err: any) {
+                                        if (err instanceof AxiosError) {
+                                            setError(err.response?.data.message || "Erro ao enviar email");
+                                        }
+                                    } finally {
+                                        setStep("unshown");
+                                    }
+                                }}
+                                className={styles.buttonEntrar}
+                                disabled={step === "loading"}
+                            >
+                                {step === "loading" ? <ButtonLoadingComponent /> : "RECUPERAR SENHA"}
+                            </button>
                         </div>
 
                         <div className={styles.noAccountDiv}>
-                            <span onClick={() => props.changeOption("Cadastro")} className={styles.createAccountText}>Voltar ao Cadastro</span>
+                            <span
+                                onClick={() => props.changeOption("Cadastro")}
+                                className={styles.createAccountText}
+                            >
+                                Voltar ao Cadastro
+                            </span>
                         </div>
 
                         <div className={styles.closeDiv}>
-                            <span onClick={() => props.setClose()} className={styles.closetext}>X</span>
+                            <span
+                                onClick={() => props.setClose()}
+                                className={styles.closetext}
+                            >
+                                X
+                            </span>
                         </div>
-
                     </div>
                 </div>
             )}
-
         </div >
     );
+
 }
