@@ -1,17 +1,18 @@
 .main {
+    position: relative;
     display: flex;
     justify-content: center;
 
     .profileContainer {
         width: 60%;
         height: 700px;
-
         background-color: #F5F5F5;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         border: 1px solid #778CFE;
         border-top: none;
         border-radius: 0 0 5px 5px;
         position: relative;
+        margin: 0 1rem 0;
 
         .profileHeader {
             width: 100%;
@@ -154,4 +155,19 @@
 
         }
     }
+
+    .containerProfilePost {
+        position: absolute;
+        width: 60%;
+        height: auto;
+        margin: 10rem 0 0 0;
+        bottom: -70%;
+        background-color: #F5F5F5;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        border: 1px solid #778CFE;
+        border-radius: 0 0 5px 5px;
+
+    }
+
+
 }

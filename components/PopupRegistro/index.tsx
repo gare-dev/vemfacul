@@ -219,8 +219,8 @@ export default function PopupRegistro(props: props) {
                         </div>)
                     }
                 </div>
-            )
-            };
+            )}
+
             {props.selectedOption === "EsqueciSenha" && (
                 <div className={styles.popupBox}>
                     <div className={styles.welcomeDiv}>
@@ -228,49 +228,107 @@ export default function PopupRegistro(props: props) {
                             <span className={styles.welcomeToText}>Recuperação de senha</span>
                         </div>
                     </div>
-                    {error &&
+                    {error && (
                         <div className={styles.errorDiv}>
                             <span className={styles.errorText}>{error}</span>
                         </div>
-                    }
-
+                    )}
+                 
                     <div className={styles.mainFormDiv}>
                         <div className={styles.emailDiv}>
                             <label className={styles.emailLabel}>E-MAIL</label>
-                            <input value={email} onChange={(e) => setEmail(e.target.value)} className={styles.emailInput} type="email" />
+                            <input
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className={styles.emailInput}
+                                type="email"
+                            />
                         </div>
 
                         <div className={styles.buttonDiv}>
-                            <button onClick={() => {
-                                if (!email) return setError("Preencha o campo email");
-                                setStep('loading')
-
-                                Api.forgotPassword(email).then(() => {
-                                    setError('')
-                                    setStep('checkemail')
-                                }).catch((err) => {
-                                    if (err instanceof AxiosError) {
-                                        setError(err.response?.data.message)
+                            <button
+                                onClick={async () => {
+                                    if (!email) {
+                                        setError("Preencha o campo email");
+                                        return;
                                     }
-                                }).finally(() => {
-                                    setStep('unshown')
-                                })
-                                alert('Verifique seu e-mail para recuperar sua senha.')
-                            }} className={`${styles.buttonEntrar}`}>{step === "unshown" ? "RECUPERAR SENHA" : <ButtonLoadingComponent />}</button>
+                                    setStep("loading");
+                                    setError("");
+                                    try {
+                                        await Api.forgotPassword(email);
+                                        props.changeOption('EmaileEnviado');
+                                        setStep("checkemail");
+                                    } catch (err: unknown) {
+                                        if (err instanceof AxiosError) {
+                                            setError(err.response?.data.message || "Erro ao enviar email");
+                                        }
+                                    } finally {
+                                        setStep("unshown");
+                                    }
+                                }}
+                                className={styles.buttonEntrar}
+                                disabled={step === "loading"}
+                            >
+                                {step === "loading" ? <ButtonLoadingComponent /> : "RECUPERAR SENHA"}
+                            </button>
                         </div>
 
                         <div className={styles.noAccountDiv}>
-                            <span onClick={() => props.changeOption("Cadastro")} className={styles.createAccountText}>Voltar ao Cadastro</span>
+                            <span
+                                onClick={() => props.changeOption("Cadastro")}
+                                className={styles.createAccountText}
+                            >
+                                Voltar ao Cadastro
+                            </span>
                         </div>
 
                         <div className={styles.closeDiv}>
-                            <span onClick={() => props.setClose()} className={styles.closetext}>X</span>
+                            <span
+                                onClick={() => props.setClose()}
+                                className={styles.closetext}
+                            >
+                                X
+                            </span>
                         </div>
-
                     </div>
                 </div>
             )}
-
+            {props.selectedOption == 'EmaileEnviado' && (
+                <div className={styles.popupBox}>
+                    <div className={styles.welcomeDiv}>
+                        <div>
+                            <span className={styles.welcomeToText}>Verifique seu e-mail</span>
+                        </div>
+                    </div>
+                    <div className={styles.checkEmailDiv}>
+                        <div className={styles.checkEmail}>
+                            <p className={styles.checkEmailText}>Enviamos um link de recuperação para o seu e-mail.</p>
+                        </div>
+                        <div className={styles.checkEmailDescription} style={{
+                            flexDirection: "column"
+                        }}>
+                            <p className={styles.checkEmailDescriptionText}>
+                                Por favor, acesse sua caixa de entrada e siga as instruções para redefinir sua senha.
+                            </p>
+                            <br />
+                            <p className={styles.checkEmailDescriptionText}>
+                                Errou o e-mail?{" "}
+                                <span
+                                    className={styles.createAccountText}
+                                    style={{ cursor: "pointer", textDecoration: "underline", color: "#001ECB" }}
+                                    onClick={() => props.changeOption("EsqueciSenha")}
+                                >
+                                    Tentar novamente
+                                </span>
+                            </p>
+                        </div>
+                        <div className={styles.closeDiv}>
+                            <span onClick={handleClose} className={styles.closetext}>X</span>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div >
     );
+
 }

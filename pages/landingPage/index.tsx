@@ -97,15 +97,23 @@ export default function LandingPage() {
     const cardCursos = [
         {
             title: "ETAPA",
-            img: "/assets/img/etapa.png"
-        },
-        {
-            title: "EPUFABC",
-            img: "/assets/img/anglo.png"
+            img: "/assets/img/etapa.png",
+            position: "left",
+            top: "5%",
         },
         {
             title: "ANGLO",
-            img: "/assets/img/epufabc.png"
+            img: "/assets/img/anglo.png",
+            text: "Acreditamos que todos merecem acesso ao ensino superior. Oferecemos apoio pedagógico, aulas dinâmicas e um ambiente acolhedor para transformar sonhos em conquistas.",
+            position: "right",
+            top: "38%"
+        },
+        {
+            title: "EPUFACBC",
+            img: "/assets/img/epufabc.png",
+            text: "Com estrutura completa, simulados frequentes e acompanhamento individualizado, potencializamos o desempenho dos estudantes rumo às melhores universidades do país.",
+            position: "left",
+            bottom: "0"
         }
     ]
     return (
@@ -127,8 +135,8 @@ export default function LandingPage() {
             />
 
             <Header />
-            <Card title img="/assets/img/cardMain_img.png" />
-
+            <Card title
+                img="/assets/img/cardMain_img.png" />
             <h1 className={styles.tituloCards} style={{
                 width: "80%",
                 fontSize: "2rem",
@@ -152,21 +160,52 @@ export default function LandingPage() {
 
             }}>
                 <div className="cardcursos" style={{
+                    position: "relative",
                     display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-around",
-                    alignItems: "center",
+                    flexDirection: "column",
                     width: "80%",
+                    height: "70rem",
                     margin: " 0",
-                    padding: "2rem 1rem",
-                    flexWrap: "wrap",
-
                 }}>
-    {
-        cardCursos.map((item, index) => (
-            <Card key={index} curso={item.title} img={item.img} />
-        ))
-    }
+                    {
+                        cardCursos.map((item, index) => (
+                            <Card
+                                style={{
+                                    [item.position]: "0",
+                                    top: [item.top],
+                                    bottom: [item.bottom]
+                                }}
+                                key={index}
+                                curso={item.title}
+                                img={item.img}
+                            />
+                        ))
+                    }
+                    <div className={styles.textInfo}>
+                        <p>
+                            Metodologia inovadora, materiais atualizados, professores experientes, preparação de qualidade, aprovação.
+                        </p>
+                    </div>
+                    <div className={styles.textInfo} style={{
+                        left: "0",
+                        top: "41%",
+                        borderTopLeftRadius: ".5rem",
+                        borderBottomLeftRadius: ".5rem",
+                        borderTopRightRadius: "0",
+                        borderBottomRightRadius: "0"
+                    }}>
+                        <p>
+                            Suporte personalizado e recursos modernos para sua melhor preparação para o vestibular.
+                        </p>
+                    </div>
+                    <div className={styles.textInfo} style={{
+                        right: "0",
+                        top: "75%",
+                    }}>
+                        <p>
+                            Excelência no ensino e apoio constante para sua aprovação. Conte com nossa equipe para conquistar sua vaga na universidade.
+                        </p>
+                    </div>
                 </div >
             </div >
             <h1 className={styles.tituloFuncionalidades} style={{

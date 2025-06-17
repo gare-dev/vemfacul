@@ -143,8 +143,7 @@
     }
 
     .active {
-        animation: gira ease-in-out 1s 1;
-        animation-delay: 0ms;
+        background-color: #778CFE;
 
         .icon {
             display: none;
@@ -155,18 +154,20 @@
             font-weight: 500;
             transition: 1s ease;
             font-size: 1rem;
-            
+
         }
     }
 
 
 
     .img {
+        position: absolute;
         display: flex;
         align-items: center;
         justify-content: center;
         width: 100%;
         height: 100%;
+        bottom: -10%;
         z-index: 2222;
         margin: 1rem 0 0 0;
         z-index: 0;
@@ -175,6 +176,7 @@
             width: 25rem;
             height: 25rem;
             object-fit: cover;
+
         }
     }
 }
@@ -199,13 +201,5 @@
 
     100% {
         transform: translate(0, 0) rotate(0deg);
-    }
-}
-
-
-@keyframes gira {
-    to {
-        perspective: 5rem;
-        transform: rotateY(180deg);
     }
 }

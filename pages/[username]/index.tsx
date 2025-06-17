@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import LoadingComponent from "@/components/LoadingComponent";
 import { UserProfileType } from "@/types/userProfileType";
 import EditProfilePopup from "@/components/EditProfilePopup";
+import UserPost from "@/components/UserPost";
 import getCookieValue from "@/utils/getCookie";
 import decodeJwt from "@/utils/decodeJwt";
 
@@ -100,6 +101,22 @@ export default function UserProfile() {
                             )
                         }) : userProfile.vestibulares}</p>
                     </div>
+                </div>
+                <div className={styles.containerProfilePost}>
+                    <UserPost
+                        profilePhoto={userProfile.foto}
+                        profilename={userProfile.nome}
+                        username={userProfile.username}
+                        postDate="20/04/2025" // exemplo
+                        postContent="Oi pessoal da apresentação. Segue nosso insta @vemfacul2025" //exemplo
+                        />
+                    <UserPost
+                        profilePhoto={userProfile.foto}
+                        profilename={userProfile.nome}
+                        username={userProfile.username}
+                        postDate="20/04/2025" // exemplo
+                        postContent="Oi pessoal da apresentação. Segue nosso insta @vemfacul2025" //exemplo
+                        />
                 </div>
             </div>
         </>

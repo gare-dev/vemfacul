@@ -4,6 +4,21 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
+
+    .sucessDiv {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+
+        .sucessText {
+            font-family: "Kantumruy Pro", sans-serif;
+            font-weight: 500;
+            font-size: 1rem;
+            color: #239a2f;
+            text-align: center;
+            margin: 0;
+        }
+    }
 }
 
 .form {
