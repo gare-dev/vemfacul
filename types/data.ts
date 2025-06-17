@@ -12,6 +12,7 @@ type PopupType = {
     link: string
     hora: string
     id_pevent: string
+    isimportant: boolean
 }
 
 export default PopupType

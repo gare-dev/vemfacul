@@ -61,7 +61,7 @@ export default function Calendario() {
         }
 
     }
-    function getOverview(info: "totalEvents" | "next31Days" | "next7Days" | "getRedacao" | "getSimulado" | "getTodayEvents") {
+    function getOverview(info: "totalEvents" | "next31Days" | "next7Days" | "getRedacao" | "getSimulado" | "getTodayEvents" | "getImportantEvents") {
 
         const overview = {
             totalEvents: events.length,
@@ -69,17 +69,22 @@ export default function Calendario() {
             next7Days: getNext7DaysEvents(),
             getRedacao: getType("redacao"),
             getSimulado: getType("simulado"),
-            getTodayEvents: getTodayEvents()
+            getTodayEvents: getTodayEvents(),
+            getImportantEvents: getImportantEvents()
         }
 
         return overview[info as keyof typeof overview]
     }
 
     function getFilter() {
-        if (
-            filtroEventos[0].tipoDeEvento.length === 0 &&
-            filtroEventos[0].tipodeCursinho.length === 0
-        ) {
+        const filtro = filtroEventos[0];
+
+        const nenhumFiltroMarcado =
+            filtro.tipoDeEvento.length === 0 &&
+            filtro.tipodeCursinho.length === 0 &&
+            !filtro.importante;
+
+        if (nenhumFiltroMarcado) {
             setPopupVisible(false);
             return setEvents(originalEvents);
         }
@@ -88,13 +93,16 @@ export default function Calendario() {
             return filtroEventos.some((f) => {
                 const tipoOk = f.tipoDeEvento.length === 0 || f.tipoDeEvento.includes(dado.type);
                 const cursinhoOk = f.tipodeCursinho.length === 0 || f.tipodeCursinho.includes(dado.cursinho?.toLowerCase());
-                return tipoOk && cursinhoOk;
+                const importanteOk = !f.importante || dado.isimportant === true;
+
+                return tipoOk && cursinhoOk && importanteOk;
             });
         });
 
         setPopupVisible(false);
         setEvents(retorno);
     }
+
 
     function getNext31DaysEvents() {
         const hoje = new Date();
@@ -162,7 +170,20 @@ export default function Calendario() {
 
             if (+evento.day === today.getDate() && +evento.month === today.getMonth() && +evento.year === today.getFullYear()) {
                 count++
-                console.log("entrou")
+            }
+        })
+
+        return count
+    }
+
+
+
+    function getImportantEvents() {
+        let count = 0
+
+        events.forEach((evento) => {
+            if (evento.isimportant) {
+                count++
             }
         })
 
@@ -171,7 +192,6 @@ export default function Calendario() {
 
     useEffect(() => {
         handleGetPersonalEvents()
-
     }, [])
 
     useEffect(() => {
@@ -236,9 +256,13 @@ export default function Calendario() {
                         <p>{getOverview("getSimulado")}</p>
                         <h1>SIMULADOS MARCADOS</h1>
                     </div>
-
+                    <div>
+                        <p>{getOverview("getImportantEvents")}</p>
+                        <h1>EVENTOS IMPORTANTES</h1>
+                    </div>
                 </div>
             </div>
+
 
             <div>
                 <DemoWrapper
