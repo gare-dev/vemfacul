@@ -96,20 +96,20 @@ export default function LandingPage() {
     }
     const cardCursos = [
         {
-            title: "Preparação Completa",
+            title: "ETAPA",
             img: "/assets/img/etapa.png",
             position: "left",
             top: "5%",
         },
         {
-            title: "Inclusão e Oportunidade",
+            title: "ANGLO",
             img: "/assets/img/anglo.png",
             text: "Acreditamos que todos merecem acesso ao ensino superior. Oferecemos apoio pedagógico, aulas dinâmicas e um ambiente acolhedor para transformar sonhos em conquistas.",
             position: "right",
             top: "38%"
         },
         {
-            title: "Tradição em Resultados",
+            title: "EPUFACBC",
             img: "/assets/img/epufabc.png",
             text: "Com estrutura completa, simulados frequentes e acompanhamento individualizado, potencializamos o desempenho dos estudantes rumo às melhores universidades do país.",
             position: "left",
