@@ -14,6 +14,10 @@ export const eventList = [
     {
         name: "EXERCÍCIOS",
         value: "exercicios",
+    },
+    {
+        name: "IMPORTANTES",
+        value: "importante",
     }
 ]
 

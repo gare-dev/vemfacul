@@ -129,6 +129,7 @@ export default function EditProfilePopup(props: Props) {
                             <input
                                 value={profile.nome}
                                 type="text"
+                                maxLength={30}
                                 defaultValue={props.name}
                                 onChange={(e) =>
                                     setProfile((prev) => ({
@@ -140,7 +141,7 @@ export default function EditProfilePopup(props: Props) {
                         </div>
                         <div className={styles.input}>
                             <label>Descrição</label>
-                            <textarea value={profile.descricao} onChange={(e) => setProfile((prev) => ({
+                            <textarea defaultValue={props.descricao} maxLength={200} value={profile.descricao} onChange={(e) => setProfile((prev) => ({
                                 ...prev,
                                 descricao: e.target.value
                             }))}></textarea>
