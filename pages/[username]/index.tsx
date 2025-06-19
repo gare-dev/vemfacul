@@ -7,9 +7,13 @@ import { useEffect, useState } from "react";
 import LoadingComponent from "@/components/LoadingComponent";
 import { UserProfileType } from "@/types/userProfileType";
 import EditProfilePopup from "@/components/EditProfilePopup";
+import CreatePostagem from "@/components/CreatePostagem";
 import UserPost from "@/components/UserPost";
 import getAuth from "@/utils/getAuth";
 import { AxiosError } from "axios";
+import { FaPen } from "react-icons/fa";
+import getCookieValue from "@/utils/getCookie";
+import decodeJwt from "@/utils/decodeJwt";
 
 
 export default function UserProfile() {
@@ -51,6 +55,7 @@ export default function UserProfile() {
 
     }, []);
 
+    const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
 
     const handleGetUserProfile = async () => {
         if (!username?.toString()) return router.push('/');
@@ -102,6 +107,10 @@ export default function UserProfile() {
                     refreshPage={() => router.reload()}
                 />
             }
+            {isVisibleSubmitPost && <CreatePostagem
+                btnClose={() => setIsVisibleSubmitPost(false)
+
+                } />}
             <div className={styles.main}>
                 <div className={styles.profileContainer}>
                     <div className={styles.profileHeader}>
@@ -146,6 +155,14 @@ export default function UserProfile() {
                         postDate="20/04/2025" // exemplo
                         postContent="Oi pessoal da apresentação. Segue nosso insta @vemfacul2025" //exemplo
                     />
+                </div>
+
+                <div className={styles.content_btn_postagem} onClick={() => setIsVisibleSubmitPost(!isVisibleSubmitPost)}>
+                    <button className={styles.btn}>
+                        <span>
+                            <FaPen />
+                        </span>
+                    </button>
                 </div>
             </div>
         </>

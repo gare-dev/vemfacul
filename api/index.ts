@@ -215,6 +215,12 @@ class _Api {
       throw error;
     }
   }
+
+  public async createPostagem(content: string) {
+    return await this._instance.post("api/createPostagem", {
+      content
+    })
+  }
 }
 
 const Api = new _Api("http://localhost:3001/"); //https://invest-api-rose.vercel.app/
