@@ -1,5 +1,6 @@
+// import Api from '@/api';
 import styles from '@/styles/userPost.module.scss'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface postProps {
     profilename: string;
@@ -8,8 +9,12 @@ interface postProps {
     postDate: string;
     postContent: string;
 }
+
 export default function UserPost(props: postProps) {
     const [liked, setLiked] = useState(false);
+    useEffect(() => {
+
+    }, [])
     return (
         <>
             <div className={styles.post}>
