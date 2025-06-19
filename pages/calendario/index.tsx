@@ -137,7 +137,7 @@ export default function Calendario() {
         events.forEach((evento) => {
 
             const dia = evento.day
-            const mes = evento.month // meses começam do zero
+            const mes = evento.month
             const ano = evento.year
 
             const dataEvento = new Date(ano, mes, dia);
