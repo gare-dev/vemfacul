@@ -223,6 +223,6 @@ class _Api {
   }
 }
 
-const Api = new _Api("http://localhost:3001/"); //https://invest-api-rose.vercel.app/
+const Api = new _Api("https://invest-api-rose.vercel.app/"); //https://invest-api-rose.vercel.app/
 
 export default Api;
