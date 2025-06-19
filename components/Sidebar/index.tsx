@@ -1,7 +1,7 @@
+import Api from "@/api"
 import styles from "@/styles/sidebar.module.scss"
 import AuthDataType from "@/types/authDataType"
-import decodeJwt from "@/utils/decodeJwt"
-import getCookieValue from "@/utils/getCookie"
+import getAuth from "@/utils/getAuth"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { FaCalendarAlt, FaRegUserCircle } from "react-icons/fa"
@@ -27,14 +27,9 @@ export default function Sidebar() {
 
     const activeIndex = navItems.findIndex(item => item.path === router.pathname) == -1 ? 6 : navItems.findIndex(item => item.path === router.pathname)
 
-    useEffect(() => {
-
-        console.log()
-
-    }, [router.pathname]);
     function handleSignout() {
-        if (getCookieValue("auth")) {
-            document.cookie = "auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+        if (getAuth()) {
+            localStorage.removeItem('auth');
             if (router.pathname === '/') {
                 router.reload();
             } else {
@@ -44,17 +39,29 @@ export default function Sidebar() {
     }
 
     useEffect(() => {
-        if (getCookieValue("auth")) {
-            const token: { email: string, image: string, name: string, username: string, iat: number, exp: number } = decodeJwt(getCookieValue("auth") ?? "")
-            setAuthData({
-                email: token.email,
-                image: token.image,
-                name: token.name,
-                username: token.username
-            })
-            return
+        console.log("AuthData changed:", authData);
+    }, [authData])
+
+    useEffect(() => {
+        const handleGetProfileIfo = async () => {
+            if (getAuth()) {
+                console.log("Auth found in localStorage")
+                try {
+                    const response = await Api.getProfileInfo()
+                    if (response.data.code === "PROFILE_INFO") {
+                        return setAuthData({
+                            name: response.data.data.nome,
+                            image: response.data.data.foto,
+                            username: response.data.data.username,
+                        })
+                    }
+                } catch (error) {
+                    console.error("Error fetching profile info:", error);
+                }
+            }
+            router.push('/')
         }
-        router.push('/')
+        handleGetProfileIfo()
     }, [])
 
     return (
