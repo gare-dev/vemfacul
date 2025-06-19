@@ -12,8 +12,6 @@ import UserPost from "@/components/UserPost";
 import getAuth from "@/utils/getAuth";
 import { AxiosError } from "axios";
 import { FaPen } from "react-icons/fa";
-import getCookieValue from "@/utils/getCookie";
-import decodeJwt from "@/utils/decodeJwt";
 
 
 export default function UserProfile() {
