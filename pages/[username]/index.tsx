@@ -1,3 +1,4 @@
+
 import Sidebar from "@/components/Sidebar";
 import { useRouter } from "next/router"
 import styles from "@/styles/profile.module.scss"
@@ -9,6 +10,8 @@ import EditProfilePopup from "@/components/EditProfilePopup";
 import CreatePostagem from "@/components/CreatePostagem";
 import UserPost from "@/components/UserPost";
 import { FaPen } from "react-icons/fa";
+import getCookieValue from "@/utils/getCookie";
+import decodeJwt from "@/utils/decodeJwt";
 
 
 export default function UserProfile() {
@@ -28,6 +31,16 @@ export default function UserProfile() {
     });
     const [loading, setLoading] = useState(true);
     const [isVisible, setIsVisible] = useState(false);
+    const [user, setUser] = useState<string | null>(null);
+
+    useEffect(() => {
+        const authCookie = getCookieValue("auth");
+        if (authCookie) {
+            const token: { username: string } = decodeJwt(authCookie);
+            setUser(token.username);
+        }
+    }, []);
+
     const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
 
     const handleGetUserProfile = async () => {
@@ -53,7 +66,7 @@ export default function UserProfile() {
         <>
             {loading && <LoadingComponent />}
             {!loading && <Sidebar />}
-            {isVisible &&
+            {isVisible && user === username &&
                 <EditProfilePopup
                     closePopup={() => setIsVisible(false)}
                     descricao={userProfile.descricao}
@@ -83,24 +96,11 @@ export default function UserProfile() {
                     </div>
                     <div className={styles.profileDescription}>
                         <p>{userProfile.descricao}</p>
-                        <div className={styles.profileStats}>
-                            <div className={styles.statsItem}>
-                                <p>{userProfile.posts_number || 0}</p>
-                                <span>Posts</span>
-                            </div>
-                            <div className={styles.statsItem}>
-                                <p>{userProfile.followers_number || 0}</p>
-                                <span>Seguidores</span>
-                            </div>
-                            <div className={styles.statsItem}>
-                                <p>{userProfile.following_number || 0}</p>
-                                <span>Seguindo</span>
-                            </div>
-                        </div>
                     </div>
-                    <div className={styles.editProfile}>
-                        <button onClick={() => setIsVisible(true)}>Editar Perfil</button>
-                    </div>
+                    {user === username &&
+                        <div className={styles.editProfile}>
+                            <button onClick={() => setIsVisible(true)}>Editar Perfil</button>
+                        </div>}
                     <div className={styles.interesses}>
                         <p>{Array.isArray(userProfile.vestibulares) ? userProfile.vestibulares?.map((interesse, index) => {
                             return (

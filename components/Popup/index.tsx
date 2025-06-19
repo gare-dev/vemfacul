@@ -59,7 +59,7 @@ export default function Popup(props: props) {
                                 <img className={s.image} src={calendarData.foto} alt="" />
                             </div>
                         )}
-                        <p>{`${padZero(calendarData.day)}/${calendarData.month + 1}/${calendarData.year}`}</p>
+                        <p>{`${padZero(calendarData.day)}/${String(Number(calendarData.month) + 1).padStart(2, "0")}/${calendarData.year}`}</p>
                         <p>{`${calendarData.hora ?? ""} `}</p>
 
                     </div>
@@ -75,7 +75,7 @@ export default function Popup(props: props) {
                                     {calendarData.title}
                                 </a>
                             ) : (
-                                <span className={s.type}>{calendarData.title}</span>
+                                <span style={{ color: calendarData.color }} className={s.type}>{calendarData.title}</span>
                             )}
 
                         </div>

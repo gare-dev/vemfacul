@@ -1,0 +1,124 @@
+.productCard {
+    position: relative;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+}
+
+.productCard:hover,
+.productCard:focus {
+    box-shadow: 0 8px 24px rgba(119, 140, 254, 0.4);
+    outline: none;
+}
+
+.productImage {
+    width: 100%;
+    height: 180px;
+    max-width: 300px;
+    max-height: 200px;
+    min-height: 150px;
+    border-radius: 12px;
+    object-fit: fit;
+
+
+}
+
+.titleRow {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.productTitle {
+    font-weight: 700;
+    font-size: 20px;
+    color: #111827;
+    margin: 0;
+    user-select: none;
+    flex: 1 1 auto;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.locationContainer {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #6b7280;
+    /* gray-500 */
+    user-select: none;
+    flex-shrink: 0;
+}
+
+.locationIcon {
+    color: #778CFE;
+    /* purple accent */
+    font-size: 18px;
+    display: inline-block;
+    user-select: none;
+}
+
+.ratingContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    user-select: none;
+    justify-content: flex-start;
+}
+
+.starIcon {
+    color: #fbbf24;
+    /* Amber 400 */
+    font-size: 20px;
+    display: inline-block;
+}
+
+.ratingText {
+    font-size: 14px;
+    color: #6b7280;
+    /* gray-500 */
+    user-select: none;
+}
+
+.plusButton {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background-color: #778CFE;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    color: #ffffff;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(124, 58, 237, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease;
+    font-size: 24px;
+    line-height: 1;
+    padding: 0;
+    user-select: none;
+    z-index: 1;
+}
+
+.plusButton:hover,
+.plusButton:focus {
+    background-color: #777CFE;
+    outline: none;
+}
