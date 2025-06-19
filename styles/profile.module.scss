@@ -169,5 +169,37 @@
 
     }
 
+    .content_btn_postagem {
+        position: fixed;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        bottom: 0%;
+        left: 20%;
+        width: 5%;
+        height: 7%;
+        margin: 0 .7rem .7rem 0;
+        background-color: #778CFE;
+        border: .1rem solid #778CFE;
+        border-radius: .5rem;
+        cursor: pointer;
+        transition: ease-in-out .2s;
+
+        span {
+            color: #fff;
+            transition: ease-in-out .2s;
+
+        }
+
+        &:hover {
+            background: #fff;
+            border-color: #778CFE;
+
+            span {
+                color: #778CFE;
+
+            }
+        }
+    }
 
 }

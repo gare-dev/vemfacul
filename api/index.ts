@@ -119,6 +119,12 @@ class _Api {
       username,
     });
   }
+
+  public async createPostagem(content: string) {
+    return await this._instance.post("api/createPostagem", {
+      content
+    })
+  }
 }
 
 const Api = new _Api("https://invest-api-rose.vercel.app/"); //https://invest-api-rose.vercel.app/
