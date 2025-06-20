@@ -13,6 +13,12 @@ import getAuth from "@/utils/getAuth";
 import { AxiosError } from "axios";
 import { FaPen } from "react-icons/fa";
 
+type Postagem = {
+  id: string | number;
+  content: string;
+  content_post?: string;
+  created_at?: string | Date;
+};
 
 export default function UserProfile() {
     const router = useRouter()
@@ -33,28 +39,39 @@ export default function UserProfile() {
     const [isVisible, setIsVisible] = useState(false);
     const [user, setUser] = useState<string | null>(null);
     const [postVisible, setPostVisibel] = useState(false)
+    const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
+    const [postagens, setPostagens] = useState<Postagem[]>([]);
 
     const handleGetPostagens = async () => {
         if (typeof username !== "string") {
-            return <div>loading</div>
+            return;
         } else {
             try {
                 const promise = await Api.getPostagem(username)
 
                 if (promise.data.code === "POSTAGENS_FOUND") {
-                    return (
-                        // setPostVisibel(true)
-                        console.log(promise.data.postagem)
-                    )
+                    console.log("apareceu")
+                    setPostagens(promise.data.postagens)
+                    setPostVisibel(true)
+                } else if (promise.data.code === "POSTAGEM_NOT_FOUND") {
+                    setPostagens([]);
+                    setPostVisibel(false);
                 } else {
-                    console.log(promise.data)
-                    return setPostVisibel(false)
+                    console.log("nao ta aparecendo nada")
                 }
             } catch (error) {
                 console.log(error)
             }
         }
     }
+
+    useEffect(() => {
+        if (typeof username === "string") {
+            handleGetPostagens()
+            console.log("ta rodando")
+        }
+    }, [username])
+
     useEffect(() => {
 
         const handleValidateProfile = async () => {
@@ -72,10 +89,8 @@ export default function UserProfile() {
             }
         }
         handleValidateProfile()
-
     }, []);
 
-    const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
 
     const handleGetUserProfile = async () => {
         if (!username?.toString()) return router.push('/');
@@ -128,9 +143,9 @@ export default function UserProfile() {
                 />
             }
             {isVisibleSubmitPost && <CreatePostagem
-                btnClose={() => setIsVisibleSubmitPost(false)
-
-                } />}
+                btnClose={() => setIsVisibleSubmitPost(false)}
+                refreshPage={() => router.reload()}
+            />}
             <div className={styles.main}>
                 <div className={styles.profileContainer}>
                     <div className={styles.profileHeader}>
@@ -161,14 +176,24 @@ export default function UserProfile() {
                     </div>
                 </div>
                 <div className={styles.containerProfilePost}>
-                    {postVisible && (
+                    {postVisible && postagens.length > 0 && postagens.map((post, idx) => (
                         <UserPost
+                            key={post.id || idx}
                             profilePhoto={userProfile.foto}
                             profilename={userProfile.nome}
                             username={userProfile.username}
-                            postDate="20/04/2025" // exemplo
-                            postContent="Oi pessoal da apresentação. Segue nosso insta @vemfacul2025" //exemplo
+                            postDate={
+                                post.created_at
+                                    ? (typeof post.created_at === "string"
+                                        ? post.created_at
+                                        : new Date(post.created_at).toLocaleDateString())
+                                    : "Data não informada"
+                            }
+                            postContent={post.content}
                         />
+                    ))}
+                    {postVisible && postagens.length === 0 && (
+                        <div><h1>nenhuma postagem encontrada</h1></div>
                     )}
                 </div>
 

@@ -1,11 +1,14 @@
 .main {
+    width: 100%;
     position: relative;
     display: flex;
-    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 
     .profileContainer {
         width: 60%;
-        height: 700px;
+        height: 40rem;
+        position: absolute;
         background-color: #F5F5F5;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         border: 1px solid #778CFE;
@@ -157,11 +160,9 @@
     }
 
     .containerProfilePost {
-        position: absolute;
         width: 60%;
         height: auto;
         margin: 10rem 0 0 0;
-        bottom: -70%;
         background-color: #F5F5F5;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         border: 1px solid #778CFE;

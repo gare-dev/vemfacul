@@ -223,7 +223,7 @@ class _Api {
   }
 
   public async getPostagem(username: string) {
-    return await this._instance.post(`/api/postagens/:${username}`)
+    return await this._instance.post(`/api/postagens/${username}`)
   }
 }
 
