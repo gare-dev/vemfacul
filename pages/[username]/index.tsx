@@ -14,15 +14,21 @@ import { AxiosError } from "axios";
 import { FaPen } from "react-icons/fa";
 
 type Postagem = {
-  id: string | number;
-  content: string;
-  content_post?: string;
-  created_at?: string | Date;
+    id: string | number;
+    content: string;
+    content_post?: string;
+    created_at?: string | Date;
 };
 
 export default function UserProfile() {
     const router = useRouter()
     const { username } = router.query;
+    const [loading, setLoading] = useState(true);
+    const [isVisible, setIsVisible] = useState(false);
+    const [user, setUser] = useState<string | null>(null);
+    const [postVisible, setPostVisibel] = useState(false)
+    const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
+    const [postagens, setPostagens] = useState<Postagem[]>([]);
     const [userProfile, setUserProfile] = useState<UserProfileType>({
         nome: "",
         username: "",
@@ -33,14 +39,9 @@ export default function UserProfile() {
         following_number: "0",
         posts_number: "0",
         vestibulares: [],
-        materias_lecionadas: []
+        materias_lecionadas: [],
+        nivel: ""
     });
-    const [loading, setLoading] = useState(true);
-    const [isVisible, setIsVisible] = useState(false);
-    const [user, setUser] = useState<string | null>(null);
-    const [postVisible, setPostVisibel] = useState(false)
-    const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
-    const [postagens, setPostagens] = useState<Postagem[]>([]);
 
     const handleGetPostagens = async () => {
         if (typeof username !== "string") {
@@ -114,8 +115,8 @@ export default function UserProfile() {
                     following_number: "0",
                     posts_number: "0",
                     vestibulares: [],
-                    materias_lecionadas: []
-
+                    materias_lecionadas: [],
+                    nivel: ""
                 })
 
 
@@ -179,17 +180,20 @@ export default function UserProfile() {
                     {postVisible && postagens.length > 0 && postagens.map((post, idx) => (
                         <UserPost
                             key={post.id || idx}
-                            profilePhoto={userProfile.foto}
-                            profilename={userProfile.nome}
+                            name={userProfile.nome}
                             username={userProfile.username}
-                            postDate={
+                            date={
                                 post.created_at
                                     ? (typeof post.created_at === "string"
                                         ? post.created_at
                                         : new Date(post.created_at).toLocaleDateString())
                                     : "Data não informada"
                             }
-                            postContent={post.content}
+                            content={post.content}
+                            profileImage={userProfile.foto}
+                            timestamp={post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).toISOString()) : ""}
+                            likes={0}
+                            comments={0}
                         />
                     ))}
                     {postVisible && postagens.length === 0 && (
