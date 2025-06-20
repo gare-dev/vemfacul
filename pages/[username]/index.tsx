@@ -1,3 +1,4 @@
+
 import Sidebar from "@/components/Sidebar";
 import { useRouter } from "next/router"
 import styles from "@/styles/profile.module.scss"
@@ -6,6 +7,11 @@ import { useEffect, useState } from "react";
 import LoadingComponent from "@/components/LoadingComponent";
 import { UserProfileType } from "@/types/userProfileType";
 import EditProfilePopup from "@/components/EditProfilePopup";
+import CreatePostagem from "@/components/CreatePostagem";
+import UserPost from "@/components/UserPost";
+import getAuth from "@/utils/getAuth";
+import { AxiosError } from "axios";
+import { FaPen } from "react-icons/fa";
 
 
 export default function UserProfile() {
@@ -25,6 +31,29 @@ export default function UserProfile() {
     });
     const [loading, setLoading] = useState(true);
     const [isVisible, setIsVisible] = useState(false);
+    const [user, setUser] = useState<string | null>(null);
+
+    useEffect(() => {
+
+        const handleValidateProfile = async () => {
+            if (getAuth()) {
+                try {
+                    const response = await Api.validateProfile()
+
+                    if (response.data.code === "PROFILE_VALIDATED") {
+                        setUser(response.data.data.username);
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+
+            }
+        }
+        handleValidateProfile()
+
+    }, []);
+
+    const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
 
     const handleGetUserProfile = async () => {
         if (!username?.toString()) return router.push('/');
@@ -36,7 +65,24 @@ export default function UserProfile() {
                 setUserProfile(response.data.data);
             }
         } catch (error) {
-            console.log(error)
+            if (error instanceof AxiosError && error.response?.data.code === "USER_NOT_FOUND") {
+                console.log("Usuário não encontrado");
+                setUserProfile({
+                    nome: "",
+                    username: username?.toString() || "",
+                    foto: "",
+                    header: "",
+                    descricao: "Essa conta não existe.",
+                    followers_number: "0",
+                    following_number: "0",
+                    posts_number: "0",
+                    vestibulares: [],
+                    materias_lecionadas: []
+
+                })
+
+
+            }
         } finally {
             setLoading(false);
         }
@@ -49,7 +95,7 @@ export default function UserProfile() {
         <>
             {loading && <LoadingComponent />}
             {!loading && <Sidebar />}
-            {isVisible &&
+            {isVisible && user === username &&
                 <EditProfilePopup
                     closePopup={() => setIsVisible(false)}
                     descricao={userProfile.descricao}
@@ -59,6 +105,10 @@ export default function UserProfile() {
                     refreshPage={() => router.reload()}
                 />
             }
+            {isVisibleSubmitPost && <CreatePostagem
+                btnClose={() => setIsVisibleSubmitPost(false)
+
+                } />}
             <div className={styles.main}>
                 <div className={styles.profileContainer}>
                     <div className={styles.profileHeader}>
@@ -71,28 +121,15 @@ export default function UserProfile() {
                         <p>{userProfile.nome}</p>
                     </div>
                     <div className={styles.profileUsername}>
-                        <p>@{userProfile.username}</p>
+                        {userProfile.username && <p>@{userProfile.username}</p>}
                     </div>
                     <div className={styles.profileDescription}>
                         <p>{userProfile.descricao}</p>
-                        <div className={styles.profileStats}>
-                            <div className={styles.statsItem}>
-                                <p>{userProfile.posts_number || 0}</p>
-                                <span>Posts</span>
-                            </div>
-                            <div className={styles.statsItem}>
-                                <p>{userProfile.followers_number || 0}</p>
-                                <span>Seguidores</span>
-                            </div>
-                            <div className={styles.statsItem}>
-                                <p>{userProfile.following_number || 0}</p>
-                                <span>Seguindo</span>
-                            </div>
-                        </div>
                     </div>
-                    <div className={styles.editProfile}>
-                        <button onClick={() => setIsVisible(true)}>Editar Perfil</button>
-                    </div>
+                    {user === username &&
+                        <div className={styles.editProfile}>
+                            <button onClick={() => setIsVisible(true)}>Editar Perfil</button>
+                        </div>}
                     <div className={styles.interesses}>
                         <p>{Array.isArray(userProfile.vestibulares) ? userProfile.vestibulares?.map((interesse, index) => {
                             return (
@@ -100,6 +137,30 @@ export default function UserProfile() {
                             )
                         }) : userProfile.vestibulares}</p>
                     </div>
+                </div>
+                <div className={styles.containerProfilePost}>
+                    <UserPost
+                        profilePhoto={userProfile.foto}
+                        profilename={userProfile.nome}
+                        username={userProfile.username}
+                        postDate="20/04/2025" // exemplo
+                        postContent="Oi pessoal da apresentação. Segue nosso insta @vemfacul2025" //exemplo
+                    />
+                    <UserPost
+                        profilePhoto={userProfile.foto}
+                        profilename={userProfile.nome}
+                        username={userProfile.username}
+                        postDate="20/04/2025" // exemplo
+                        postContent="Oi pessoal da apresentação. Segue nosso insta @vemfacul2025" //exemplo
+                    />
+                </div>
+
+                <div className={styles.content_btn_postagem} onClick={() => setIsVisibleSubmitPost(!isVisibleSubmitPost)}>
+                    <button className={styles.btn}>
+                        <span>
+                            <FaPen />
+                        </span>
+                    </button>
                 </div>
             </div>
         </>

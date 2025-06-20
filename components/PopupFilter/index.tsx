@@ -22,31 +22,41 @@ export default function PopupFilter({ isVisible, setFiltroEventos, filtroEventos
                             <p className={styles.titleFiltros}>Tipos de Evento</p>
                             <div>
                                 {eventList.map((event, index) => {
+                                    const isImportante = event.value === "importante";
+                                    const current = filtroEventos[0];
+                                    const isActive = isImportante
+                                        ? current.importante
+                                        : current.tipoDeEvento.includes(event.value);
+
                                     return (
-                                        <div style={filtroEventos[0].tipoDeEvento.includes(event.value) ? { backgroundColor: "#001ECB" } : { backgroundColor: "" }} onClick={() => {
-                                            const current = filtroEventos[0];
-                                            const alreadyExists = current.tipoDeEvento.includes(event.value);
-
-                                            if (!alreadyExists) {
-                                                const updated = {
-                                                    ...current,
-                                                    tipoDeEvento: [...current.tipoDeEvento, event.value],
-                                                };
-                                                setFiltroEventos([updated]);
-                                            } else {
-                                                const updated = {
-                                                    ...current,
-                                                    tipoDeEvento: current.tipoDeEvento.filter((item) => item !== event.value),
-                                                };
-                                                setFiltroEventos([updated]);
-                                            }
-                                        }}
-
-                                            key={index} className={styles.eventoContainer}>
-                                            <p style={filtroEventos[0].tipoDeEvento.includes(event.value) ? { color: "#fff" } : { color: "#000" }}>{event.name}</p>
+                                        <div
+                                            key={index}
+                                            className={styles.eventoContainer}
+                                            style={{ backgroundColor: isActive ? "#001ECB" : "" }}
+                                            onClick={() => {
+                                                if (isImportante) {
+                                                    const updated = {
+                                                        ...current,
+                                                        importante: !current.importante,
+                                                    };
+                                                    setFiltroEventos([updated]);
+                                                } else {
+                                                    const alreadyExists = current.tipoDeEvento.includes(event.value);
+                                                    const updated = {
+                                                        ...current,
+                                                        tipoDeEvento: alreadyExists
+                                                            ? current.tipoDeEvento.filter((item) => item !== event.value)
+                                                            : [...current.tipoDeEvento, event.value],
+                                                    };
+                                                    setFiltroEventos([updated]);
+                                                }
+                                            }}
+                                        >
+                                            <p style={{ color: isActive ? "#fff" : "#000" }}>{event.name}</p>
                                         </div>
-                                    )
+                                    );
                                 })}
+
                             </div>
                         </div>
                         <div>
@@ -80,10 +90,11 @@ export default function PopupFilter({ isVisible, setFiltroEventos, filtroEventos
                             </div>
                         </div>
 
+
                     </div>
                     <div className={styles.buttonsContainer}>
                         <button onClick={() => callFilter()}>BUSCAR</button>
-                        <button onClick={() => setFiltroEventos([{ tipodeCursinho: [], tipoDeEvento: [] }])}>LIMPAR</button>
+                        <button onClick={() => setFiltroEventos([{ tipodeCursinho: [], tipoDeEvento: [], importante: false }])}>LIMPAR</button>
                     </div>
 
                 </div>

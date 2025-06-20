@@ -27,36 +27,6 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
     const monthOptions = monthNames.map((month, index) => ({ name: month, value: `${index}` }));
     const [hovered, setHovered] = useState(false);
 
-
-
-    // const eventos: PopupType[] = [
-    //     {
-    //         day: 1,
-    //         month: 0,
-    //         title: "REDAÇÃO",
-    //         year: 2025,
-    //         cursinho: "EPUFABC",
-    //         descricao: "Esta é a descrição do evento",
-    //         foto: "https://www3.santoandre.sp.gov.br/parquetecnologico/wp-content/uploads/2021/11/ufabc.jpg",
-    //         type: "REDAÇÃO",
-    //         color: "#01642b", //#01642b
-    //     },
-    //     {
-    //         day: 1,
-    //         month: 0,
-    //         year: 2025,
-    //         cursinho: "EPUFABC",
-    //         descricao: "Esta é a descrição do evento",
-    //         title: "REDAÇÃO",
-    //         type: "REDAÇÃO",
-    //         color: "#01642b", //#01642b
-    //         foto: "https://www3.santoandre.sp.gov.br/parquetecnologico/wp-content/uploads/2021/11/ufabc.jpg"
-    //     },
-    // ]
-
-
-
-
     const scrollToDay = (monthIndex: number, dayIndex: number) => {
         const targetDayIndex = dayRefs.current.findIndex(
             (ref) => ref && ref.getAttribute('data-month') === `${monthIndex}` && ref.getAttribute('data-day') === `${dayIndex}`,
