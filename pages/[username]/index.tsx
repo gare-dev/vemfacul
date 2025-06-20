@@ -1,4 +1,3 @@
-
 import Sidebar from "@/components/Sidebar";
 import { useRouter } from "next/router"
 import styles from "@/styles/profile.module.scss"
@@ -8,10 +7,11 @@ import LoadingComponent from "@/components/LoadingComponent";
 import { UserProfileType } from "@/types/userProfileType";
 import EditProfilePopup from "@/components/EditProfilePopup";
 import CreatePostagem from "@/components/CreatePostagem";
-import UserPost from "@/components/UserPost";
 import getAuth from "@/utils/getAuth";
 import { AxiosError } from "axios";
 import { FaPen } from "react-icons/fa";
+import Head from "next/head";
+import Tweet from "@/components/UserPost";
 
 
 export default function UserProfile() {
@@ -27,11 +27,19 @@ export default function UserProfile() {
         following_number: "0",
         posts_number: "0",
         vestibulares: [],
-        materias_lecionadas: []
+        materias_lecionadas: [],
+        nivel: ""
     });
     const [loading, setLoading] = useState(true);
     const [isVisible, setIsVisible] = useState(false);
     const [user, setUser] = useState<string | null>(null);
+
+    const typeEmojiMap: Record<string, string> = {
+        teacher: '👨‍🏫',
+        "Aluno EM": '🧑‍🎓',
+        admin: '🔧',
+        guest: '👤'
+    };
 
     useEffect(() => {
 
@@ -77,7 +85,8 @@ export default function UserProfile() {
                     following_number: "0",
                     posts_number: "0",
                     vestibulares: [],
-                    materias_lecionadas: []
+                    materias_lecionadas: [],
+                    nivel: ""
 
                 })
 
@@ -110,49 +119,82 @@ export default function UserProfile() {
 
                 } />}
             <div className={styles.main}>
+                <Head>
+                    <title>{userProfile.nome} | Profile</title>
+                    <meta name="description" content={`Profile page for ${userProfile.nome}`} />
+                    <link rel="icon" href="/favicon.ico" />
+                </Head>
+
                 <div className={styles.profileContainer}>
-                    <div className={styles.profileHeader}>
-                        {userProfile.header && <img src={userProfile.header} alt="" />}
+                    {/* Header Image */}
+                    <div className={styles.headerImageContainer}>
+                        <img
+                            src={userProfile.header}
+                            alt="Header background"
+                            className={styles.headerImage}
+                        />
                     </div>
-                    <div className={styles.profileImage}>
-                        {userProfile.foto && <img src={userProfile.foto} alt="User profile" />}
-                    </div>
-                    <div className={styles.profileName}>
-                        <p>{userProfile.nome}</p>
-                    </div>
-                    <div className={styles.profileUsername}>
-                        {userProfile.username && <p>@{userProfile.username}</p>}
-                    </div>
-                    <div className={styles.profileDescription}>
-                        <p>{userProfile.descricao}</p>
-                    </div>
-                    {user === username &&
-                        <div className={styles.editProfile}>
-                            <button onClick={() => setIsVisible(true)}>Editar Perfil</button>
-                        </div>}
-                    <div className={styles.interesses}>
-                        <p>{Array.isArray(userProfile.vestibulares) ? userProfile.vestibulares?.map((interesse, index) => {
-                            return (
-                                `${index > 0 ? ', ' : ''}${interesse}`
-                            )
-                        }) : userProfile.vestibulares}</p>
+
+                    <div className={styles.profileInfoContainer}>
+                        <div className={styles.profilePictureContainer}>
+                            <img
+                                src={userProfile.foto}
+                                alt={`${userProfile.nome}'s profile`}
+                                className={styles.profilePicture}
+                            />
+                            {user === username && <button onClick={() => setIsVisible(true)} className={styles.editProfileButton}>
+                                Edit profile
+                            </button>}
+                        </div>
+
+                        <div className={styles.nameSection}>
+                            <h1 className={styles.name}>{userProfile.nome}</h1>
+                            <p className={styles.username}>@{userProfile.username}</p>
+                        </div>
+
+                        <div className={styles.typeIndicator}>
+                            <span className={styles.typeEmoji}>{typeEmojiMap[userProfile.nivel] || '👤'}</span>
+                            <span className={styles.typeText}>{userProfile.nivel.charAt(0).toUpperCase() + userProfile.nivel.slice(1)}</span>
+                        </div>
+
+                        <p className={styles.description}>{userProfile.descricao}</p>
+
+                        <div className={styles.universityInterests}>
+                            <h3 className={styles.interestsTitle}>{userProfile.nivel === "Aluno EM" ? "Vestibulares: " : "Matérias Lecionadas: "}</h3>
+                            <ul className={styles.universityList}>
+                                {userProfile.nivel === "Professor" ? userProfile.materias_lecionadas.map((university, index) => (
+                                    <li key={index} className={styles.universityItem}>
+                                        {university}
+                                    </li>
+                                )) : userProfile.vestibulares.map((university, index) => (
+                                    <li key={index} className={styles.universityItem}>
+                                        {university}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <div className={styles.containerProfilePost}>
-                    <UserPost
-                        profilePhoto={userProfile.foto}
-                        profilename={userProfile.nome}
+                    <Tweet
+                        content="Just created a new profile page component with Next.js, TypeScript, and SCSS! #webdev #frontend"
+                        name={userProfile.nome}
                         username={userProfile.username}
-                        postDate="20/04/2025" // exemplo
-                        postContent="Oi pessoal da apresentação. Segue nosso insta @vemfacul2025" //exemplo
+                        profileImage={userProfile.foto}
+                        timestamp="2h ago"
+                        likes={42}
+                        comments={7}
                     />
-                    <UserPost
-                        profilePhoto={userProfile.foto}
-                        profilename={userProfile.nome}
+                    <Tweet
+                        content="Just created a new profile page component with Next.js, TypeScript, and SCSS! #webdev #frontend"
+                        name={userProfile.nome}
                         username={userProfile.username}
-                        postDate="20/04/2025" // exemplo
-                        postContent="Oi pessoal da apresentação. Segue nosso insta @vemfacul2025" //exemplo
+                        profileImage={userProfile.foto}
+                        timestamp="2h ago"
+                        likes={42212}
+                        comments={7}
                     />
+
                 </div>
 
                 <div className={styles.content_btn_postagem} onClick={() => setIsVisibleSubmitPost(!isVisibleSubmitPost)}>

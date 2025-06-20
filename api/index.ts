@@ -59,15 +59,12 @@ class _Api {
   }
 
   public async loginAccount(email: string, password: string) {
-    try {
+   
       return await this._instance.post("/api/loginaccount", {
         email,
         password,
       });
-    } catch (error) {
-      console.error("Error logging in account:", error);
-      throw error;
-    }
+   
   }
 
   public async createAccount(formData: any) {

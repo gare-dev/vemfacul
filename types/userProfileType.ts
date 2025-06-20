@@ -9,6 +9,7 @@ export type UserProfileType = {
     posts_number: string
     vestibulares: string[]
     materias_lecionadas: string[]
+    nivel: string
 }
 
 export type ProfileType = {
