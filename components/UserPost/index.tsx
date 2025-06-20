@@ -9,6 +9,7 @@ interface TweetProps {
   timestamp: string;
   likes: number;
   comments: number;
+  date: string
 }
 
 const Tweet: React.FC<TweetProps> = ({
