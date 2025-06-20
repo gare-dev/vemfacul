@@ -125,6 +125,10 @@ class _Api {
       content
     })
   }
+
+  public async getPostagem(username: string) {
+    return await this._instance.post(`/api/postagens/:${username}`)
+  }
 }
 
 const Api = new _Api("https://invest-api-rose.vercel.app/"); //https://invest-api-rose.vercel.app/

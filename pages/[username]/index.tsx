@@ -32,13 +32,38 @@ export default function UserProfile() {
     const [loading, setLoading] = useState(true);
     const [isVisible, setIsVisible] = useState(false);
     const [user, setUser] = useState<string | null>(null);
+    const [postVisible, setPostVisibel] = useState(false)
 
+    const handleGetPostagens = async () => {
+        if (typeof username !== "string") {
+            return <div>loading</div>
+        } else {
+            try {
+                const promise = await Api.getPostagem(username)
+
+                if (promise.data.code === "POSTAGENS_FOUND") {
+                    return (
+                        // setPostVisibel(true)
+                        console.log(promise.data.postagem)
+                    )
+                } else {
+                    console.log(promise.data)
+                    return setPostVisibel(false)
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }
     useEffect(() => {
         const authCookie = getCookieValue("auth");
         if (authCookie) {
             const token: { username: string } = decodeJwt(authCookie);
             setUser(token.username);
         }
+        handleGetPostagens()
+
+
     }, []);
 
     const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
@@ -110,20 +135,15 @@ export default function UserProfile() {
                     </div>
                 </div>
                 <div className={styles.containerProfilePost}>
-                    <UserPost
-                        profilePhoto={userProfile.foto}
-                        profilename={userProfile.nome}
-                        username={userProfile.username}
-                        postDate="20/04/2025" // exemplo
-                        postContent="Oi pessoal da apresentação. Segue nosso insta @vemfacul2025" //exemplo
-                    />
-                    <UserPost
-                        profilePhoto={userProfile.foto}
-                        profilename={userProfile.nome}
-                        username={userProfile.username}
-                        postDate="20/04/2025" // exemplo
-                        postContent="Oi pessoal da apresentação. Segue nosso insta @vemfacul2025" //exemplo
-                    />
+                    {postVisible && (
+                        <UserPost
+                            profilePhoto={userProfile.foto}
+                            profilename={userProfile.nome}
+                            username={userProfile.username}
+                            postDate="20/04/2025" // exemplo
+                            postContent="Oi pessoal da apresentação. Segue nosso insta @vemfacul2025" //exemplo
+                        />
+                    )}
                 </div>
 
                 <div className={styles.content_btn_postagem} onClick={() => setIsVisibleSubmitPost(!isVisibleSubmitPost)}>
