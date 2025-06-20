@@ -5,7 +5,9 @@ import { IoArrowBack } from "react-icons/io5"
 import ButtonLoadingComponent from "../ButtonLoadingComponent";
 
 interface props {
-    btnClose: () => void
+    btnClose: () => void,
+    refreshPage: () => void
+
 }
 
 export default function CreatePostagem(props: props) {
@@ -29,6 +31,8 @@ export default function CreatePostagem(props: props) {
                     setMessageStatus(`postado: ${promise.data.data}`);
                     setValue('')
                     props.btnClose();
+                    props.refreshPage()
+
                 } else {
                     setMessageStatus(`Erro: ${promise.data.message || "Erro ao postar"}`);
                 }

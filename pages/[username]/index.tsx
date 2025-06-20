@@ -1,3 +1,4 @@
+
 import Sidebar from "@/components/Sidebar";
 import { useRouter } from "next/router"
 import styles from "@/styles/profile.module.scss"
@@ -7,16 +8,29 @@ import LoadingComponent from "@/components/LoadingComponent";
 import { UserProfileType } from "@/types/userProfileType";
 import EditProfilePopup from "@/components/EditProfilePopup";
 import CreatePostagem from "@/components/CreatePostagem";
+import UserPost from "@/components/UserPost";
 import getAuth from "@/utils/getAuth";
 import { AxiosError } from "axios";
 import { FaPen } from "react-icons/fa";
 import Head from "next/head";
-import Tweet from "@/components/UserPost";
+import monthsMap from "@/utils/getMonth";
 
+type Postagem = {
+    id: string | number;
+    content: string;
+    content_post?: string;
+    created_at?: string | Date;
+};
 
 export default function UserProfile() {
     const router = useRouter()
     const { username } = router.query;
+    const [loading, setLoading] = useState(true);
+    const [isVisible, setIsVisible] = useState(false);
+    const [user, setUser] = useState<string | null>(null);
+    const [postVisible, setPostVisibel] = useState(false)
+    const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
+    const [postagens, setPostagens] = useState<Postagem[]>([]);
     const [userProfile, setUserProfile] = useState<UserProfileType>({
         nome: "",
         username: "",
@@ -30,16 +44,43 @@ export default function UserProfile() {
         materias_lecionadas: [],
         nivel: ""
     });
-    const [loading, setLoading] = useState(true);
-    const [isVisible, setIsVisible] = useState(false);
-    const [user, setUser] = useState<string | null>(null);
 
     const typeEmojiMap: Record<string, string> = {
-        teacher: '👨‍🏫',
+        "Professor": '👨‍🏫',
         "Aluno EM": '🧑‍🎓',
         admin: '🔧',
         guest: '👤'
     };
+
+    const handleGetPostagens = async () => {
+        if (typeof username !== "string") {
+            return;
+        } else {
+            try {
+                const promise = await Api.getPostagem(username)
+
+                if (promise.data.code === "POSTAGENS_FOUND") {
+                    console.log("apareceu")
+                    setPostagens(promise.data.postagens)
+                    setPostVisibel(true)
+                } else if (promise.data.code === "POSTAGEM_NOT_FOUND") {
+                    setPostagens([]);
+                    setPostVisibel(false);
+                } else {
+                    console.log("nao ta aparecendo nada")
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }
+
+    useEffect(() => {
+        if (typeof username === "string") {
+            handleGetPostagens()
+            console.log("ta rodando")
+        }
+    }, [username])
 
     useEffect(() => {
 
@@ -58,10 +99,8 @@ export default function UserProfile() {
             }
         }
         handleValidateProfile()
-
     }, []);
 
-    const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
 
     const handleGetUserProfile = async () => {
         if (!username?.toString()) return router.push('/');
@@ -87,7 +126,6 @@ export default function UserProfile() {
                     vestibulares: [],
                     materias_lecionadas: [],
                     nivel: ""
-
                 })
 
 
@@ -115,18 +153,18 @@ export default function UserProfile() {
                 />
             }
             {isVisibleSubmitPost && <CreatePostagem
-                btnClose={() => setIsVisibleSubmitPost(false)
-
-                } />}
+                btnClose={() => setIsVisibleSubmitPost(false)}
+                refreshPage={() => router.reload()}
+            />}
             <div className={styles.main}>
                 <Head>
-                    <title>{userProfile.nome} | Profile</title>
+                    <title>{userProfile.nome} | Perfil</title>
                     <meta name="description" content={`Profile page for ${userProfile.nome}`} />
                     <link rel="icon" href="/favicon.ico" />
                 </Head>
 
                 <div className={styles.profileContainer}>
-                    {/* Header Image */}
+                    
                     <div className={styles.headerImageContainer}>
                         <img
                             src={userProfile.header}
@@ -142,9 +180,10 @@ export default function UserProfile() {
                                 alt={`${userProfile.nome}'s profile`}
                                 className={styles.profilePicture}
                             />
-                            {user === username && <button onClick={() => setIsVisible(true)} className={styles.editProfileButton}>
-                                Edit profile
-                            </button>}
+                            {user === username &&
+                                <button onClick={() => setIsVisible(true)} className={styles.editProfileButton}>
+                                    Editar Perfil
+                                </button>}
                         </div>
 
                         <div className={styles.nameSection}>
@@ -157,16 +196,18 @@ export default function UserProfile() {
                             <span className={styles.typeText}>{userProfile.nivel.charAt(0).toUpperCase() + userProfile.nivel.slice(1)}</span>
                         </div>
 
+                        {/* Description */}
                         <p className={styles.description}>{userProfile.descricao}</p>
 
+                        {/* University Interests */}
                         <div className={styles.universityInterests}>
-                            <h3 className={styles.interestsTitle}>{userProfile.nivel === "Aluno EM" ? "Vestibulares: " : "Matérias Lecionadas: "}</h3>
+                            <h3 className={styles.interestsTitle}>{userProfile.nivel === "Aluno EM" ? "Vestibulares" : "Matérias Lecionadas"}</h3>
                             <ul className={styles.universityList}>
-                                {userProfile.nivel === "Professor" ? userProfile.materias_lecionadas.map((university, index) => (
+                                {userProfile.nivel === "Aluno EM" ? userProfile.vestibulares.map((university, index) => (
                                     <li key={index} className={styles.universityItem}>
                                         {university}
                                     </li>
-                                )) : userProfile.vestibulares.map((university, index) => (
+                                )) : userProfile.materias_lecionadas.map((university, index) => (
                                     <li key={index} className={styles.universityItem}>
                                         {university}
                                     </li>
@@ -176,25 +217,28 @@ export default function UserProfile() {
                     </div>
                 </div>
                 <div className={styles.containerProfilePost}>
-                    <Tweet
-                        content="Just created a new profile page component with Next.js, TypeScript, and SCSS! #webdev #frontend"
-                        name={userProfile.nome}
-                        username={userProfile.username}
-                        profileImage={userProfile.foto}
-                        timestamp="2h ago"
-                        likes={42}
-                        comments={7}
-                    />
-                    <Tweet
-                        content="Just created a new profile page component with Next.js, TypeScript, and SCSS! #webdev #frontend"
-                        name={userProfile.nome}
-                        username={userProfile.username}
-                        profileImage={userProfile.foto}
-                        timestamp="2h ago"
-                        likes={42212}
-                        comments={7}
-                    />
-
+                    {postVisible && postagens.length > 0 && postagens.map((post, idx) => (
+                        <UserPost
+                            key={post.id || idx}
+                            name={userProfile.nome}
+                            username={userProfile.username}
+                            date={
+                                post.created_at
+                                    ? (typeof post.created_at === "string"
+                                        ? post.created_at
+                                        : new Date(post.created_at).toLocaleDateString())
+                                    : "Data não informada"
+                            }
+                            content={post.content}
+                            profileImage={userProfile.foto}
+                            timestamp={post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).getDate().toString() + " de " + monthsMap[new Date(post.created_at).getMonth() ]) : ""}
+                            likes={0}
+                            comments={0}
+                        />
+                    ))}
+                    {postVisible && postagens.length === 0 && (
+                        <div><h1>nenhuma postagem encontrada</h1></div>
+                    )}
                 </div>
 
                 <div className={styles.content_btn_postagem} onClick={() => setIsVisibleSubmitPost(!isVisibleSubmitPost)}>
