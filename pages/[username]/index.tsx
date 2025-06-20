@@ -9,9 +9,9 @@ import { UserProfileType } from "@/types/userProfileType";
 import EditProfilePopup from "@/components/EditProfilePopup";
 import CreatePostagem from "@/components/CreatePostagem";
 import UserPost from "@/components/UserPost";
+import getAuth from "@/utils/getAuth";
+import { AxiosError } from "axios";
 import { FaPen } from "react-icons/fa";
-import getCookieValue from "@/utils/getCookie";
-import decodeJwt from "@/utils/decodeJwt";
 
 
 export default function UserProfile() {
@@ -56,13 +56,22 @@ export default function UserProfile() {
         }
     }
     useEffect(() => {
-        const authCookie = getCookieValue("auth");
-        if (authCookie) {
-            const token: { username: string } = decodeJwt(authCookie);
-            setUser(token.username);
-        }
-        handleGetPostagens()
 
+        const handleValidateProfile = async () => {
+            if (getAuth()) {
+                try {
+                    const response = await Api.validateProfile()
+
+                    if (response.data.code === "PROFILE_VALIDATED") {
+                        setUser(response.data.data.username);
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+
+            }
+        }
+        handleValidateProfile()
 
     }, []);
 
@@ -78,7 +87,24 @@ export default function UserProfile() {
                 setUserProfile(response.data.data);
             }
         } catch (error) {
-            console.log(error)
+            if (error instanceof AxiosError && error.response?.data.code === "USER_NOT_FOUND") {
+                console.log("Usuário não encontrado");
+                setUserProfile({
+                    nome: "",
+                    username: username?.toString() || "",
+                    foto: "",
+                    header: "",
+                    descricao: "Essa conta não existe.",
+                    followers_number: "0",
+                    following_number: "0",
+                    posts_number: "0",
+                    vestibulares: [],
+                    materias_lecionadas: []
+
+                })
+
+
+            }
         } finally {
             setLoading(false);
         }
@@ -117,7 +143,7 @@ export default function UserProfile() {
                         <p>{userProfile.nome}</p>
                     </div>
                     <div className={styles.profileUsername}>
-                        <p>@{userProfile.username}</p>
+                        {userProfile.username && <p>@{userProfile.username}</p>}
                     </div>
                     <div className={styles.profileDescription}>
                         <p>{userProfile.descricao}</p>

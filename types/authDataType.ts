@@ -1,7 +1,7 @@
 type AuthDataType = {
     image: string
     name: string
-    email: string
+    email?: string
     username: string
 }
 

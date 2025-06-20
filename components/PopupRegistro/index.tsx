@@ -69,6 +69,7 @@ export default function PopupRegistro(props: props) {
             if (response.data.code === "LOGIN_SUCCESS") {
                 setError('')
                 props.setClose()
+                localStorage.setItem('auth', response.data.auth)
                 router.push('/feed')
                 return
             }
@@ -233,7 +234,7 @@ export default function PopupRegistro(props: props) {
                             <span className={styles.errorText}>{error}</span>
                         </div>
                     )}
-                 
+
                     <div className={styles.mainFormDiv}>
                         <div className={styles.emailDiv}>
                             <label className={styles.emailLabel}>E-MAIL</label>

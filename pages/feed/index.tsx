@@ -3,7 +3,7 @@ import FilterBar from "@/components/SearchHeader";
 import Sidebar from "@/components/Sidebar";
 import products from "@/mock/cursinhos";
 import styles from "@/styles/feed.module.scss";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function Feed() {
     const [cursinhos, setCursinhos] = useState(products);
@@ -24,10 +24,6 @@ export default function Feed() {
 
     }
 
-    useEffect(() => {
-        console.log("Cursinhos atualizados:", cursinhos);
-
-    }, [cursinhos]);
     return (
         <div>
 
