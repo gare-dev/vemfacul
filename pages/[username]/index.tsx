@@ -48,7 +48,7 @@ export default function UserProfile() {
     const typeEmojiMap: Record<string, string> = {
         "Professor": '👨‍🏫',
         "Aluno EM": '🧑‍🎓',
-        admin: '🔧',
+        "Vestibulando": '🧑‍🎓',
         guest: '👤'
     };
 
@@ -78,7 +78,6 @@ export default function UserProfile() {
     useEffect(() => {
         if (typeof username === "string") {
             handleGetPostagens()
-            console.log("ta rodando")
         }
     }, [username])
 
@@ -168,7 +167,7 @@ export default function UserProfile() {
                     <div className={styles.headerImageContainer}>
                         <img
                             src={userProfile.header}
-                            alt="Header background"
+                            
                             className={styles.headerImage}
                         />
                     </div>
@@ -203,11 +202,15 @@ export default function UserProfile() {
                         <div className={styles.universityInterests}>
                             <h3 className={styles.interestsTitle}>{userProfile.nivel === "Aluno EM" ? "Vestibulares" : "Matérias Lecionadas"}</h3>
                             <ul className={styles.universityList}>
-                                {userProfile.nivel === "Aluno EM" ? userProfile.vestibulares.map((university, index) => (
+                                {userProfile.nivel === "Aluno EM" ? userProfile.vestibulares?.map((university, index) => (
                                     <li key={index} className={styles.universityItem}>
                                         {university}
                                     </li>
-                                )) : userProfile.materias_lecionadas.map((university, index) => (
+                                )) : userProfile.nivel === "Vestibulando" ?  userProfile.vestibulares?.map((university, index) => (
+                                    <li key={index} className={styles.universityItem}>
+                                        {university}
+                                    </li>
+                                )) : userProfile.materias_lecionadas?.map((university, index) => (
                                     <li key={index} className={styles.universityItem}>
                                         {university}
                                     </li>
@@ -236,8 +239,8 @@ export default function UserProfile() {
                             comments={0}
                         />
                     ))}
-                    {postVisible && postagens.length === 0 && (
-                        <div><h1>nenhuma postagem encontrada</h1></div>
+                    {postagens.length === 0 && (
+                        <div><h1 style={{textAlign: "center"}}>Nenhuma postagem encontrada</h1></div>
                     )}
                 </div>
 

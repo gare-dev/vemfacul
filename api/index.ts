@@ -36,15 +36,12 @@ class _Api {
 
 
   public async registerAccount(email: string, password: string) {
-    try {
+    
       return await this._instance.post("/api/createaccount", {
         email,
         password,
       });
-    } catch (error) {
-      console.error("Error registering account:", error);
-      throw error;
-    }
+  
   }
 
   public async confirmAccount(token: string) {
