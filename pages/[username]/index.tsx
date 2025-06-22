@@ -51,7 +51,6 @@ export default function UserProfile() {
                 const promise = await Api.getPostagem(username)
 
                 if (promise.data.code === "POSTAGENS_FOUND") {
-                    console.log("apareceu")
                     setPostagens(promise.data.postagens)
                     setPostVisibel(true)
                 } else if (promise.data.code === "POSTAGEM_NOT_FOUND") {
@@ -66,10 +65,9 @@ export default function UserProfile() {
         }
     }
 
-    useEffect(() => {
+    useEffect(() => { 
         if (typeof username === "string") {
             handleGetPostagens()
-            console.log("ta rodando")
         }
     }, [username])
 
