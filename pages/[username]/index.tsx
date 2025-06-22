@@ -31,6 +31,7 @@ export default function UserProfile() {
     const [postVisible, setPostVisibel] = useState(false)
     const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
     const [postagens, setPostagens] = useState<Postagem[]>([]);
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [userProfile, setUserProfile] = useState<UserProfileType>({
         nome: "",
         username: "",
@@ -50,6 +51,16 @@ export default function UserProfile() {
         "Aluno EM": '🧑‍🎓',
         "Vestibulando": '🧑‍🎓',
         guest: '👤'
+    };
+
+    const handleOpenPopup = () => {
+        setIsPopupOpen(true);
+    };
+    const handleClosePopup = () => {
+        setIsPopupOpen(false);
+    };
+    const handlePostTweet = (tweet: string) => {
+        console.log('Tweet posted:', tweet);
     };
 
     const handleGetPostagens = async () => {
@@ -151,10 +162,15 @@ export default function UserProfile() {
                     refreshPage={() => router.reload()}
                 />
             }
-            {isVisibleSubmitPost && <CreatePostagem
-                btnClose={() => setIsVisibleSubmitPost(false)}
-                refreshPage={() => router.reload()}
-            />}
+            {isVisibleSubmitPost &&
+                <CreatePostagem
+                    isOpen={isPopupOpen}
+                    onClose={handleClosePopup}
+                    onPostTweet={handlePostTweet}
+                    onReload={() => router.reload()}
+                // btnClose={() => setIsVisibleSubmitPost(false)}
+                // refreshPage={() => router.reload()}
+                />}
             <div className={styles.main}>
                 <Head>
                     <title>{userProfile.nome} | Perfil</title>
@@ -163,11 +179,11 @@ export default function UserProfile() {
                 </Head>
 
                 <div className={styles.profileContainer}>
-                    
+
                     <div className={styles.headerImageContainer}>
                         <img
                             src={userProfile.header}
-                            
+
                             className={styles.headerImage}
                         />
                     </div>
@@ -206,7 +222,7 @@ export default function UserProfile() {
                                     <li key={index} className={styles.universityItem}>
                                         {university}
                                     </li>
-                                )) : userProfile.nivel === "Vestibulando" ?  userProfile.vestibulares?.map((university, index) => (
+                                )) : userProfile.nivel === "Vestibulando" ? userProfile.vestibulares?.map((university, index) => (
                                     <li key={index} className={styles.universityItem}>
                                         {university}
                                     </li>
@@ -234,19 +250,19 @@ export default function UserProfile() {
                             }
                             content={post.content}
                             profileImage={userProfile.foto}
-                            timestamp={post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).getDate().toString() + " de " + monthsMap[new Date(post.created_at).getMonth() ]) : ""}
+                            timestamp={post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).getDate().toString() + " de " + monthsMap[new Date(post.created_at).getMonth()]) : ""}
                             likes={0}
                             comments={0}
                         />
                     ))}
                     {postagens.length === 0 && (
-                        <div><h1 style={{textAlign: "center"}}>Nenhuma postagem encontrada</h1></div>
+                        <div><h1 style={{ textAlign: "center" }}>Nenhuma postagem encontrada</h1></div>
                     )}
                 </div>
 
-                <div className={styles.content_btn_postagem} onClick={() => setIsVisibleSubmitPost(!isVisibleSubmitPost)}>
-                    <button className={styles.btn}>
-                        <span>
+                <div className={styles.content_btn_postagem} onClick={() => { setIsVisibleSubmitPost(!isVisibleSubmitPost); handleOpenPopup() }}>
+                    <button onClick={() => { setIsVisibleSubmitPost(!isVisibleSubmitPost); handleOpenPopup() }} className={styles.btn}>
+                        <span onClick={() => { setIsVisibleSubmitPost(!isVisibleSubmitPost); handleOpenPopup() }}>
                             <FaPen />
                         </span>
                     </button>

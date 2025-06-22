@@ -1,76 +1,71 @@
-import Api from "@/api";
-import styles from "@/styles/createPostagem.module.scss"
-import { useState, useEffect } from "react";
-import { IoArrowBack } from "react-icons/io5"
-import ButtonLoadingComponent from "../ButtonLoadingComponent";
+// components/TweetPopup.tsx
+import React, { useState } from 'react';
+import styles from '@/styles/createPostagem.module.scss';
+import Api from '@/api';
+import { AxiosError } from 'axios';
 
-interface props {
-    btnClose: () => void,
-    refreshPage: () => void
-
+interface TweetPopupProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onPostTweet: (tweet: string) => void;
+    onReload: () => void;
 }
 
-export default function CreatePostagem(props: props) {
-    const [value, setValue] = useState('')
-    const [visible, setIsVisible] = useState(false)
-    const [loading, setIsLoadin] = useState(false)
-    const [messageStatus, setMessageStatus] = useState('');
+const TweetPopup: React.FC<TweetPopupProps> = ({ isOpen, onClose, onPostTweet, onReload }) => {
+    const [tweetText, setTweetText] = useState('');
+    const [error, setError] = useState('');
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!value) {
-            setIsVisible(true)
-            setMessageStatus("digite Algo");
-        } else {
-            setIsVisible(false)
-            setIsLoadin(true)
+    const handlePostTweet = async (e: React.FormEvent) => {
+        if (tweetText.trim()) {
+            e.preventDefault();
+            if (tweetText.length === 0) {
+                return setError("Você não pode postar um post vazio.");
+            }
+            if (tweetText.length > 280) {
+                return setError("O tweet não pode exceder 280 caracteres.");
+            }
             try {
-                const promise = await Api.createPostagem(value)
+                setError('');
+                const response = await Api.createPostagem(tweetText);
 
-                if (promise.data.code === "POSTAGEM_SUCESS") {
-                    setMessageStatus(`postado: ${promise.data.data}`);
-                    setValue('')
-                    props.btnClose();
-                    props.refreshPage()
-
-                } else {
-                    setMessageStatus(`Erro: ${promise.data.message || "Erro ao postar"}`);
+                if (response.data.code === "POSTAGEM_SUCESS") {
+                    onPostTweet(tweetText);
+                    setTweetText('');
+                    onClose();
+                    onReload();
+                    return
                 }
+
             } catch (error) {
-                console.log(error)
-            } finally {
-                setIsLoadin(false)
+                if (error instanceof AxiosError) {
+                    if (error.response?.data.code === "POSTAGEM_ERROR") {
+                        setError("Ocorreu um erro ao postar o tweet. Tente novamente mais tarde.");
+                    }
+                }
             }
         }
-    }
+    };
 
-    useEffect(() => {
-
-    }, [])
+    if (!isOpen) return null;
 
     return (
-        <>
-            <div className={styles.contentPost}>
-                <div className={styles.main}>
-                    <div className={styles.closeDiv}>
-                        <button className={styles.btn} onClick={props.btnClose}>
-                            <span>
-                                <IoArrowBack />
-                            </span>
-                        </button>
-                    </div>
-                    <div className={styles.label}>
-                        <h1 className={styles.label}>O que você anda estudndo?</h1>
-                        {visible && <h3 className={styles.alertStatus}>{messageStatus}</h3>}
-                    </div>
-                    <form onSubmit={handleSubmit}>
-                        <textarea maxLength={250} value={value} onChange={(e) => setValue(e.target.value)} />
-                        <button className={styles.btn} type="submit">
-                            {loading ? <ButtonLoadingComponent /> : <span>Postar</span>}
-                        </button>
-                    </form>
-                </div>
-            </div >
-        </>
-    )
-}
+        <div className={styles.popup}>
+            <div className={styles.popupContent}>
+                <span className={styles.close} onClick={onClose}>&times;</span>
+                <h2>O que você anda estudando?</h2>
+                {error && <h1>{error}</h1>}
+                <textarea
+                    className={styles.textarea}
+                    value={tweetText}
+                    onChange={(e) => setTweetText(e.target.value)}
+                    maxLength={280}
+                />
+                <button className={styles.postButton} onClick={handlePostTweet}>
+                    Postar
+                </button>
+            </div>
+        </div>
+    );
+};
+
+export default TweetPopup;
