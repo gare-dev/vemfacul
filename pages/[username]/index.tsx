@@ -16,7 +16,7 @@ import Head from "next/head";
 import monthsMap from "@/utils/getMonth";
 
 type Postagem = {
-    id: string | number;
+    id_postagem: string | number;
     content: string;
     content_post?: string;
     created_at?: string | Date;
@@ -85,7 +85,7 @@ export default function UserProfile() {
         }
     }
 
-    useEffect(() => { 
+    useEffect(() => {
         if (typeof username === "string") {
             handleGetPostagens()
         }
@@ -207,7 +207,7 @@ export default function UserProfile() {
 
                         <div className={styles.typeIndicator}>
                             <span className={styles.typeEmoji}>{typeEmojiMap[userProfile.nivel] || '👤'}</span>
-                            <span className={styles.typeText}>{userProfile.nivel.charAt(0).toUpperCase() + userProfile.nivel.slice(1)}</span>
+                            <span className={styles.typeText}>{userProfile.nivel?.charAt(0).toUpperCase() + userProfile.nivel?.slice(1)}</span>
                         </div>
 
                         {/* Description */}
@@ -237,7 +237,8 @@ export default function UserProfile() {
                 <div className={styles.containerProfilePost}>
                     {postVisible && postagens.length > 0 && postagens.map((post, idx) => (
                         <UserPost
-                            key={post.id || idx}
+                            key={ 0 || idx}
+                            id={post.id_postagem}
                             name={userProfile.nome}
                             username={userProfile.username}
                             date={

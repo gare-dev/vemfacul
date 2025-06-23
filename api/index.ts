@@ -56,12 +56,12 @@ class _Api {
   }
 
   public async loginAccount(email: string, password: string) {
-   
-      return await this._instance.post("/api/loginaccount", {
-        email,
-        password,
-      });
-   
+
+    return await this._instance.post("/api/loginaccount", {
+      email,
+      password,
+    });
+
   }
 
   public async createAccount(formData: any) {
@@ -218,6 +218,12 @@ class _Api {
 
   public async getPostagem(username: string) {
     return await this._instance.post(`/api/postagens/${username}`)
+  }
+
+  public async getLikesCount(id_postagem: number | string) {
+    return await this._instance.post('/api/likePostagem/countlikes', {
+      id_postagem
+    })
   }
 }
 
