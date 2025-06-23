@@ -16,7 +16,7 @@ import Head from "next/head";
 import monthsMap from "@/utils/getMonth";
 
 type Postagem = {
-    id: string | number;
+    id_postagem: string | number;
     content: string;
     content_post?: string;
     created_at?: string | Date;
@@ -74,7 +74,7 @@ export default function UserProfile() {
         }
     }
 
-    useEffect(() => { 
+    useEffect(() => {
         if (typeof username === "string") {
             handleGetPostagens()
         }
@@ -162,7 +162,7 @@ export default function UserProfile() {
                 </Head>
 
                 <div className={styles.profileContainer}>
-                    
+
                     <div className={styles.headerImageContainer}>
                         <img
                             src={userProfile.header}
@@ -191,7 +191,7 @@ export default function UserProfile() {
 
                         <div className={styles.typeIndicator}>
                             <span className={styles.typeEmoji}>{typeEmojiMap[userProfile.nivel] || '👤'}</span>
-                            <span className={styles.typeText}>{userProfile.nivel.charAt(0).toUpperCase() + userProfile.nivel.slice(1)}</span>
+                            <span className={styles.typeText}>{userProfile.nivel?.charAt(0).toUpperCase() + userProfile.nivel?.slice(1)}</span>
                         </div>
 
                         {/* Description */}
@@ -201,11 +201,11 @@ export default function UserProfile() {
                         <div className={styles.universityInterests}>
                             <h3 className={styles.interestsTitle}>{userProfile.nivel === "Aluno EM" ? "Vestibulares" : "Matérias Lecionadas"}</h3>
                             <ul className={styles.universityList}>
-                                {userProfile.nivel === "Aluno EM" ? userProfile.vestibulares.map((university, index) => (
+                                {userProfile.nivel === "Aluno EM" ? userProfile.vestibulares?.map((university, index) => (
                                     <li key={index} className={styles.universityItem}>
                                         {university}
                                     </li>
-                                )) : userProfile.materias_lecionadas.map((university, index) => (
+                                )) : userProfile.materias_lecionadas?.map((university, index) => (
                                     <li key={index} className={styles.universityItem}>
                                         {university}
                                     </li>
@@ -217,7 +217,8 @@ export default function UserProfile() {
                 <div className={styles.containerProfilePost}>
                     {postVisible && postagens.length > 0 && postagens.map((post, idx) => (
                         <UserPost
-                            key={post.id || idx}
+                            key={ 0 || idx}
+                            id={post.id_postagem}
                             name={userProfile.nome}
                             username={userProfile.username}
                             date={
@@ -229,7 +230,7 @@ export default function UserProfile() {
                             }
                             content={post.content}
                             profileImage={userProfile.foto}
-                            timestamp={post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).getDate().toString() + " de " + monthsMap[new Date(post.created_at).getMonth() ]) : ""}
+                            timestamp={post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).getDate().toString() + " de " + monthsMap[new Date(post.created_at).getMonth()]) : ""}
                             likes={0}
                             comments={0}
                         />

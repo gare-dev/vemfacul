@@ -8,8 +8,6 @@ interface CardProps {
     title?: boolean;
     curso?: string;
     img?: string;
-    textInfo?: string;
-    style?: object;
 }
 
 
@@ -41,8 +39,7 @@ function MainCard(props: CardProps) {
 function secondCard(props: CardProps) {
     return (
         <div className={styles.content}>
-            <div className={styles.second_content}
-                style={props.style}>
+            <div className={styles.second_content}>
                 <div className={styles.card}>
                     <div className={styles.img}>
                         <img src={props.img} alt="" />
