@@ -5,7 +5,7 @@ import RegisterAccountLoadingComponent from "@/components/RegisterAccountLoading
 import useEmail from "@/hooks/useEmail";
 import s from "@/styles/cadastrarusuario.module.scss";
 import { Register } from "@/types/registerType";
-import inputs, { inputAlunoEM, inputVestibulando, professorInputs, universitarioInputs, vestibulandoInputs } from "@/utils/inputs";
+import inputs, { inputAlunoEM, professorInputs, universitarioInputs, vestibulandoInputs } from "@/utils/inputs";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -29,9 +29,10 @@ export default function CadastrarUsuario() {
         passouVestibular: false,
         universidade: "",
         curso: "",
-        formouEM: false,
+        formouem: false,
         trabalha: false,
         instituicao: "",
+        username: ""
     })
 
     useEffect(() => {
@@ -50,7 +51,8 @@ export default function CadastrarUsuario() {
                     escola: user.escola,
                     ano: user.ano,
                     vestibulares: user.vestibulares,
-                    email: email
+                    email: email,
+                    username: user.username
                 }
 
                 const formData = new FormData()
@@ -65,6 +67,8 @@ export default function CadastrarUsuario() {
                     const response = await Api.createAccount(formData)
 
                     if (response.data.code === "REGISTERED_ACCOUNT") {
+                        localStorage.setItem("auth", response.data.auth)
+
                         router.push('/feed')
                     }
                 } catch (error) {
@@ -77,10 +81,11 @@ export default function CadastrarUsuario() {
                     nome: user.nome,
                     estado: user.estado,
                     nivel: nivel,
-                    formouEM: user.formouEM,
+                    formouem: user.formouem,
                     trabalha: user.trabalha,
                     vestibulares: user.vestibulares,
-                    email: email
+                    email: email,
+                    username: user.username
                 }
 
                 const formData = new FormData()
@@ -95,6 +100,8 @@ export default function CadastrarUsuario() {
                     const response = await Api.createAccount(formData)
 
                     if (response.data.code === "REGISTERED_ACCOUNT") {
+                        localStorage.setItem("auth", response.data.auth)
+
                         router.push('/feed')
                     }
                 } catch (error) {
@@ -110,7 +117,8 @@ export default function CadastrarUsuario() {
                     passouVestibular: user.passouVestibular,
                     universidade: user.universidade,
                     curso: user.curso,
-                    email: email
+                    email: email,
+                    username: user.username
                 }
 
                 const formData = new FormData()
@@ -125,16 +133,44 @@ export default function CadastrarUsuario() {
                     const response = await Api.createAccount(formData)
 
                     if (response.data.code === "REGISTERED_ACCOUNT") {
+                        localStorage.setItem("auth", response.data.auth)
+
                         router.push('/feed')
                     }
                 } catch (error) {
                     console.log(error)
                 }
             },
-            outroLevel: () => {
-                console.log('Função para outroLevel');
+            professor: async () => {
+                const userData = {
+                    nome: user.nome,
+                    estado: user.estado,
+                    nivel: nivel,
+                    instituicao_leciona: user.instituicao,
+                    materias_lecionadas: user.materiasLecionadas,
+                    email: email,
+                    username: user.username 
+                }
 
-            },
+                const formData = new FormData()
+                formData.append('userData', JSON.stringify(userData))
+
+                if (user.foto instanceof File) {
+                    formData.append('imagem', user.foto);
+                }
+
+                try {
+                    setIsloading(true)
+                    const response = await Api.createAccount(formData)
+
+                    if (response.data.code === "REGISTERED_ACCOUNT") {
+                        localStorage.setItem("auth", response.data.auth)
+                        router.push('/feed')
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            }
 
         };
 
@@ -174,22 +210,30 @@ export default function CadastrarUsuario() {
 
 
     const checkMandatoryFields = () => {
-        if (user.nome === "") {
-            alert("Nome é obrigatório")
-
-            return false
-        }
+    if (step === 0 && user.nome === "") {
+        alert("Nome é obrigatório");
+        return false;
     }
+    if (step === 3 && user.username === "") {
+        alert("Username é obrigatório");
+        return false;
+    }
+    return true;
+}
+
 
     useEffect(() => {
-        if (inputAlunoEM[step - 4]?.type === "finished") {
+        if (inputAlunoEM[step - 5]?.type === "finished" && user.nivel === "Aluno EM") {
             return handleSubmit("alunoEM");
         }
-        if (inputVestibulando[step - 4]?.type === "finished") {
+        if (vestibulandoInputs[step - 5]?.type === "finished" && user.nivel === "Vestibulando") {
             return handleSubmit("alunoVestibular");
         }
-        if (universitarioInputs[step - 4]?.type === "finished") {
+        if (universitarioInputs[step - 5]?.type === "finished" && user.nivel === "Universitário") {
             return handleSubmit("universitario");
+        }
+        if (professorInputs[step - 5]?.type === "finished" && user.nivel === "Professor") {
+            return handleSubmit("professor")
         }
     }, [step]);
 
@@ -204,17 +248,17 @@ export default function CadastrarUsuario() {
 
 
     function renderInputAlunoEM() {
-        switch (inputAlunoEM[step - 4]?.type) {
+        switch (inputAlunoEM[step - 5]?.type) {
             case "textEscola":
                 return (
                     <div className={s.inputDivAluno}>
-                        <input maxLength={30} value={user.escola} onChange={(e) => updateState("escola", e.target.value)} placeholder={inputAlunoEM[step - 4].placeholder} type="text" className={s.inputAlunoEscola} />
+                        <input maxLength={30} value={user.escola} onChange={(e) => updateState("escola", e.target.value)} placeholder={inputAlunoEM[step - 5].placeholder} type="text" className={s.inputAlunoEscola} />
                     </div>
                 )
             case "selectAno":
                 return (
                     <select value={user.ano} onChange={(e) => updateState("ano", e.target.value)} className={s.select} name="" id="">
-                        {inputAlunoEM[step - 4].opcoes?.map((opcao, index) => (
+                        {inputAlunoEM[step - 5].opcoes?.map((opcao, index) => (
                             <option className={s.option} key={index} value={opcao}>{opcao}</option>
                         ))}
                     </select>
@@ -222,7 +266,7 @@ export default function CadastrarUsuario() {
             case "selectVestibular":
                 return (
                     <div className={s.optionsDiv}>
-                        {inputAlunoEM[step - 4].opcoes?.map((opcao, index) => {
+                        {inputAlunoEM[step - 5].opcoes?.map((opcao, index) => {
                             const selecionado = user.vestibulares?.includes(opcao);
 
                             return (
@@ -257,11 +301,11 @@ export default function CadastrarUsuario() {
     }
 
     function renderUniversitario() {
-        switch (universitarioInputs[step - 4]?.type) {
+        switch (universitarioInputs[step - 5]?.type) {
             case "textEscola":
                 return (
                     <div className={s.inputDivAluno}>
-                        <input value={user.universidade} onChange={(e) => updateState("universidade", e.target.value)} type="text" placeholder={universitarioInputs[step - 4].placeholder} />
+                        <input value={user.universidade} onChange={(e) => updateState("universidade", e.target.value)} type="text" placeholder={universitarioInputs[step - 5].placeholder} />
                     </div>
 
                 )
@@ -280,7 +324,7 @@ export default function CadastrarUsuario() {
             case "textCurso":
                 return (
                     <div className={s.inputDivAluno}>
-                        <input value={user.curso} onChange={(e) => updateState("curso", e.target.value)} type="text" placeholder={universitarioInputs[step - 4].placeholder} />
+                        <input value={user.curso} onChange={(e) => updateState("curso", e.target.value)} type="text" placeholder={universitarioInputs[step - 5].placeholder} />
                     </div>
                 )
             case "finished":
@@ -301,13 +345,17 @@ export default function CadastrarUsuario() {
         }
     }
 
+    useEffect(( ) => {
+        console.log(step    )
+    }, [step])
+
     function renderVestibulando() {
-        switch (vestibulandoInputs[step - 4]?.type) {
+        switch (vestibulandoInputs[step - 5]?.type) {
             case "selectEM":
                 return (
                     <div className={s.vestibulandoDiv}>
-                        {vestibulandoInputs[step - 4].opcoes?.map((opcao, index) => (
-                            <div style={(user.formouEM ? "Sim" : "Não") === opcao ? { backgroundColor: "#777CFE" } : { backgroundColor: "transparent" }} onClick={() => updateState("formouEM", (opcao === "Sim" ? true : false))} key={index}>
+                        {vestibulandoInputs[step - 5].opcoes?.map((opcao, index) => (
+                            <div style={(user.formouem ? "Sim" : "Não") === opcao ? { backgroundColor: "#777CFE" } : { backgroundColor: "transparent" }} onClick={() => updateState("formouem", (opcao === "Sim" ? true : false))} key={index}>
                                 <p>{opcao}</p>
                             </div>
                         ))
@@ -317,7 +365,7 @@ export default function CadastrarUsuario() {
             case "textEscola":
                 return (
                     <div className={s.inputVestibulando}>
-                        {vestibulandoInputs[step - 4].opcoes?.map((opcao, index) => (
+                        {vestibulandoInputs[step - 5].opcoes?.map((opcao, index) => (
                             <div style={(user.trabalha ? "Sim" : "Não") === opcao ? { backgroundColor: "#777CFE" } : { backgroundColor: "transparent" }} onClick={() => updateState("trabalha", (opcao === "Sim" ? true : false))} key={index}>
                                 <p>{opcao}</p>
                             </div>
@@ -328,7 +376,7 @@ export default function CadastrarUsuario() {
             case "selectVestibular":
                 return (
                     <div className={s.vestibulandoDiv}>
-                        {vestibulandoInputs[step - 4].opcoes?.map((opcao, index) => {
+                        {vestibulandoInputs[step - 5].opcoes?.map((opcao, index) => {
                             const selecionado = user.vestibulares?.includes(opcao);
 
 
@@ -353,7 +401,6 @@ export default function CadastrarUsuario() {
                         </div>
                     ) :
                         <div className={s.divAlunoEMFinalizar}>
-
                             <div>
                                 <p>Conta Registrada! Aperte no botão <p style={{ color: "#777CFE", fontWeight: 600 }}>FINALIZAR</p><p> para ser redirecionado ao nosso feed.</p></p>
                             </div>
@@ -363,17 +410,17 @@ export default function CadastrarUsuario() {
     }
 
     function renderProfessor() {
-        switch (professorInputs[step - 4]?.type) {
+        switch (professorInputs[step - 5]?.type) {
             case "textEscola":
                 return (
                     <div className={s.inputDivAluno}>
-                        <input value={user.instituicao} onChange={(e) => updateState("instituicao", e.target.value)} type="text" placeholder={professorInputs[step - 4].placeholder} />
+                        <input value={user.instituicao} onChange={(e) => updateState("instituicao", e.target.value)} type="text" placeholder={professorInputs[step - 5].placeholder} />
                     </div>
                 )
             case "textArea":
                 return (
                     <div className={s.inputProfessorOpcoesDiv}>
-                        {professorInputs[step - 4].opcoes?.map((opcao, index) => {
+                        {professorInputs[step - 5].opcoes?.map((opcao, index) => {
                             const selecionado = user.materiasLecionadas?.includes(opcao);
 
                             return (
@@ -410,10 +457,10 @@ export default function CadastrarUsuario() {
 
     useEffect(() => {
         const tipo =
-            nivel === "Aluno EM" ? inputAlunoEM[step - 4]?.type :
-                nivel === "Vestibulando" ? vestibulandoInputs[step - 4]?.type :
-                    nivel === "Universitário" ? universitarioInputs[step - 4]?.type :
-                        nivel === "Professor" ? professorInputs[step - 4]?.type :
+            nivel === "Aluno EM" ? inputAlunoEM[step - 5]?.type :
+                nivel === "Vestibulando" ? vestibulandoInputs[step - 5]?.type :
+                    nivel === "Universitário" ? universitarioInputs[step - 5]?.type :
+                        nivel === "Professor" ? professorInputs[step - 5]?.type :
                             null;
 
         if (tipo === "finished") {
@@ -502,14 +549,26 @@ export default function CadastrarUsuario() {
                                 ))}
                             </div>
                         </>
+                    ) : inputs[step]?.type === "textUsername" ? (
+                     <>
+                            <div className={s.titleDiv}>
+                                <p className={s.titleText}>{inputs[step]?.title}</p>
+                            </div>
+                            <div className={s.subtitleDiv}>
+                                <p className={s.subtitleText}>{inputs[step]?.subtitle}</p>
+                            </div>
+                            <div className={s.inputDiv}>
+                                <input value={user.username} onChange={(e) => updateState("username", e.target.value)} placeholder={inputs[step].placeholder} className={s.input} type="text" />
+                            </div>
+                        </>  
                     ) :
                         nivel === "Aluno EM" ? (
                             <>
                                 <div className={s.titleDiv}>
-                                    <p className={s.titleText}>{inputAlunoEM[step - 4]?.title}</p>
+                                    <p className={s.titleText}>{inputAlunoEM[step - 5]?.title}</p>
                                 </div>
                                 <div className={s.subtitleDiv}>
-                                    <p className={s.subtitleText}>{inputAlunoEM[step - 4]?.subtitle}</p>
+                                    <p className={s.subtitleText}>{inputAlunoEM[step - 5]?.subtitle}</p>
                                 </div>
 
                                 {renderInputAlunoEM()}
@@ -519,10 +578,10 @@ export default function CadastrarUsuario() {
                                 <>
                                     <div>
                                         <div className={s.titleDiv}>
-                                            <p className={s.titleText}>{vestibulandoInputs[step - 4]?.title}</p>
+                                            <p className={s.titleText}>{vestibulandoInputs[step - 5]?.title}</p>
                                         </div>
                                         <div className={s.subtitleDiv}>
-                                            <p className={s.subtitleText}>{vestibulandoInputs[step - 4]?.subtitle}</p>
+                                            <p className={s.subtitleText}>{vestibulandoInputs[step - 5]?.subtitle}</p>
                                         </div>
                                         {renderVestibulando()}
                                     </div>
@@ -533,10 +592,10 @@ export default function CadastrarUsuario() {
 
                                 <>
                                     <div className={s.titleDiv}>
-                                        <p className={s.titleText}>{universitarioInputs[step - 4]?.title}</p>
+                                        <p className={s.titleText}>{universitarioInputs[step - 5]?.title}</p>
                                     </div>
                                     <div className={s.subtitleDiv}>
-                                        <p className={s.subtitleText}>{universitarioInputs[step - 4]?.subtitle}</p>
+                                        <p className={s.subtitleText}>{universitarioInputs[step - 5]?.subtitle}</p>
                                     </div>
                                     {renderUniversitario()}
                                 </>
@@ -545,10 +604,10 @@ export default function CadastrarUsuario() {
                                 nivel === "Professor" ? (
                                     <div>
                                         <div className={s.titleDiv}>
-                                            <p className={s.titleText}>{professorInputs[step - 4]?.title}</p>
+                                            <p className={s.titleText}>{professorInputs[step - 5]?.title}</p>
                                         </div>
                                         <div className={s.subtitleDiv}>
-                                            <p className={s.subtitleText}>{professorInputs[step - 4]?.subtitle}</p>
+                                            <p className={s.subtitleText}>{professorInputs[step - 5]?.subtitle}</p>
                                         </div>
                                         {renderProfessor()}
                                     </div>
@@ -559,7 +618,7 @@ export default function CadastrarUsuario() {
                 }
 
                 <div className={s.nextDiv}>
-                    {step !== 3 ? <button onClick={
+                    {step !== 4 ? <button onClick={
                         () => {
                             const validMandatory = checkMandatoryFields()
                             if (validMandatory !== false) {
@@ -587,7 +646,6 @@ export default function CadastrarUsuario() {
                     name={user.nome}
                     estado={user.estado}
                     interesses={nivel === "Aluno EM" ? user.vestibulares : nivel === "Universitário" ? user.curso : user.materiasLecionadas} />
-
             </div>
         </div>
     );

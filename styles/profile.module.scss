@@ -1,207 +1,208 @@
 .main {
-    width: 100%;
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  .profileContainer {
+    width: 60%;
+    height: 40rem;
+    position: absolute;
+    background-color: #F5F5F5;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border: 1px solid #778CFE;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
     position: relative;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+    margin: 0 1rem 0;
 
-    .profileContainer {
-        width: 60%;
-        height: 40rem;
-        position: absolute;
-        background-color: #F5F5F5;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        border: 1px solid #778CFE;
-        border-top: none;
-        border-radius: 0 0 5px 5px;
-        position: relative;
-        margin: 0 1rem 0;
+    .profileHeader {
+      width: 100%;
+      height: 200px;
+      background-size: cover;
+      background-position: center;
 
-        .profileHeader {
-            width: 100%;
-            height: 200px;
-            background-size: cover;
-            background-position: center;
-
-            img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                display: block;
-            }
-        }
-
-        .profileImage {
-            position: absolute;
-            top: 120px;
-            padding-left: 50px;
-
-            img {
-                height: 150px;
-                width: 150px;
-                object-fit: cover;
-
-                border-radius: 50%;
-            }
-        }
-
-        .profileName {
-            position: absolute;
-            top: 270px;
-            padding-left: 50px;
-
-            p {
-
-                font-size: 2rem;
-                font-weight: 600;
-                font-family: "Kantumruy Pro", sans-serif;
-                color: #000;
-            }
-        }
-
-        .profileUsername {
-            position: absolute;
-            top: 310px;
-            padding-left: 50px;
-
-            p {
-
-                font-size: 1rem;
-                font-weight: 600;
-                font-family: "Kantumruy Pro", sans-serif;
-                color: #778CFE;
-            }
-        }
-
-        .profileDescription {
-            position: absolute;
-            top: 350px;
-            padding-left: 50px;
-            padding-right: 50px;
-
-            p {
-
-                font-size: 1.2rem;
-                font-weight: 500;
-                font-family: "Kantumruy Pro", sans-serif;
-                color: #000;
-            }
-        }
-
-        .editProfile {
-            position: absolute;
-            top: 220px;
-            right: 0px;
-            padding-right: 20px;
-            padding-left: 50px;
-
-            button {
-                font-size: 1rem;
-                font-weight: 600;
-                font-family: "Kantumruy Pro", sans-serif;
-                color: #fff;
-                background-color: #778CFE;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                height: 30px;
-                width: 150px;
-
-                &:hover {
-                    background-color: #5a6bcf;
-                }
-            }
-        }
-
-        .interesses {
-            position: absolute;
-            bottom: 0;
-            padding-left: 50px;
-            padding-bottom: 20px;
-
-            p {
-                font-size: 1rem;
-                font-weight: 700;
-                font-family: "Kantumruy Pro", sans-serif;
-                color: #9D9D9D;
-            }
-        }
-
-        .profileStats {
-
-            left: 50px;
-            display: flex;
-            flex-direction: row;
-            padding-top: 40px;
-            gap: 80px;
-
-            .statsItem {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-
-                p {
-                    font-size: 1.2rem;
-                    font-weight: 600;
-                    font-family: "Kantumruy Pro", sans-serif;
-                    color: #000;
-                }
-
-                span {
-                    font-size: 1rem;
-                    font-weight: 500;
-                    font-family: "Kantumruy Pro", sans-serif;
-                    color: #9D9D9D;
-                }
-            }
-
-
-        }
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
     }
 
-    .containerProfilePost {
-        width: 60%;
-        height: auto;
-        margin: 10rem 0 0 0;
-        background-color: #F5F5F5;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        border: 1px solid #778CFE;
-        border-radius: 0 0 5px 5px;
+    .profileImage {
+      position: absolute;
+      top: 120px;
+      padding-left: 50px;
 
+      img {
+        height: 150px;
+        width: 150px;
+        object-fit: cover;
+
+        border-radius: 50%;
+      }
     }
 
-    .content_btn_postagem {
-        position: fixed;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        bottom: 0%;
-        left: 20%;
-        width: 5%;
-        height: 7%;
-        margin: 0 .7rem .7rem 0;
+    .profileName {
+      position: absolute;
+      top: 270px;
+      padding-left: 50px;
+
+      p {
+
+        font-size: 2rem;
+        font-weight: 600;
+        font-family: "Kantumruy Pro", sans-serif;
+        color: #000;
+      }
+    }
+
+    .profileUsername {
+      position: absolute;
+      top: 310px;
+      padding-left: 50px;
+
+      p {
+
+        font-size: 1rem;
+        font-weight: 600;
+        font-family: "Kantumruy Pro", sans-serif;
+        color: #778CFE;
+      }
+    }
+
+    .profileDescription {
+      position: absolute;
+      top: 350px;
+      padding-left: 50px;
+      padding-right: 50px;
+
+      p {
+
+        font-size: 1.2rem;
+        font-weight: 500;
+        font-family: "Kantumruy Pro", sans-serif;
+        color: #000;
+      }
+    }
+
+    .editProfile {
+      position: absolute;
+      top: 220px;
+      right: 0px;
+      padding-right: 20px;
+      padding-left: 50px;
+
+      button {
+        font-size: 1rem;
+        font-weight: 600;
+        font-family: "Kantumruy Pro", sans-serif;
+        color: #fff;
         background-color: #778CFE;
-        border: .1rem solid #778CFE;
-        border-radius: .5rem;
+        border: none;
+        border-radius: 5px;
         cursor: pointer;
-        transition: ease-in-out .2s;
-
-        span {
-            color: #fff;
-            transition: ease-in-out .2s;
-
-        }
+        height: 30px;
+        width: 150px;
 
         &:hover {
-            background: #fff;
-            border-color: #778CFE;
-
-            span {
-                color: #778CFE;
-
-            }
+          background-color: #5a6bcf;
         }
+      }
     }
+
+    .interesses {
+      position: absolute;
+      bottom: 0;
+      padding-left: 50px;
+      padding-bottom: 20px;
+
+      p {
+        font-size: 1rem;
+        font-weight: 700;
+        font-family: "Kantumruy Pro", sans-serif;
+        color: #9D9D9D;
+      }
+    }
+
+    .profileStats {
+
+      left: 50px;
+      display: flex;
+      flex-direction: row;
+      padding-top: 40px;
+      gap: 80px;
+
+      .statsItem {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        p {
+          font-size: 1.2rem;
+          font-weight: 600;
+          font-family: "Kantumruy Pro", sans-serif;
+          color: #000;
+        }
+
+        span {
+          font-size: 1rem;
+          font-weight: 500;
+          font-family: "Kantumruy Pro", sans-serif;
+          color: #9D9D9D;
+        }
+      }
+
+
+    }
+  }
+
+  .containerProfilePost {
+    width: 60%;
+    max-width: 800px;
+    height: auto;
+    margin: 10rem 0 0 0;
+    background-color: #F5F5F5;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border: 1px solid #778CFE;
+    border-radius: 0 0 5px 5px;
+
+  }
+
+  .content_btn_postagem {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    bottom: 0%;
+    left: 20%;
+    width: 5%;
+    height: 7%;
+    margin: 0 .7rem .7rem 0;
+    background-color: #778CFE;
+    border: .1rem solid #778CFE;
+    border-radius: .5rem;
+    cursor: pointer;
+    transition: ease-in-out .2s;
+
+    span {
+      color: #fff;
+      transition: ease-in-out .2s;
+
+    }
+
+    &:hover {
+      background: #fff;
+      border-color: #778CFE;
+
+      span {
+        color: #778CFE;
+
+      }
+    }
+  }
 
 }
 
@@ -232,7 +233,7 @@ $shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   height: 200px;
   overflow: hidden;
   position: relative;
-  
+
   .headerImage {
     width: 100%;
     height: 100%;
@@ -253,7 +254,7 @@ $shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   align-items: flex-end;
   margin-top: -50px;
   margin-bottom: 20px;
-  
+
   .profilePicture {
     width: 100px;
     height: 100px;
@@ -276,7 +277,7 @@ $shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  
+
   &:hover {
     background-color: $primary-color;
     color: $white;
@@ -286,14 +287,14 @@ $shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 // Name section
 .nameSection {
   margin-bottom: 15px;
-  
+
   .name {
     font-size: 24px;
     font-weight: 800;
     margin: 0;
     color: $text-color;
   }
-  
+
   .username {
     font-size: 16px;
     color: #666;
@@ -307,11 +308,11 @@ $shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   align-items: center;
   gap: 8px;
   margin-bottom: 15px;
-  
+
   .typeEmoji {
     font-size: 20px;
   }
-  
+
   .typeText {
     font-size: 14px;
     color: $text-color;
@@ -335,14 +336,14 @@ $shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   background-color: $light-gray;
   padding: 15px;
   border-radius: $border-radius;
-  
+
   .interestsTitle {
     font-size: 16px;
     margin: 0 0 10px 0;
     color: $primary-color;
     font-weight: 600;
   }
-  
+
   .universityList {
     list-style: none;
     padding: 0;
@@ -351,7 +352,7 @@ $shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     flex-wrap: wrap;
     gap: 8px;
   }
-  
+
   .universityItem {
     background-color: $white;
     padding: 6px 12px;
@@ -359,7 +360,7 @@ $shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     font-size: 14px;
     color: $text-color;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    
+
     &:hover {
       background-color: $primary-color;
       color: $white;
@@ -373,24 +374,24 @@ $shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   .headerImageContainer {
     height: 150px;
   }
-  
+
   .profilePictureContainer {
     flex-direction: column;
     align-items: flex-start;
     margin-top: -30px;
-    
+
     .profilePicture {
       width: 80px;
       height: 80px;
       margin-bottom: 10px;
     }
   }
-  
+
   .nameSection {
     .name {
       font-size: 20px;
     }
-    
+
     .username {
       font-size: 14px;
     }

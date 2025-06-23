@@ -9,10 +9,11 @@ export type Register = {
     passouVestibular?: boolean;
     universidade?: string;
     curso?: string;
-    formouEM?: boolean;
+    formouem?: boolean;
     trabalha: boolean | undefined
     instituicao?: string;
     materiasLecionadas?: string[];
+    username?: string
 }
 
 
