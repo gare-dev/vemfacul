@@ -196,7 +196,7 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
 
                             {getEventsRender(day, month)}
 
-                            <span style={{ fontSize: 30 }} className={`absolute left-1 top-1 flex size-5 items-center justify-center rounded-full text-2xl sm:size-6 sm:text-sm lg:left-2 lg:top-2 lg:size-8 lg:text-base ${isToday ? 'bg-blue-500 font-semibold text-white' : ''} ${month < 0 ? 'text-slate-400' : 'text-slate-800'}`}>
+                            <span style={{ fontSize: 30 }} className={`absolute left-1 top-1 flex size-5 items-center justify-center rounded-full text-2xl sm:size-6 sm:text-sm lg:left-2 lg:top-2 lg:size-9 lg:text-base ${isToday ? 'bg-blue-500 font-semibold text-white' : ''} ${month < 0 ? 'text-slate-400' : 'text-slate-800'}`}>
                                 {day}
                             </span>
                             {

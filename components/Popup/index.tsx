@@ -1,8 +1,8 @@
 import Api from "@/api";
+import useAlert from "@/hooks/useAlert";
 import useCalendarData from "@/hooks/useCalendarData";
-import useOpenPopup from "@/hooks/useOpenPopup";
 import s from "@/styles/popup.module.scss"
-import getCookieValue from "@/utils/getCookie";
+import getAuth from "@/utils/getAuth";
 import { IoMdAdd } from "react-icons/io";
 import { MdDeleteOutline, MdModeEdit } from "react-icons/md";
 
@@ -19,26 +19,26 @@ interface props {
 
 export default function Popup(props: props) {
     const { calendarData } = useCalendarData()
-    const { setIsOpen } = useOpenPopup()
+    // const { setIsOpen } = useOpenPopup()
+    const { showAlert } = useAlert()
 
     function padZero(n: number): string {
         return n < 10 ? `0${n}` : `${n}`;
     }
 
     async function saveEvent() {
-        if (!getCookieValue("auth")) {
-            return setIsOpen(true)
-        }
-
-        try {
-            const response = await Api.insertPersonalEvent(calendarData.day, calendarData.month, calendarData.year, calendarData.title, calendarData.cursinho, calendarData.descricao, calendarData.foto, calendarData.link, calendarData.type, calendarData.color, calendarData.main_title)
-            if (response.data.code === "EVENT_ADDED") {
-                console.log("REGISTROu")
+        if (getAuth()) {
+            try {
+                const response = await Api.insertPersonalEvent(calendarData.day, calendarData.month, calendarData.year, calendarData.title, calendarData.cursinho, calendarData.descricao, calendarData.foto, calendarData.link, calendarData.type, calendarData.color, calendarData.main_title)
+                if (response.data.code === "EVENT_ADDED") {
+                    showAlert('Evento adicionado à sua agenda pessoal!', 'success')
+                }
+            } catch (error) {
+                console.log("NAo REGISTROu" + error)
             }
-        } catch (error) {
-            console.log("NAo REGISTROu" + error)
-
         }
+
+
     }
 
     // TODOFIXMETODOFIXMETODOFIXMETODO

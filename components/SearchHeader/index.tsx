@@ -24,7 +24,7 @@ const FilterBar: React.FC<FilterBarProps> = ({ onSearch }) => {
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
                 >
-                    <option value="">Selecionar Estado</option>
+                    <option value="">Todos</option>
                     <option value="sp">São Paulo</option>
                     <option value="rj">Rio de Janeiro</option>
                     <option value="bh">Belo Horizonte</option>
@@ -42,7 +42,7 @@ const FilterBar: React.FC<FilterBarProps> = ({ onSearch }) => {
                     onChange={(e) => setState(e.target.value)}
                     disabled={!location}
                 >
-                    <option value="">{location ? 'Selecionar Cidade' : 'Selecione o Estado Primeiro'}</option>
+                    <option value="">{location ? 'Todos' : 'Selecione o Estado Primeiro'}</option>
                     {location === 'sp' && (
                         <>
                             <option value="sp">São Paulo</option>
@@ -66,8 +66,6 @@ const FilterBar: React.FC<FilterBarProps> = ({ onSearch }) => {
                     )}
                 </select>
             </div>
-
-
 
             <div className={styles.filterItem} style={{ flex: '2 1 200px' }}>
                 <label htmlFor="filter-search" className={styles.filterLabel}>

@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { AxiosError } from "axios";
 import useAlert from "@/hooks/useAlert";
+import getAuth from "@/utils/getAuth";
 
 export default function LandingPage() {
     const router = useRouter()
@@ -29,7 +30,22 @@ export default function LandingPage() {
         tipodeCursinho: []
     }]);
 
+    const handleIsLogged = async () => {
+        if (getAuth()) {
+            try {
+                const response = await Api.validateProfile()
+                if (response.data.code === "PROFILE_VALIDATED") {
+                    await router.push('/feed')
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }
 
+    useEffect(() => {
+        handleIsLogged()
+    }, [])
 
     const getEvents = async () => {
         try {
@@ -92,6 +108,8 @@ export default function LandingPage() {
         setPopupVisible(false);
         setEvents(retorno);
     }
+
+
 
 
     if (isLoading) {

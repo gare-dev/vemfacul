@@ -9,8 +9,6 @@ export default function Feed() {
     const [cursinhos, setCursinhos] = useState(products);
 
     function handleFilterChange(filters: { location: string; state: string; city: string; query: string }) {
-        // Aqui você pode implementar a lógica de filtragem com base nos filtros recebidos
-        // Por exemplo, filtrando os cursinhos com base na localização, estado, cidade e consulta
         const filteredCursinhos = products.filter(cursinho => {
             return (
                 (filters.location ? cursinho.location.toLowerCase() === filters.location.toLowerCase() : true) &&
@@ -20,8 +18,6 @@ export default function Feed() {
             );
         });
         setCursinhos(filteredCursinhos);
-
-
     }
 
     return (
@@ -42,6 +38,9 @@ export default function Feed() {
                             imageUrl={item.imageUrl}
                         />
                     ))}
+                    {cursinhos.length === 0 && (
+                        <h2 style={{ textAlign: 'center' }}>Nenhum cursinho encontrado para o filtro especificado.</h2>
+                    )}
                 </div>
             </div>
         </div>
