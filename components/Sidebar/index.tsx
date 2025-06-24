@@ -4,7 +4,7 @@ import AuthDataType from "@/types/authDataType"
 import getAuth from "@/utils/getAuth"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import { FaCalendarAlt, FaRegUserCircle } from "react-icons/fa"
+import { FaCalendar, FaCalendarAlt, FaRegUserCircle } from "react-icons/fa"
 import { IoMdPeople, IoMdSettings } from "react-icons/io"
 import { LuFilePenLine } from "react-icons/lu"
 import { MdAssignment, MdExitToApp, MdQuiz } from "react-icons/md"
@@ -17,11 +17,12 @@ export default function Sidebar() {
 
     const navItems = [
         { icon: <RiPagesLine />, name: "Feed", path: "/feed" },
-        { icon: <FaCalendarAlt />, name: "Calendário Pessoal", path: "/calendario" },
         { icon: <IoMdPeople />, name: "Comunidade", path: "/comunidade" },
+        { icon: <FaCalendar />, name: "Calendário Geral", path: "/eventos" },
         { icon: <LuFilePenLine />, name: "Correção de Redação", path: "/correcaoRedacao" },
         { icon: <MdQuiz />, name: "Exercícios", path: "/exercicios" },
         { icon: <MdAssignment />, name: "Exercício Diário", path: "/exercicioDiario" },
+        { icon: <FaCalendarAlt />, name: "Calendário Pessoal", path: "/calendario" },
         { icon: <FaRegUserCircle />, name: "Perfil", path: `/${authData?.username}` },
     ]
 
@@ -39,13 +40,8 @@ export default function Sidebar() {
     }
 
     useEffect(() => {
-        console.log("AuthData changed:", authData);
-    }, [authData])
-
-    useEffect(() => {
         const handleGetProfileIfo = async () => {
             if (getAuth()) {
-                console.log("Auth found in localStorage")
                 try {
                     const response = await Api.getProfileInfo()
                     if (response.data.code === "PROFILE_INFO") {

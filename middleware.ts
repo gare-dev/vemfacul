@@ -9,7 +9,11 @@ const RESERVED_ROUTES = [
     'confirmarConta',
     'landingPage',
     '_next',
-    'comunidade'
+    'comunidade',
+    'eventos',
+    'correcaoRedacao',
+    'exercicioDiario'
+
 ];
 
 export function middleware(request: NextRequest) {
