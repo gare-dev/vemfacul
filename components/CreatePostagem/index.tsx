@@ -7,11 +7,10 @@ import { AxiosError } from 'axios';
 interface TweetPopupProps {
     isOpen: boolean;
     onClose: () => void;
-    onPostTweet: (tweet: string) => void;
     onReload: () => void;
 }
 
-const TweetPopup: React.FC<TweetPopupProps> = ({ isOpen, onClose, onPostTweet, onReload }) => {
+const TweetPopup: React.FC<TweetPopupProps> = ({ isOpen, onClose, onReload }) => {
     const [tweetText, setTweetText] = useState('');
     const [error, setError] = useState('');
 
@@ -29,7 +28,6 @@ const TweetPopup: React.FC<TweetPopupProps> = ({ isOpen, onClose, onPostTweet, o
                 const response = await Api.createPostagem(tweetText);
 
                 if (response.data.code === "POSTAGEM_SUCESS") {
-                    onPostTweet(tweetText);
                     setTweetText('');
                     onClose();
                     onReload();

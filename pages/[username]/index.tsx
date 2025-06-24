@@ -20,6 +20,7 @@ type Postagem = {
     content: string;
     content_post?: string;
     created_at?: string | Date;
+    total_likes?: string;
 };
 
 export default function UserProfile() {
@@ -43,7 +44,9 @@ export default function UserProfile() {
         posts_number: "0",
         vestibulares: [],
         materias_lecionadas: [],
-        nivel: ""
+        nivel: "",
+
+
     });
 
     const typeEmojiMap: Record<string, string> = {
@@ -58,9 +61,6 @@ export default function UserProfile() {
     };
     const handleClosePopup = () => {
         setIsPopupOpen(false);
-    };
-    const handlePostTweet = (tweet: string) => {
-        console.log('Tweet posted:', tweet);
     };
 
     const handleGetPostagens = async () => {
@@ -115,6 +115,7 @@ export default function UserProfile() {
         if (!username?.toString()) return router.push('/');
 
         try {
+            setLoading(true);
             const response = await Api.getUserProfile(username.toString());
 
             if (response.data.code === "USER_FOUND") {
@@ -134,10 +135,8 @@ export default function UserProfile() {
                     posts_number: "0",
                     vestibulares: [],
                     materias_lecionadas: [],
-                    nivel: ""
+                    nivel: "",
                 })
-
-
             }
         } finally {
             setLoading(false);
@@ -165,11 +164,10 @@ export default function UserProfile() {
                 <CreatePostagem
                     isOpen={isPopupOpen}
                     onClose={handleClosePopup}
-                    onPostTweet={handlePostTweet}
                     onReload={() => router.reload()}
-                // btnClose={() => setIsVisibleSubmitPost(false)}
-                // refreshPage={() => router.reload()}
-                />}
+                />
+
+            }
             <div className={styles.main}>
                 <Head>
                     <title>{userProfile.nome} | Perfil</title>
@@ -237,7 +235,7 @@ export default function UserProfile() {
                 <div className={styles.containerProfilePost}>
                     {postVisible && postagens.length > 0 && postagens.map((post, idx) => (
                         <UserPost
-                            key={ 0 || idx}
+                            key={0 || idx}
                             id={post.id_postagem}
                             name={userProfile.nome}
                             username={userProfile.username}
@@ -251,7 +249,7 @@ export default function UserProfile() {
                             content={post.content}
                             profileImage={userProfile.foto}
                             timestamp={post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).getDate().toString() + " de " + monthsMap[new Date(post.created_at).getMonth()]) : ""}
-                            likes={0}
+                            likes={+(post.total_likes ?? 0)}
                             comments={0}
                         />
                     ))}

@@ -52,6 +52,10 @@ export default function PopupRegistro(props: props) {
                     setStep('shown')
                     return setError(error.response?.data.message)
                 }
+                if (error.code === "ERR_NETWORK") {
+                    setError("Erro de rede. Tente novamente mais tarde.");
+                    return
+                }
             }
         }
     }

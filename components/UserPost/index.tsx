@@ -1,5 +1,4 @@
-import Api from '@/api/'
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styles from '@/styles/userPost.module.scss';
 
 interface TweetProps {
@@ -15,7 +14,7 @@ interface TweetProps {
 }
 
 const Tweet: React.FC<TweetProps> = ({
-  id,
+  // id,
   content,
   name,
   username,
@@ -36,25 +35,25 @@ const Tweet: React.FC<TweetProps> = ({
     setIsLiked(!isLiked);
   };
 
-  const handleGetLikes = async (id_postagem: number | string) => {
-    try {
-      const promise = await Api.getLikesCount(id_postagem)
+  // const handleGetLikes = async (id_postagem: number | string) => {
+  //   try {
+  //     const promise = await Api.getLikesCount(id_postagem)
 
-      if (promise.data.code === "COUNT_LIKE_SUCESS") {
-        return setCurrentLikes(+promise.data.likes)
-      }
-      return setCurrentLikes(0)
-    } catch (erro) {
-      console.log(erro)
-    }
-  }
+  //     if (promise.data.code === "COUNT_LIKE_SUCESS") {
+  //       return setCurrentLikes(+promise.data.likes)
+  //     }
+  //     return setCurrentLikes(0)
+  //   } catch (erro) {
+  //     console.log(erro)
+  //   }
+  // }
 
-  useEffect(() => {
-    if (typeof id !== "string" && typeof id !== "number") {
-      console.log("que id é esse fi", id)
-    }
-    handleGetLikes(id)
-  }, [])
+  // useEffect(() => {
+  //   if (typeof id !== "string" && typeof id !== "number") {
+  //     console.log("que id é esse fi", id)
+  //   }
+  //   handleGetLikes(id)
+  // }, [])
   return (
     <div className={styles.tweetContainer}>
       <div className={styles.tweetContent}>

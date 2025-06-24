@@ -11,9 +11,8 @@ import PopupType from "@/types/data";
 import { FiltrosType } from "@/types/filtrosType";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-
-
-
+import { AxiosError } from "axios";
+import useAlert from "@/hooks/useAlert";
 
 export default function LandingPage() {
     const router = useRouter()
@@ -24,6 +23,7 @@ export default function LandingPage() {
     const [originalEvents, setOriginalEvents] = useState<PopupType[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [popupVisible, setPopupVisible] = useState<boolean>(false)
+    const { showAlert } = useAlert()
     const [filtroEventos, setFiltroEventos] = useState<FiltrosType[]>([{
         tipoDeEvento: [],
         tipodeCursinho: []
@@ -42,6 +42,14 @@ export default function LandingPage() {
             }
         } catch (error) {
             console.log(error)
+            if (error instanceof AxiosError) {
+                if (error.response?.data.code === "NO_FOUND_EVENTS") {
+                    console.error("Erro ao buscar eventos:", error.response.data.message);
+                }
+                if (error.code === "ERR_NETWORK") {
+                    showAlert("Não foi possível obter os eventos. Tente novamente mais tarde.", "danger");
+                }
+            }
         } finally {
             setIsLoading(false)
         }
