@@ -5,21 +5,24 @@ import { SnackProvider } from "@/hooks/SnackProvider";
 import { CalendarDataProvider } from "@/context/CalendarDataContext";
 import { OpenPopupProvider } from "@/context/OpenPopupContext";
 import { PersonalEventDataProvider } from "@/context/PersonalEventPopupContext";
+import AlertProvider from "@/context/AlertContext";
 
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <EmailProvider>
-      <PersonalEventDataProvider>
-        <SnackProvider>
-          <OpenPopupProvider>
-            <CalendarDataProvider>
-              <Component {...pageProps} />
-            </CalendarDataProvider>
-          </OpenPopupProvider>
-        </SnackProvider>
-      </PersonalEventDataProvider>
-    </EmailProvider >
+    <AlertProvider>
+      <EmailProvider>
+        <PersonalEventDataProvider>
+          <SnackProvider>
+            <OpenPopupProvider>
+              <CalendarDataProvider>
+                <Component {...pageProps} />
+              </CalendarDataProvider>
+            </OpenPopupProvider>
+          </SnackProvider>
+        </PersonalEventDataProvider>
+      </EmailProvider >
+    </AlertProvider>
   )
 
 }

@@ -1,4 +1,5 @@
 import Api from "@/api";
+import useAlert from "@/hooks/useAlert";
 import usePersonalEvents from "@/hooks/usePersonalEvents";
 import styles from "@/styles/popuuppersonalevents.module.scss"
 import padZero from "@/utils/padZero";
@@ -14,6 +15,7 @@ type FormModalProps = {
 export default function FormModal({ onClose, isVisible }: FormModalProps) {
     const { setPersonalEventsData, personalEventsData } = usePersonalEvents()
     const router = useRouter()
+    const { showAlert } = useAlert()
 
 
     async function handleSubmit() {
@@ -26,7 +28,7 @@ export default function FormModal({ onClose, isVisible }: FormModalProps) {
             const response = await Api.insertPersonalLocalEvent(personalEventsData.day, personalEventsData.month, personalEventsData.year, personalEventsData.title, personalEventsData.descricao, personalEventsData.color, personalEventsData.main_title, personalEventsData.isImportant, personalEventsData.hora)
 
             if (response.data.code === "EVENT_ADDED") {
-                alert("Evento criado com sucesso");
+                showAlert("Evento adicionado com sucesso", "success");
                 setPersonalEventsData((prev) => ({
                     ...prev,
                     title: "",

@@ -16,6 +16,13 @@ const inputs: InputText[] = [
         subtitle: "Ela será exibida no seu perfi, então escolhe uma bem bonita!",
         level: "initialLogin"
     },
+     {
+        placeholder: "Username",
+        type: "textUsername",
+        title: "Coloque um @!",
+        subtitle: "Esse username será o seu identificador na plataforma.",
+        level: "initialLogin"
+    },
     {
         placeholder: "",
         type: "selectEstado",

@@ -10,12 +10,12 @@ import useCalendarData from "@/hooks/useCalendarData";
 import PopupType from "@/types/data";
 import { FiltrosType } from "@/types/filtrosType";
 import { useEffect, useState } from "react";
-
-
-
+import { useRouter } from "next/router";
+import { AxiosError } from "axios";
+import useAlert from "@/hooks/useAlert";
 
 export default function LandingPage() {
-
+    const router = useRouter()
     const [isVisible, setIsVisible] = useState<boolean>(false)
     const { calendarData } = useCalendarData()
     const [hasOpened, setHasOpened] = useState<boolean>(false)
@@ -23,10 +23,12 @@ export default function LandingPage() {
     const [originalEvents, setOriginalEvents] = useState<PopupType[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [popupVisible, setPopupVisible] = useState<boolean>(false)
+    const { showAlert } = useAlert()
     const [filtroEventos, setFiltroEventos] = useState<FiltrosType[]>([{
         tipoDeEvento: [],
         tipodeCursinho: []
     }]);
+
 
 
     const getEvents = async () => {
@@ -40,6 +42,14 @@ export default function LandingPage() {
             }
         } catch (error) {
             console.log(error)
+            if (error instanceof AxiosError) {
+                if (error.response?.data.code === "NO_FOUND_EVENTS") {
+                    console.error("Erro ao buscar eventos:", error.response.data.message);
+                }
+                if (error.code === "ERR_NETWORK") {
+                    showAlert("Não foi possível obter os eventos. Tente novamente mais tarde.", "danger");
+                }
+            }
         } finally {
             setIsLoading(false)
         }
@@ -98,27 +108,28 @@ export default function LandingPage() {
         {
             title: "ETAPA",
             img: "/assets/img/etapa.png",
-            position: "left",
-            top: "5%",
+            // position: "left",
+            // top: "5%",
         },
         {
             title: "ANGLO",
             img: "/assets/img/anglo.png",
             text: "Acreditamos que todos merecem acesso ao ensino superior. Oferecemos apoio pedagógico, aulas dinâmicas e um ambiente acolhedor para transformar sonhos em conquistas.",
-            position: "right",
-            top: "38%"
+            // position: "right",
+            // top: "38%"
         },
         {
             title: "EPUFACBC",
             img: "/assets/img/epufabc.png",
             text: "Com estrutura completa, simulados frequentes e acompanhamento individualizado, potencializamos o desempenho dos estudantes rumo às melhores universidades do país.",
-            position: "left",
-            bottom: "0"
+            // position: "left",
+            // bottom: "0"
         }
     ]
     return (
 
-        <div className="pb-24" style={{ backgroundColor: "#D0D7FF" }}>
+        <div className={`${styles.main}`}>
+
             <Popup
                 canAdd
                 isVisible={isVisible}
@@ -135,78 +146,31 @@ export default function LandingPage() {
             />
 
             <Header />
-            <Card title
-                img="/assets/img/cardMain_img.png" />
-            <h1 className={styles.tituloCards} style={{
-                width: "80%",
-                fontSize: "2rem",
-                fontWeight: "bold",
-                textAlign: "left",
-                position: "relative",
-                left: '14.2rem',
-                margin: ".2rem 0 0 0",
-                color: "#333"
-            }}>Principais cursos</h1>
 
+            <div className={styles.container_title_card}>
+                <Card title
+                    img="/assets/img/cardMain_img.png" />
+            </div>
 
-            <div style={{
-                width: "100%",
-                height: "auto",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                flexWrap: "wrap",
+            <div className={styles.tituloCards} style={{
 
             }}>
-                <div className="cardcursos" style={{
-                    position: "relative",
-                    display: "flex",
-                    flexDirection: "column",
-                    width: "80%",
-                    height: "70rem",
-                    margin: " 0",
-                }}>
+                <h1>Principais cursos</h1>
+            </div>
+
+
+            <div className={styles.container_cards}>
+                <div className={styles.cardcursos}>
                     {
                         cardCursos.map((item, index) => (
                             <Card
-                                style={{
-                                    [item.position]: "0",
-                                    top: [item.top],
-                                    bottom: [item.bottom]
-                                }}
                                 key={index}
                                 curso={item.title}
                                 img={item.img}
                             />
                         ))
                     }
-                    <div className={styles.textInfo}>
-                        <p>
-                            Metodologia inovadora, materiais atualizados, professores experientes, preparação de qualidade, aprovação.
-                        </p>
-                    </div>
-                    <div className={styles.textInfo} style={{
-                        left: "0",
-                        top: "41%",
-                        borderTopLeftRadius: ".5rem",
-                        borderBottomLeftRadius: ".5rem",
-                        borderTopRightRadius: "0",
-                        borderBottomRightRadius: "0"
-                    }}>
-                        <p>
-                            Suporte personalizado e recursos modernos para sua melhor preparação para o vestibular.
-                        </p>
-                    </div>
-                    <div className={styles.textInfo} style={{
-                        right: "0",
-                        top: "75%",
-                    }}>
-                        <p>
-                            Excelência no ensino e apoio constante para sua aprovação. Conte com nossa equipe para conquistar sua vaga na universidade.
-                        </p>
-                    </div>
-                </div >
+                </div>
             </div >
             <h1 className={styles.tituloFuncionalidades} style={{
                 width: "auto",
@@ -226,6 +190,17 @@ export default function LandingPage() {
                     popUpClick={() => setIsVisible(true)}
                     popupFilterClick={() => setPopupVisible(true)} />
             </main>
+
+            <footer className={styles.footer}>
+                <div className={styles["footer-content"]}>
+                    <span className={styles["footer-logo"]}>VemFacul</span>
+                    <nav className={styles["footer-links"]}>
+                        <button onClickCapture={() => router.push("/")}>Início</button >
+                        <button onClickCapture={() => router.push("/")}>Sobre</button >
+                        <button onClickCapture={() => router.push("/")}>Contato</button >
+                    </nav>
+                </div>
+            </footer>
         </div >
     )
 }

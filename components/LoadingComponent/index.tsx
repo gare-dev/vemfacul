@@ -4,7 +4,7 @@ import styles from "@/styles/loadingcomponent.module.scss"
 export default function LoadingComponent() {
     return (
         <div >
-            <div style={{ zIndex: 99999 }} className="flex items-center justify-center h-screen">
+            <div style={{ zIndex: 9999999999999 }} className="flex items-center justify-center h-screen">
 
 
                 <svg

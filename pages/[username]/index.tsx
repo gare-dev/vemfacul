@@ -12,11 +12,27 @@ import UserPost from "@/components/UserPost";
 import getAuth from "@/utils/getAuth";
 import { AxiosError } from "axios";
 import { FaPen } from "react-icons/fa";
+import Head from "next/head";
+import monthsMap from "@/utils/getMonth";
 
+type Postagem = {
+    id_postagem: string | number;
+    content: string;
+    content_post?: string;
+    created_at?: string | Date;
+    total_likes?: string;
+};
 
 export default function UserProfile() {
     const router = useRouter()
     const { username } = router.query;
+    const [loading, setLoading] = useState(true);
+    const [isVisible, setIsVisible] = useState(false);
+    const [user, setUser] = useState<string | null>(null);
+    const [postVisible, setPostVisibel] = useState(false)
+    const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
+    const [postagens, setPostagens] = useState<Postagem[]>([]);
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [userProfile, setUserProfile] = useState<UserProfileType>({
         nome: "",
         username: "",
@@ -27,11 +43,53 @@ export default function UserProfile() {
         following_number: "0",
         posts_number: "0",
         vestibulares: [],
-        materias_lecionadas: []
+        materias_lecionadas: [],
+        nivel: "",
+
+
     });
-    const [loading, setLoading] = useState(true);
-    const [isVisible, setIsVisible] = useState(false);
-    const [user, setUser] = useState<string | null>(null);
+
+    const typeEmojiMap: Record<string, string> = {
+        "Professor": '👨‍🏫',
+        "Aluno EM": '🧑‍🎓',
+        "Vestibulando": '🧑‍🎓',
+        guest: '👤'
+    };
+
+    const handleOpenPopup = () => {
+        setIsPopupOpen(true);
+    };
+    const handleClosePopup = () => {
+        setIsPopupOpen(false);
+    };
+
+    const handleGetPostagens = async () => {
+        if (typeof username !== "string") {
+            return;
+        } else {
+            try {
+                const promise = await Api.getPostagem(username)
+
+                if (promise.data.code === "POSTAGENS_FOUND") {
+                    setPostagens(promise.data.postagens)
+                    setPostVisibel(true)
+                } else if (promise.data.code === "POSTAGEM_NOT_FOUND") {
+                    setPostagens([]);
+                    setPostVisibel(false);
+                } else {
+                    console.log("nao ta aparecendo nada")
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }
+
+    useEffect(() => {
+        if (typeof username === "string") {
+            handleGetPostagens()
+        }
+    }, [username])
 
     useEffect(() => {
 
@@ -50,15 +108,14 @@ export default function UserProfile() {
             }
         }
         handleValidateProfile()
-
     }, []);
 
-    const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
 
     const handleGetUserProfile = async () => {
         if (!username?.toString()) return router.push('/');
 
         try {
+            setLoading(true);
             const response = await Api.getUserProfile(username.toString());
 
             if (response.data.code === "USER_FOUND") {
@@ -77,11 +134,9 @@ export default function UserProfile() {
                     following_number: "0",
                     posts_number: "0",
                     vestibulares: [],
-                    materias_lecionadas: []
-
+                    materias_lecionadas: [],
+                    nivel: "",
                 })
-
-
             }
         } finally {
             setLoading(false);
@@ -105,59 +160,107 @@ export default function UserProfile() {
                     refreshPage={() => router.reload()}
                 />
             }
-            {isVisibleSubmitPost && <CreatePostagem
-                btnClose={() => setIsVisibleSubmitPost(false)
+            {isVisibleSubmitPost &&
+                <CreatePostagem
+                    isOpen={isPopupOpen}
+                    onClose={handleClosePopup}
+                    onReload={() => router.reload()}
+                />
 
-                } />}
+            }
             <div className={styles.main}>
+                <Head>
+                    <title>{userProfile.nome} | Perfil</title>
+                    <meta name="description" content={`Profile page for ${userProfile.nome}`} />
+                    <link rel="icon" href="/favicon.ico" />
+                </Head>
+
                 <div className={styles.profileContainer}>
-                    <div className={styles.profileHeader}>
-                        {userProfile.header && <img src={userProfile.header} alt="" />}
+
+                    <div className={styles.headerImageContainer}>
+                        <img
+                            src={userProfile.header}
+
+                            className={styles.headerImage}
+                        />
                     </div>
-                    <div className={styles.profileImage}>
-                        {userProfile.foto && <img src={userProfile.foto} alt="User profile" />}
-                    </div>
-                    <div className={styles.profileName}>
-                        <p>{userProfile.nome}</p>
-                    </div>
-                    <div className={styles.profileUsername}>
-                        {userProfile.username && <p>@{userProfile.username}</p>}
-                    </div>
-                    <div className={styles.profileDescription}>
-                        <p>{userProfile.descricao}</p>
-                    </div>
-                    {user === username &&
-                        <div className={styles.editProfile}>
-                            <button onClick={() => setIsVisible(true)}>Editar Perfil</button>
-                        </div>}
-                    <div className={styles.interesses}>
-                        <p>{Array.isArray(userProfile.vestibulares) ? userProfile.vestibulares?.map((interesse, index) => {
-                            return (
-                                `${index > 0 ? ', ' : ''}${interesse}`
-                            )
-                        }) : userProfile.vestibulares}</p>
+
+                    <div className={styles.profileInfoContainer}>
+                        <div className={styles.profilePictureContainer}>
+                            <img
+                                src={userProfile.foto}
+                                alt={`${userProfile.nome}'s profile`}
+                                className={styles.profilePicture}
+                            />
+                            {user === username &&
+                                <button onClick={() => setIsVisible(true)} className={styles.editProfileButton}>
+                                    Editar Perfil
+                                </button>}
+                        </div>
+
+                        <div className={styles.nameSection}>
+                            <h1 className={styles.name}>{userProfile.nome}</h1>
+                            <p className={styles.username}>@{userProfile.username}</p>
+                        </div>
+
+                        <div className={styles.typeIndicator}>
+                            <span className={styles.typeEmoji}>{typeEmojiMap[userProfile.nivel] || '👤'}</span>
+                            <span className={styles.typeText}>{userProfile.nivel?.charAt(0).toUpperCase() + userProfile.nivel?.slice(1)}</span>
+                        </div>
+
+                        {/* Description */}
+                        <p className={styles.description}>{userProfile.descricao}</p>
+
+                        {/* University Interests */}
+                        <div className={styles.universityInterests}>
+                            <h3 className={styles.interestsTitle}>{userProfile.nivel === "Aluno EM" ? "Vestibulares" : "Matérias Lecionadas"}</h3>
+                            <ul className={styles.universityList}>
+                                {userProfile.nivel === "Aluno EM" ? userProfile.vestibulares?.map((university, index) => (
+                                    <li key={index} className={styles.universityItem}>
+                                        {university}
+                                    </li>
+                                )) : userProfile.nivel === "Vestibulando" ? userProfile.vestibulares?.map((university, index) => (
+                                    <li key={index} className={styles.universityItem}>
+                                        {university}
+                                    </li>
+                                )) : userProfile.materias_lecionadas?.map((university, index) => (
+                                    <li key={index} className={styles.universityItem}>
+                                        {university}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <div className={styles.containerProfilePost}>
-                    <UserPost
-                        profilePhoto={userProfile.foto}
-                        profilename={userProfile.nome}
-                        username={userProfile.username}
-                        postDate="20/04/2025" // exemplo
-                        postContent="Oi pessoal da apresentação. Segue nosso insta @vemfacul2025" //exemplo
-                    />
-                    <UserPost
-                        profilePhoto={userProfile.foto}
-                        profilename={userProfile.nome}
-                        username={userProfile.username}
-                        postDate="20/04/2025" // exemplo
-                        postContent="Oi pessoal da apresentação. Segue nosso insta @vemfacul2025" //exemplo
-                    />
+                    {postVisible && postagens.length > 0 && postagens.map((post, idx) => (
+                        <UserPost
+                            key={0 || idx}
+                            id={post.id_postagem}
+                            name={userProfile.nome}
+                            username={userProfile.username}
+                            date={
+                                post.created_at
+                                    ? (typeof post.created_at === "string"
+                                        ? post.created_at
+                                        : new Date(post.created_at).toLocaleDateString())
+                                    : "Data não informada"
+                            }
+                            content={post.content}
+                            profileImage={userProfile.foto}
+                            timestamp={post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).getDate().toString() + " de " + monthsMap[new Date(post.created_at).getMonth()]) : ""}
+                            likes={+(post.total_likes ?? 0)}
+                            comments={0}
+                        />
+                    ))}
+                    {postagens.length === 0 && (
+                        <div><h1 style={{ textAlign: "center" }}>Nenhuma postagem encontrada</h1></div>
+                    )}
                 </div>
 
-                <div className={styles.content_btn_postagem} onClick={() => setIsVisibleSubmitPost(!isVisibleSubmitPost)}>
-                    <button className={styles.btn}>
-                        <span>
+                <div className={styles.content_btn_postagem} onClick={() => { setIsVisibleSubmitPost(!isVisibleSubmitPost); handleOpenPopup() }}>
+                    <button onClick={() => { setIsVisibleSubmitPost(!isVisibleSubmitPost); handleOpenPopup() }} className={styles.btn}>
+                        <span onClick={() => { setIsVisibleSubmitPost(!isVisibleSubmitPost); handleOpenPopup() }}>
                             <FaPen />
                         </span>
                     </button>

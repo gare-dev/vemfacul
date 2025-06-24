@@ -36,15 +36,12 @@ class _Api {
 
 
   public async registerAccount(email: string, password: string) {
-    try {
-      return await this._instance.post("/api/createaccount", {
-        email,
-        password,
-      });
-    } catch (error) {
-      console.error("Error registering account:", error);
-      throw error;
-    }
+
+    return await this._instance.post("/api/createaccount", {
+      email,
+      password,
+    });
+
   }
 
   public async confirmAccount(token: string) {
@@ -59,15 +56,12 @@ class _Api {
   }
 
   public async loginAccount(email: string, password: string) {
-    try {
-      return await this._instance.post("/api/loginaccount", {
-        email,
-        password,
-      });
-    } catch (error) {
-      console.error("Error logging in account:", error);
-      throw error;
-    }
+
+    return await this._instance.post("/api/loginaccount", {
+      email,
+      password,
+    });
+
   }
 
   public async createAccount(formData: any) {
@@ -123,12 +117,7 @@ class _Api {
   }
 
   public async getEvents() {
-    try {
-      return await this._instance.post('/api/getevents')
-    } catch (error) {
-      console.error("Error fetching events:", error);
-      throw error; // Re-throw the error to handle it in the calling function
-    }
+    return await this._instance.post('/api/getevents')
   }
 
   public async getPersonalEvents() {
@@ -221,8 +210,22 @@ class _Api {
       content
     })
   }
+
+  public async getPostagem(username: string) {
+    return await this._instance.post(`/api/postagens/${username}`)
+  }
+
+  public async getLikesCount(id_postagem: number | string) {
+    return await this._instance.post('/api/likePostagem/countlikes', {
+      id_postagem
+    })
+  }
+
+  public async selectAllPosts() {
+    return await this._instance.post('/api/selectposts')
+  }
 }
 
-const Api = new _Api("https://invest-api-rose.vercel.app/"); //https://invest-api-rose.vercel.app/
+const Api = new _Api("http://localhost:3001"); //https://invest-api-rose.vercel.app/
 
 export default Api;
