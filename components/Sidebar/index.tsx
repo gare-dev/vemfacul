@@ -26,7 +26,7 @@ export default function Sidebar() {
         { icon: <FaRegUserCircle />, name: "Perfil", path: `/${authData?.username}` },
     ]
 
-    const activeIndex = navItems.findIndex(item => item.path === router.pathname) == -1 ? 6 : navItems.findIndex(item => item.path === router.pathname)
+    const activeIndex = navItems.findIndex(item => item.path === router.pathname) == -1 ? 7 : navItems.findIndex(item => item.path === router.pathname)
 
     function handleSignout() {
         if (getAuth()) {
