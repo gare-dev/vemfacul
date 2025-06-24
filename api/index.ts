@@ -226,6 +226,7 @@ class _Api {
   }
 }
 
-const Api = new _Api("https://invest-api-rose.vercel.app"); //https://invest-api-rose.vercel.app/
+const Api = new _Api(process.env.NEXT_PUBLIC_API_URL ?? ""); //https://invest-api-rose.vercel.app/
+
 
 export default Api;
