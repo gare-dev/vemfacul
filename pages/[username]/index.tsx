@@ -31,6 +31,7 @@ export default function UserProfile() {
     const [postVisible, setPostVisibel] = useState(false)
     const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
     const [postagens, setPostagens] = useState<Postagem[]>([]);
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [userProfile, setUserProfile] = useState<UserProfileType>({
         nome: "",
         username: "",
@@ -48,8 +49,18 @@ export default function UserProfile() {
     const typeEmojiMap: Record<string, string> = {
         "Professor": '👨‍🏫',
         "Aluno EM": '🧑‍🎓',
-        admin: '🔧',
+        "Vestibulando": '🧑‍🎓',
         guest: '👤'
+    };
+
+    const handleOpenPopup = () => {
+        setIsPopupOpen(true);
+    };
+    const handleClosePopup = () => {
+        setIsPopupOpen(false);
+    };
+    const handlePostTweet = (tweet: string) => {
+        console.log('Tweet posted:', tweet);
     };
 
     const handleGetPostagens = async () => {
@@ -150,10 +161,15 @@ export default function UserProfile() {
                     refreshPage={() => router.reload()}
                 />
             }
-            {isVisibleSubmitPost && <CreatePostagem
-                btnClose={() => setIsVisibleSubmitPost(false)}
-                refreshPage={() => router.reload()}
-            />}
+            {isVisibleSubmitPost &&
+                <CreatePostagem
+                    isOpen={isPopupOpen}
+                    onClose={handleClosePopup}
+                    onPostTweet={handlePostTweet}
+                    onReload={() => router.reload()}
+                // btnClose={() => setIsVisibleSubmitPost(false)}
+                // refreshPage={() => router.reload()}
+                />}
             <div className={styles.main}>
                 <Head>
                     <title>{userProfile.nome} | Perfil</title>
@@ -166,7 +182,7 @@ export default function UserProfile() {
                     <div className={styles.headerImageContainer}>
                         <img
                             src={userProfile.header}
-                            alt="Header background"
+
                             className={styles.headerImage}
                         />
                     </div>
@@ -205,6 +221,10 @@ export default function UserProfile() {
                                     <li key={index} className={styles.universityItem}>
                                         {university}
                                     </li>
+                                )) : userProfile.nivel === "Vestibulando" ? userProfile.vestibulares?.map((university, index) => (
+                                    <li key={index} className={styles.universityItem}>
+                                        {university}
+                                    </li>
                                 )) : userProfile.materias_lecionadas?.map((university, index) => (
                                     <li key={index} className={styles.universityItem}>
                                         {university}
@@ -235,14 +255,14 @@ export default function UserProfile() {
                             comments={0}
                         />
                     ))}
-                    {postVisible && postagens.length === 0 && (
-                        <div><h1>nenhuma postagem encontrada</h1></div>
+                    {postagens.length === 0 && (
+                        <div><h1 style={{ textAlign: "center" }}>Nenhuma postagem encontrada</h1></div>
                     )}
                 </div>
 
-                <div className={styles.content_btn_postagem} onClick={() => setIsVisibleSubmitPost(!isVisibleSubmitPost)}>
-                    <button className={styles.btn}>
-                        <span>
+                <div className={styles.content_btn_postagem} onClick={() => { setIsVisibleSubmitPost(!isVisibleSubmitPost); handleOpenPopup() }}>
+                    <button onClick={() => { setIsVisibleSubmitPost(!isVisibleSubmitPost); handleOpenPopup() }} className={styles.btn}>
+                        <span onClick={() => { setIsVisibleSubmitPost(!isVisibleSubmitPost); handleOpenPopup() }}>
                             <FaPen />
                         </span>
                     </button>
