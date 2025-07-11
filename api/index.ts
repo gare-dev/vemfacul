@@ -92,11 +92,11 @@ class _Api {
 
   }
 
-  public async resetPassword(password: string, email: string) {
+  public async resetPassword(password: string, cryptrEmail: string) {
     try {
       return await this._instance.post("/api/resetpassword", {
         password,
-        email
+        cryptrEmail
       });
     } catch (error) {
       console.error("Error resetting password:", error);
