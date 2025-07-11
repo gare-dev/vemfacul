@@ -81,12 +81,6 @@ export default function LandingPage() {
         getEvents()
     }, [])
 
-
-    useEffect(() => {
-        console.log("filtroEventos", filtroEventos)
-    }, [filtroEventos])
-
-
     function getFilter() {
         if (
             filtroEventos[0].tipoDeEvento.length === 0 &&

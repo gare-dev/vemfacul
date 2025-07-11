@@ -12,7 +12,8 @@ const RESERVED_ROUTES = [
     'comunidade',
     'eventos',
     'correcaoRedacao',
-    'exercicioDiario'
+    'exercicioDiario',
+    'cursinho'
 
 ];
 

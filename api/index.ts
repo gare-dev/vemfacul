@@ -197,12 +197,7 @@ class _Api {
   }
 
   public async validateProfile() {
-    try {
-      return await this._instance.post("/api/validateprofile");
-    } catch (error) {
-      console.error("Error validating profile:", error);
-      throw error;
-    }
+    return await this._instance.post("/api/validateprofile");
   }
 
   public async createPostagem(content: string) {
