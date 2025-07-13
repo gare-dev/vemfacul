@@ -36,12 +36,12 @@ class _Api {
 
 
   public async registerAccount(email: string, password: string) {
-    
-      return await this._instance.post("/api/createaccount", {
-        email,
-        password,
-      });
-  
+
+    return await this._instance.post("/api/createaccount", {
+      email,
+      password,
+    });
+
   }
 
   public async confirmAccount(token: string) {
@@ -218,6 +218,13 @@ class _Api {
 
   public async getPostagem(username: string) {
     return await this._instance.post(`/api/postagens/${username}`)
+  }
+  public async likePostagem(id_postagem: number | string) {
+    return await this._instance.post('/api/likePostagem/like', { id_postagem }
+    );
+  }
+  public async unLinkePostagem(id_postagem: number | string) {
+    return await this._instance.post('/api/likePostagem/unlike', { id_postagem });
   }
 
   public async getLikesCount(id_postagem: number | string) {

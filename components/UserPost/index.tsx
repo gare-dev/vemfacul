@@ -9,6 +9,7 @@ interface TweetProps {
   username: string;
   profileImage: string;
   timestamp: string;
+  alredyLiked: boolean;
   likes: number;
   comments: number;
   date: string
@@ -21,19 +22,28 @@ const Tweet: React.FC<TweetProps> = ({
   username,
   profileImage,
   timestamp,
+  alredyLiked,
   likes,
   comments,
 }) => {
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(alredyLiked);
   const [currentLikes, setCurrentLikes] = useState(likes);
+  
 
-  const handleLike = () => {
+  const handleLike = async () => {
     if (isLiked) {
-      setCurrentLikes(currentLikes - 1);
+      const promise = await Api.unLinkePostagem(id);
+      if (promise.data.code === 'UNLIKE_SUCESS') {
+        setCurrentLikes((prev) => prev - 1);
+        setIsLiked(false);
+      }
     } else {
-      setCurrentLikes(currentLikes + 1);
+      const promise = await Api.likePostagem(id);
+      if (promise.data.code === "LIKE_SUCESS") {
+        setCurrentLikes((prev) => prev + 1);
+        setIsLiked(true);
+      }
     }
-    setIsLiked(!isLiked);
   };
 
   const handleGetLikes = async (id_postagem: number | string) => {
@@ -41,6 +51,7 @@ const Tweet: React.FC<TweetProps> = ({
       const promise = await Api.getLikesCount(id_postagem)
 
       if (promise.data.code === "COUNT_LIKE_SUCESS") {
+        setIsLiked(promise.data.alreadyLiked);
         return setCurrentLikes(+promise.data.likes)
       }
       return setCurrentLikes(0)
