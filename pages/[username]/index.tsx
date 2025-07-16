@@ -170,7 +170,7 @@ export default function UserProfile() {
             }
             <div className={styles.main}>
                 <Head>
-                    <title>{userProfile.nome} | Perfil</title>
+                    <title>{`${userProfile.nome} | Perfil`}</title>
                     <meta name="description" content={`Profile page for ${userProfile.nome}`} />
                     <link rel="icon" href="/favicon.ico" />
                 </Head>
@@ -179,7 +179,7 @@ export default function UserProfile() {
 
                     <div className={styles.headerImageContainer}>
                         <img
-                            src={userProfile.header}
+                            src={userProfile.header === '' ? undefined : userProfile.header}
 
                             className={styles.headerImage}
                         />
@@ -188,7 +188,7 @@ export default function UserProfile() {
                     <div className={styles.profileInfoContainer}>
                         <div className={styles.profilePictureContainer}>
                             <img
-                                src={userProfile.foto}
+                                src={userProfile.foto === '' ? undefined : userProfile.foto}
                                 alt={`${userProfile.nome}'s profile`}
                                 className={styles.profilePicture}
                             />

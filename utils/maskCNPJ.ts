@@ -12,3 +12,7 @@ export function maskCNPJ(value: string): string {
 
 
 export default maskCNPJ
+
+export function unmaskCNPJ(value: string): string {
+    return value.replace(/\D/g, ''); // remove tudo que não for dígito
+}

@@ -25,7 +25,7 @@ const ProfilePage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>{user.name} | Profile</title>
+        {/* <title>{user.name} | Profile</title> */}
         <meta name="description" content={`Profile page for ${user.name}`} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -33,9 +33,9 @@ const ProfilePage: React.FC = () => {
       <div className={styles.profileContainer}>
         {/* Header Image */}
         <div className={styles.headerImageContainer}>
-          <img 
-            src={user.headerImage} 
-            alt="Header background" 
+          <img
+            src={user.headerImage}
+            alt="Header background"
             className={styles.headerImage}
           />
         </div>
@@ -44,9 +44,9 @@ const ProfilePage: React.FC = () => {
         <div className={styles.profileInfoContainer}>
           {/* Profile Picture and Edit Button */}
           <div className={styles.profilePictureContainer}>
-            <img 
-              src={user.profileImage} 
-              alt={`${user.name}'s profile`} 
+            <img
+              src={user.profileImage}
+              alt={`${user.name}'s profile`}
               className={styles.profilePicture}
             />
             <button className={styles.editProfileButton}>

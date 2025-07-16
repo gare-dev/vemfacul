@@ -1,3 +1,4 @@
+import { AcademicData, AddressData, FinancialData, InstitutionData, LoginData, MediaData } from "@/pages/cursinho/cadastro";
 import { handleDates } from "@/utils/date";
 import getAuth from "@/utils/getAuth";
 import axios, { AxiosInstance } from "axios";
@@ -146,7 +147,7 @@ class _Api {
       })
     } catch (error) {
       console.error("Error inserting personal event:", error);
-      throw error; // Re-throw the error to handle it in the calling function
+      throw error;
     }
   }
 
@@ -218,6 +219,14 @@ class _Api {
 
   public async selectAllPosts() {
     return await this._instance.post('/api/selectposts')
+  }
+
+  public async insertCursinho(formData: any) {
+    return await this._instance.post('/api/insertcursinho', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    })
   }
 }
 

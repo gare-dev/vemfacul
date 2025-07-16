@@ -1,3 +1,6 @@
+@use 'sass:color';
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&display=swap');
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -26,7 +29,9 @@
 
 
     h2 {
-        color: #3498db;
+        font-family: "Kantumruy Pro", sans-serif;
+        font-weight: 600;
+        color: #001ECB;
         margin-bottom: 1.5rem;
         font-size: 1.5rem;
         border-bottom: 1px solid #eee;
@@ -61,6 +66,8 @@
 
         &:focus {
             outline: none;
+            border: 1px solid #001ECB;
+
         }
     }
 
@@ -87,7 +94,7 @@
 }
 
 .submitButton {
-    background-color: #3498db;
+    background-color: #001ECB;
     color: white;
     border: none;
     padding: 1rem 2rem;
@@ -98,6 +105,6 @@
     transition: background-color 0.3s;
 
     &:hover {
-        background-color: #2980b9;
+        background-color: color.adjust(#001ECB, $lightness: -10%);
     }
 }

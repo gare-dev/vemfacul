@@ -103,9 +103,6 @@ export default function LandingPage() {
         setEvents(retorno);
     }
 
-
-
-
     if (isLoading) {
         return (
             <div style={{

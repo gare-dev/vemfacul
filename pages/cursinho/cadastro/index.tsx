@@ -4,111 +4,113 @@ import Input from '@/components/Common/Cursinho/Input';
 import Header from '@/components/Header';
 import maskCNPJ from '@/utils/maskCNPJ';
 import maskCEP from '@/utils/maskCEP';
+import { maskPhone } from '@/utils/maskPhone';
+import Api from '@/api';
 
-interface InstitutionData {
-    name: string;
-    exhibitionName: string
+export interface InstitutionData {
+    nome: string;
+    nomeExibido: string
     cnpj: string;
-    legalRepresentative: string;
-    contactEmail: string;
-    phone: string;
-    website: string;
+    representanteLegal: string;
+    emailContato: string;
+    telefone: string;
+    site: string;
 }
 
-interface AddressData {
-    street: string;
-    number: string;
-    neighborhood: string;
-    city: string;
+export interface AddressData {
+    rua: string;
+    numero: string;
+    bairro: string;
+    cidade: string;
     cep: string;
-    state: string
+    estado: string;
     uf: string;
     regiao: string
 }
 
-interface AcademicData {
-    offeredModalities: string[];
-    focusSubjects: string[];
-    averageStudentsPerClass: string;
-    differentials: string;
+export interface AcademicData {
+    modalidades: string[];
+    disciplinasFoco: string[];
+    mediaAlunosPorTurma: string;
+    diferenciais: string;
 }
 
-interface FinancialData {
-    priceRange: string;
-    hasScholarships: boolean;
-    acceptsPublicPrograms: boolean;
+export interface FinancialData {
+    faixaPreco: string;
+    temBolsa: boolean;
+    aceitaProgramasPublicos: boolean;
 }
 
-interface MediaData {
-    description: string;
+export interface MediaData {
+    descricao: string;
     logo: File | null;
-    spacePhotos: File[] | null;
+    imagensLugar: File[] | null;
 }
 
-interface LoginData {
+export interface LoginData {
     email: string;
     password: string;
 }
 
 export default function InstitutionRegistration() {
-    const [institutionData, setInstitutionData] = useState<InstitutionData>({
-        name: '',
-        exhibitionName: '',
+    const [instituicao, setInstitutionData] = useState<InstitutionData>({
+        nome: '',
+        nomeExibido: '',
         cnpj: '',
-        legalRepresentative: '',
-        contactEmail: '',
-        phone: '',
-        website: ''
+        representanteLegal: '',
+        emailContato: '',
+        telefone: '',
+        site: ''
     });
 
-    const [addressData, setAddressData] = useState<AddressData>({
-        street: '',
-        number: '',
-        neighborhood: '',
-        city: '',
+    const [endereco, setAddressData] = useState<AddressData>({
+        rua: '',
+        numero: '',
+        bairro: '',
+        cidade: '',
         cep: '',
-        state: '',
+        estado: '',
         uf: '',
         regiao: ''
     });
 
-    const [academicData, setAcademicData] = useState<AcademicData>({
-        offeredModalities: [],
-        focusSubjects: [],
-        averageStudentsPerClass: '',
-        differentials: ''
+    const [academico, setAcademicData] = useState<AcademicData>({
+        modalidades: [],
+        disciplinasFoco: [],
+        mediaAlunosPorTurma: '',
+        diferenciais: ''
     });
 
-    const [financialData, setFinancialData] = useState<FinancialData>({
-        priceRange: '',
-        hasScholarships: false,
-        acceptsPublicPrograms: false
+    const [financeiro, setFinancialData] = useState<FinancialData>({
+        faixaPreco: '',
+        temBolsa: false,
+        aceitaProgramasPublicos: false
     });
 
-    const [mediaData, setMediaData] = useState<MediaData>({
-        description: '',
+    const [imagens, setMediaData] = useState<MediaData>({
+        descricao: '',
         logo: null,
-        spacePhotos: null
+        imagensLugar: null
     });
 
-    const [loginData, setLoginData] = useState<LoginData>({
+    const [login, setLoginData] = useState<LoginData>({
         email: '',
         password: ''
     });
 
     // Handle CEP API consultation
     useEffect(() => {
-        if (addressData.cep.length === 9) {
-            fetch(`https://viacep.com.br/ws/${addressData.cep.replace('-', '')}/json/`)
+        if (endereco.cep.length === 8) {
+            fetch(`https://viacep.com.br/ws/${endereco.cep}/json/`)
                 .then(response => response.json())
                 .then(data => {
                     if (!data.erro) {
                         setAddressData({
-                            ...addressData,
-                            street: data.logradouro,
-                            neighborhood: data.bairro,
-                            city: data.localidade,
-                            state: data.estado,
+                            ...endereco,
+                            rua: data.logradouro,
+                            bairro: data.bairro,
+                            cidade: data.localidade,
+                            estado: data.estado,
                             uf: data.uf,
                             regiao: data.regiao,
                         });
@@ -116,57 +118,57 @@ export default function InstitutionRegistration() {
                 })
                 .catch(error => console.error('CEP lookup error:', error));
         }
-    }, [addressData.cep]);
+    }, [endereco.cep]);
 
-    // Handlers for each form section
+
     const handleInstitutionDataChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setInstitutionData({
-            ...institutionData,
-            [name]: value
+            ...instituicao,
+            [name]: name === 'cnpj' ? value.replace(/\D/g, '') : value
         });
     };
 
     const handleAddressDataChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setAddressData({
-            ...addressData,
-            [name]: value
+            ...endereco,
+            [name]: name === 'cep' ? value.replace(/\D/g, '') : value
         });
     };
 
     const handleModalityChange = (modality: string) => {
-        const isSelected = academicData.offeredModalities.includes(modality);
+        const isSelected = academico.modalidades.includes(modality);
         let newModalities;
         if (isSelected) {
-            newModalities = academicData.offeredModalities.filter(m => m !== modality);
+            newModalities = academico.modalidades.filter(m => m !== modality);
         } else {
-            newModalities = [...academicData.offeredModalities, modality];
+            newModalities = [...academico.modalidades, modality];
         }
         setAcademicData({
-            ...academicData,
-            offeredModalities: newModalities
+            ...academico,
+            modalidades: newModalities
         });
     };
 
     const handleSubjectChange = (subject: string) => {
-        const isSelected = academicData.focusSubjects.includes(subject);
+        const isSelected = academico.disciplinasFoco.includes(subject);
         let newSubjects;
         if (isSelected) {
-            newSubjects = academicData.focusSubjects.filter(s => s !== subject);
+            newSubjects = academico.disciplinasFoco.filter(s => s !== subject);
         } else {
-            newSubjects = [...academicData.focusSubjects, subject];
+            newSubjects = [...academico.disciplinasFoco, subject];
         }
         setAcademicData({
-            ...academicData,
-            focusSubjects: newSubjects
+            ...academico,
+            disciplinasFoco: newSubjects
         });
     };
 
     const handleFinancialDataChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, type, checked, value } = e.target;
         setFinancialData({
-            ...financialData,
+            ...financeiro,
             [name]: type === 'checkbox' ? checked : value
         });
     };
@@ -174,7 +176,7 @@ export default function InstitutionRegistration() {
     const handleMediaDataChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setMediaData({
-            ...mediaData,
+            ...imagens,
             [name]: value
         });
     };
@@ -182,7 +184,7 @@ export default function InstitutionRegistration() {
     const handleLoginDataChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setLoginData({
-            ...loginData,
+            ...login,
             [name]: value
         });
     };
@@ -191,30 +193,48 @@ export default function InstitutionRegistration() {
         if (e.target.files) {
             if (field === 'logo') {
                 setMediaData({
-                    ...mediaData,
+                    ...imagens,
                     logo: e.target.files[0]
                 });
             } else {
                 setMediaData({
-                    ...mediaData,
-                    spacePhotos: Array.from(e.target.files)
+                    ...imagens,
+                    imagensLugar: Array.from(e.target.files)
                 });
             }
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         // Here you would normally submit the form data to your API
-        console.log({
-            institutionData,
-            addressData,
-            academicData,
-            financialData,
-            mediaData,
-            loginData
-        });
-        alert('Form submitted! Check console for data.');
+        try {
+            const dataToSend = {
+                instituicao,
+                endereco,
+                academico,
+                financeiro,
+                login
+            };
+
+            const formData = new FormData();
+            formData.append('data', JSON.stringify(dataToSend));
+
+            imagens.imagensLugar?.forEach((file: File) => {
+                formData.append(`imagens`, file);
+            });
+
+            formData.append('logo', imagens.logo as File);
+
+            const response = await Api.insertCursinho(formData);
+
+            if (response.data.code === "CURSINHO_INSERTED") {
+                alert("CURSINHO CRIADO COM SUCESSO!")
+            }
+        } catch (error) {
+            console.log(error)
+        }
+
     };
 
     return (
@@ -222,29 +242,28 @@ export default function InstitutionRegistration() {
             <Header />
             <div className={styles.container}>
                 <form onSubmit={handleSubmit} className={styles.form}>
-                    {/* Institutional Information */}
                     <div className={styles.formSection}>
                         <h2>Informações Institucionais</h2>
                         <div className={styles.inputGroup}>
-                            <Input name='name' label='Nome da Instituição' onChange={handleInstitutionDataChange} value={institutionData.name} required type='text' />
+                            <Input name='nome' label='Nome da Instituição' onChange={handleInstitutionDataChange} value={instituicao.nome} required type='text' />
                         </div>
                         <div className={styles.inputGroup}>
-                            <Input name='exhibitionName' label='Nome de exibição' onChange={handleInstitutionDataChange} value={institutionData.exhibitionName} required type='text' />
+                            <Input name='nomeExibido' label='Nome de exibição' onChange={handleInstitutionDataChange} value={instituicao.nomeExibido} required type='text' />
                         </div>
                         <div className={styles.inputGroup}>
-                            <Input name='cnpj' maxLength={18} label='CNPJ' onChange={handleInstitutionDataChange} value={maskCNPJ(institutionData.cnpj)} required type='text' />
+                            <Input name='cnpj' maxLength={18} label='CNPJ' onChange={handleInstitutionDataChange} value={maskCNPJ(instituicao.cnpj)} required type='text' />
                         </div>
                         <div className={styles.inputGroup}>
-                            <Input name='legalRepresentative' label='Nome do Responsável Legal' onChange={handleInstitutionDataChange} value={institutionData.legalRepresentative} required type='text' />
+                            <Input name='representanteLegal' label='Nome do Responsável Legal' onChange={handleInstitutionDataChange} value={instituicao.representanteLegal} required type='text' />
                         </div>
                         <div className={styles.inputGroup}>
-                            <Input name='contactEmail' label='Email de Contato' onChange={handleInstitutionDataChange} value={institutionData.contactEmail} required type='text' />
+                            <Input name='emailContato' label='Email de Contato' onChange={handleInstitutionDataChange} value={instituicao.emailContato} required type='text' />
                         </div>
                         <div className={styles.inputGroup}>
-                            <Input name='phone' label='Telefone' onChange={handleInstitutionDataChange} value={institutionData.phone} required type="tel" />
+                            <Input maxLength={15} name='telefone' label='Telefone' onChange={handleInstitutionDataChange} value={maskPhone(instituicao.telefone)} required type="tel" />
                         </div>
                         <div className={styles.inputGroup}>
-                            <Input name='website' label='Site Oficial' onChange={handleInstitutionDataChange} value={institutionData.website} required type='tel' />
+                            <Input name='site' label='Site Oficial' onChange={handleInstitutionDataChange} value={instituicao.site} required type='tel' />
                         </div>
                     </div>
                     <div className={styles.formSection}>
@@ -255,7 +274,7 @@ export default function InstitutionRegistration() {
                                 name='cep'
                                 label='CEP (digite para consultar)'
                                 onChange={handleAddressDataChange}
-                                value={maskCEP(addressData.cep)}
+                                value={maskCEP(endereco.cep)}
                                 required
                                 maxLength={20}
                                 type='text'
@@ -263,10 +282,10 @@ export default function InstitutionRegistration() {
                         </div>
                         <div className={styles.inputGroup}>
                             <Input
-                                name='street'
+                                name='rua'
                                 label='Rua'
                                 onChange={handleAddressDataChange}
-                                value={addressData.street}
+                                value={endereco.rua}
                                 required
                                 maxLength={40}
                                 type='text'
@@ -275,10 +294,10 @@ export default function InstitutionRegistration() {
 
                         <div className={styles.inputGroup}>
                             <Input
-                                name='number'
+                                name='numero'
                                 label='Número'
                                 onChange={handleAddressDataChange}
-                                value={addressData.number}
+                                value={endereco.numero}
                                 required
                                 type='number'
                             />
@@ -286,30 +305,30 @@ export default function InstitutionRegistration() {
 
                         <div className={styles.inputGroup}>
                             <Input
-                                name='neighborhood'
+                                name='bairro'
                                 label='Bairro'
                                 onChange={handleAddressDataChange}
-                                value={addressData.neighborhood}
+                                value={endereco.bairro}
                                 required
                                 type='text'
                             />
                         </div>
                         <div className={styles.inputGroup}>
                             <Input
-                                name='city'
+                                name='cidade'
                                 label='Cidade'
                                 onChange={handleAddressDataChange}
-                                value={addressData.city}
+                                value={endereco.cidade}
                                 required
                                 type='text'
                             />
                         </div>
                         <div className={styles.inputGroup}>
                             <Input
-                                name='state'
+                                name='estado'
                                 label='Estado'
                                 onChange={handleAddressDataChange}
-                                value={addressData.state}
+                                value={endereco.estado}
                                 required
                                 type='text'
                             />
@@ -325,7 +344,7 @@ export default function InstitutionRegistration() {
                                     <label key={modality} className={styles.checkboxLabel}>
                                         <input
                                             type="checkbox"
-                                            checked={academicData.offeredModalities.includes(modality)}
+                                            checked={academico.modalidades.includes(modality)}
                                             onChange={() => handleModalityChange(modality)}
                                         />
                                         {modality}
@@ -341,7 +360,7 @@ export default function InstitutionRegistration() {
                                     <label key={subject} className={styles.checkboxLabel}>
                                         <input
                                             type="checkbox"
-                                            checked={academicData.focusSubjects.includes(subject)}
+                                            checked={academico.disciplinasFoco.includes(subject)}
                                             onChange={() => handleSubjectChange(subject)}
                                         />
                                         {subject}
@@ -354,12 +373,12 @@ export default function InstitutionRegistration() {
                             <label htmlFor="averageStudentsPerClass">Número Médio de Alunos por Turma</label>
                             <input
                                 type="number"
-                                id="averageStudentsPerClass"
-                                name="averageStudentsPerClass"
-                                value={academicData.averageStudentsPerClass}
+                                id="mediaAlunosPorTurma"
+                                name="mediaAlunosPorTurma"
+                                value={academico.mediaAlunosPorTurma}
                                 onChange={(e) => setAcademicData({
-                                    ...academicData,
-                                    averageStudentsPerClass: e.target.value
+                                    ...academico,
+                                    mediaAlunosPorTurma: e.target.value
                                 })}
                                 min="1"
                                 required
@@ -369,12 +388,12 @@ export default function InstitutionRegistration() {
                         <div className={styles.inputGroup}>
                             <label htmlFor="differentials">Diferenciais</label>
                             <textarea
-                                id="differentials"
-                                name="differentials"
-                                value={academicData.differentials}
+                                id="diferenciais"
+                                name="diferenciais"
+                                value={academico.diferenciais}
                                 onChange={(e) => setAcademicData({
-                                    ...academicData,
-                                    differentials: e.target.value
+                                    ...academico,
+                                    diferenciais: e.target.value
                                 })}
                                 rows={4}
                                 placeholder="Descreva os principais diferenciais da sua instituição"
@@ -386,14 +405,14 @@ export default function InstitutionRegistration() {
                         <h2>Informações Financeiras</h2>
 
                         <div className={styles.inputGroup}>
-                            <label htmlFor="priceRange">Faixa de Preço</label>
+                            <label htmlFor="faixaPreco">Faixa de Preço</label>
                             <select
-                                id="priceRange"
-                                name="priceRange"
-                                value={financialData.priceRange}
+                                id="faixaPreco"
+                                name="faixaPreco"
+                                value={financeiro.faixaPreco}
                                 onChange={(e) => setFinancialData({
-                                    ...financialData,
-                                    priceRange: e.target.value
+                                    ...financeiro,
+                                    faixaPreco: e.target.value
                                 })}
                                 required
                             >
@@ -408,8 +427,8 @@ export default function InstitutionRegistration() {
                             <label className={styles.checkboxLabel}>
                                 <input
                                     type="checkbox"
-                                    name="hasScholarships"
-                                    checked={financialData.hasScholarships}
+                                    name="temBolsa"
+                                    checked={financeiro.temBolsa}
                                     onChange={handleFinancialDataChange}
                                 />
                                 Possui Bolsas de Estudo
@@ -420,8 +439,8 @@ export default function InstitutionRegistration() {
                             <label className={styles.checkboxLabel}>
                                 <input
                                     type="checkbox"
-                                    name="acceptsPublicPrograms"
-                                    checked={financialData.acceptsPublicPrograms}
+                                    name="aceitaProgramasPublicos"
+                                    checked={financeiro.aceitaProgramasPublicos}
                                     onChange={handleFinancialDataChange}
                                 />
                                 Aceita Inscrição por Programas Públicos
@@ -434,11 +453,11 @@ export default function InstitutionRegistration() {
                         <h2>Mídia e Apresentação</h2>
 
                         <div className={styles.inputGroup}>
-                            <label htmlFor="description">Descrição da Instituição</label>
+                            <label htmlFor="descricao">Descrição da Instituição</label>
                             <textarea
-                                id="description"
-                                name="description"
-                                value={mediaData.description}
+                                id="descricao"
+                                name="descricao"
+                                value={imagens.descricao}
                                 onChange={handleMediaDataChange}
                                 rows={6}
                                 placeholder="Descreva sua instituição, sua missão, valores, etc."
@@ -455,6 +474,7 @@ export default function InstitutionRegistration() {
                                 accept="image/*"
                                 onChange={(e) => handleFileUpload(e, 'logo')}
                             />
+
                         </div>
 
                         <div className={styles.inputGroup}>
@@ -465,38 +485,26 @@ export default function InstitutionRegistration() {
                                 name="spacePhotos"
                                 accept="image/*"
                                 multiple
-                                onChange={(e) => handleFileUpload(e, 'spacePhotos')}
+                                onChange={(e) => {
+                                    if (e.target.files && e.target.files.length > 5) {
+                                        return alert('Você pode enviar no máximo 5 fotos.');
+                                    }
+                                    handleFileUpload(e, 'spacePhotos')
+                                }}
                             />
                         </div>
                     </div>
 
-                    {/* Login Information */}
+
                     <div className={styles.formSection}>
                         <h2>Informações de Login</h2>
 
                         <div className={styles.inputGroup}>
-                            <label htmlFor="loginEmail">Email para Acesso</label>
-                            <input
-                                type="email"
-                                id="loginEmail"
-                                name="email"
-                                value={loginData.email}
-                                onChange={handleLoginDataChange}
-                                required
-                            />
+                            <Input name='email' label='Email para Acesso' onChange={handleLoginDataChange} value={login.email} required type='text' />
                         </div>
 
                         <div className={styles.inputGroup}>
-                            <label htmlFor="password">Senha</label>
-                            <input
-                                type="password"
-                                id="password"
-                                name="password"
-                                value={loginData.password}
-                                onChange={handleLoginDataChange}
-                                minLength={8}
-                                required
-                            />
+                            <Input name='password' label='Senha' onChange={handleLoginDataChange} value={login.password} required type='password' />
                         </div>
                     </div>
 
