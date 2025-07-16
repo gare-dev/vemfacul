@@ -53,6 +53,7 @@ export interface LoginData {
 }
 
 export default function InstitutionRegistration() {
+    const [overlay, setOverlay] = useState(false);
     const [instituicao, setInstitutionData] = useState<InstitutionData>({
         nome: '',
         nomeExibido: '',
@@ -207,14 +208,16 @@ export default function InstitutionRegistration() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Here you would normally submit the form data to your API
         try {
             const dataToSend = {
                 instituicao,
                 endereco,
                 academico,
                 financeiro,
-                login
+                login,
+                imagens: {
+                    descricao: imagens.descricao,
+                }
             };
 
             const formData = new FormData();
@@ -229,7 +232,46 @@ export default function InstitutionRegistration() {
             const response = await Api.insertCursinho(formData);
 
             if (response.data.code === "CURSINHO_INSERTED") {
-                alert("CURSINHO CRIADO COM SUCESSO!")
+                setOverlay(true);
+                setInstitutionData({
+                    nome: '',
+                    nomeExibido: '',
+                    cnpj: '',
+                    representanteLegal: '',
+                    emailContato: '',
+                    telefone: '',
+                    site: ''
+                });
+                setAddressData({
+                    rua: '',
+                    numero: '',
+                    bairro: '',
+                    cidade: '',
+                    cep: '',
+                    estado: '',
+                    uf: '',
+                    regiao: ''
+                });
+                setAcademicData({
+                    modalidades: [],
+                    disciplinasFoco: [],
+                    mediaAlunosPorTurma: '',
+                    diferenciais: ''
+                });
+                setFinancialData({
+                    faixaPreco: '',
+                    temBolsa: false,
+                    aceitaProgramasPublicos: false
+                });
+                setMediaData({
+                    descricao: '',
+                    logo: null,
+                    imagensLugar: null
+                });
+                setLoginData({
+                    email: '',
+                    password: ''
+                });
             }
         } catch (error) {
             console.log(error)
@@ -267,7 +309,6 @@ export default function InstitutionRegistration() {
                         </div>
                     </div>
                     <div className={styles.formSection}>
-
                         <h2>Endereço</h2>
                         <div className={styles.inputGroup}>
                             <Input
@@ -417,6 +458,7 @@ export default function InstitutionRegistration() {
                                 required
                             >
                                 <option value="">Selecione</option>
+                                <option value="gratuito">Gratuito</option>
                                 <option value="baixa">Baixa (até R$500/mês)</option>
                                 <option value="media">Média (R$500-R$1500/mês)</option>
                                 <option value="alta">Alta (acima de R$1500/mês)</option>
@@ -513,6 +555,16 @@ export default function InstitutionRegistration() {
                     </button>
                 </form >
             </div >
+            {overlay && (
+                <div className={styles.overlay}>
+                    <div className={styles.overlayContent}>
+                        <span onClick={() => setOverlay(false)}>x</span>
+                        <h2>Cadastro enviado com sucesso!</h2>
+                        <p>Nós enviaremos um email quando o seu cadastro for aprovado.
+                            Após a aprovação, você poderá acessar a plataforma com as informações de login preenchidas.</p>
+                    </div>
+                </div>
+            )}
         </>
     );
 }

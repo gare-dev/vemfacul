@@ -13,7 +13,8 @@ const RESERVED_ROUTES = [
     'eventos',
     'correcaoRedacao',
     'exercicioDiario',
-    'cursinho'
+    'cursinho',
+    'config'
 
 ];
 

@@ -108,3 +108,53 @@
         background-color: color.adjust(#001ECB, $lightness: -10%);
     }
 }
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+
+}
+
+.overlayContent {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    z-index: 1001;
+    position: relative;
+    max-width: 500px;
+
+    h2 {
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+        color: #001ECB;
+        font-family: "Kantumruy Pro", sans-serif;
+        font-weight: 500;
+    }
+
+    p {
+        color: #34495e;
+    }
+
+    span {
+        position: absolute;
+        top: 0rem;
+        right: 1rem;
+        cursor: pointer;
+        font-size: 1.5rem;
+        color: #34495e;
+
+        &:hover {
+            color: #001ECB;
+        }
+    }
+}

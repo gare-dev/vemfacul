@@ -1,5 +1,6 @@
 import { AcademicData, AddressData, FinancialData, InstitutionData, LoginData, MediaData } from "@/pages/cursinho/cadastro";
 import { handleDates } from "@/utils/date";
+import getAdminToken from "@/utils/getAdminToken";
 import getAuth from "@/utils/getAuth";
 import axios, { AxiosInstance } from "axios";
 
@@ -28,6 +29,11 @@ class _Api {
       if (getAuth()) {
         if (config.headers) {
           config.headers['Authorization'] = `Bearer ${getAuth()}`;
+        }
+      }
+      if (getAdminToken()) {
+        if (config.headers) {
+          config.headers['Admin-Token'] = getAdminToken();
         }
       }
       return config;
@@ -227,6 +233,21 @@ class _Api {
         'Content-Type': 'multipart/form-data',
       }
     })
+  }
+
+  public async loginAdmin(username: string, password: string) {
+    return await this._instance.post('/api/loginadmin', {
+      username,
+      password
+    });
+  }
+
+  public async adminAuth() {
+    return await this._instance.get('/api/adminauth');
+  }
+
+  public async selectAproveList() {
+    return await this._instance.get('/api/selectapprovecursinhos')
   }
 }
 
