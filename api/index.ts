@@ -215,9 +215,22 @@ class _Api {
       content
     })
   }
-
+  public async createComentario(postagem_pai: string | number, content: string) {
+    return await this._instance.post("/api/coments/create", {
+      content,
+      postagem_pai
+    })
+  }
   public async getPostagem(username: string) {
-    return await this._instance.post(`/api/postagens/${username}`)
+    return await this._instance.post(`/api/postagens/usuario/${username}`)
+  }
+  public async getSinglePostagem(id_postagem: string | number) {
+    return await this._instance.post(`api/postagens/unica/${id_postagem}`)
+  }
+  public async getComentarios(id_pai: string | number) {
+    return await this._instance.post("/api/coments", {
+      id_pai
+    })
   }
   public async likePostagem(id_postagem: number | string) {
     return await this._instance.post('/api/likePostagem/like', { id_postagem }

@@ -167,9 +167,8 @@ export default function UserProfile() {
                     onClose={handleClosePopup}
                     onPostTweet={handlePostTweet}
                     onReload={() => router.reload()}
-                // btnClose={() => setIsVisibleSubmitPost(false)}
-                // refreshPage={() => router.reload()}
-                />}
+                />
+                }
             <div className={styles.main}>
                 <Head>
                     <title>{userProfile.nome} | Perfil</title>
