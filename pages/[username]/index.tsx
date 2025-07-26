@@ -20,6 +20,9 @@ type Postagem = {
     content: string;
     content_post?: string;
     created_at?: string | Date;
+    total_comments: number;
+    alredyliked: number | boolean;
+    total_likes: number;
 };
 
 export default function UserProfile() {
@@ -250,9 +253,9 @@ export default function UserProfile() {
                             content={post.content}
                             profileImage={userProfile.foto}
                             timestamp={post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).getDate().toString() + " de " + monthsMap[new Date(post.created_at).getMonth()]) : ""}
-                            alredyLiked={false}
-                            likes={0}
-                            comments={0}
+                            alredyLiked={post.alredyliked}
+                            likes={post.total_likes}
+                            comments={post.total_comments}
                         />
                     ))}
                     {postagens.length === 0 && (
