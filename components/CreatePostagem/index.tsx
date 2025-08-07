@@ -1,8 +1,9 @@
 import Api from '@/api';
 import styles from '@/styles/createPostagem.module.scss';
+import post_styles from '@/styles/userPost.module.scss';
 import React, { useState } from 'react';
 import { AxiosError } from 'axios';
-import Tweet from '../UserPost';
+
 
 interface TweetPopupProps {
     isOpen: boolean;
@@ -15,6 +16,8 @@ interface TweetPopupProps {
 }
 
 interface Postagem {
+    name: string;
+    username: string;
     id_postagem: string | number;
     content: string;
     content_post?: string;
@@ -28,7 +31,6 @@ interface Postagem {
 const TweetPopup: React.FC<TweetPopupProps> = ({ isOpen, coment, postagemID_pai, postagemInfo_pai, onClose, onPostTweet, onReload }) => {
     const [tweetText, setTweetText] = useState('');
     const [error, setError] = useState('');
-    const [isVisible, setIsvisible] = useState(false)
 
     const handlePostTweet = async (e: React.FormEvent) => {
         if (tweetText.trim()) {
@@ -107,8 +109,29 @@ const TweetPopup: React.FC<TweetPopupProps> = ({ isOpen, coment, postagemID_pai,
                 <span className={styles.close} onClick={onClose}>&times;</span>
                 {coment && postagemInfo_pai && (
                     <>
-                    <img src={postagemInfo_pai.profileImage} alt="" />
-                        <p>{postagemInfo_pai.content}</p>
+                        <div className={post_styles.tweetContainer} >
+                            <div className={post_styles.tweetContent}>
+                                {/* Profile Image */}
+                                <div className={post_styles.profileImageContainer}>
+                                    <img
+                                        src={postagemInfo_pai.profileImage}
+                                        className={post_styles.profileImage}
+                                    />
+                                </div>
+
+                                {/* Tweet Body */}
+                                <div className={post_styles.tweetBody} >
+                                    {/* Tweet Header (name, username, timestamp) */}
+                                    <div className={post_styles.tweetHeader}>
+                                        <span className={post_styles.name}>{postagemInfo_pai.name}</span>
+                                        <span className={post_styles.username}>@{postagemInfo_pai.username}</span>
+                                    </div>
+
+                                    {/* Tweet Text */}
+                                    <p className={post_styles.tweetText}> {postagemInfo_pai.content}</p>
+                                </div>
+                            </div>
+                        </div >
                     </>
                 )
                 }

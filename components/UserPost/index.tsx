@@ -18,6 +18,8 @@ interface TweetProps {
 }
 
 interface Postagem {
+  name: string;
+  username: string;
   id_postagem: string | number;
   content: string;
   content_post?: string;
@@ -129,6 +131,8 @@ const Tweet: React.FC<TweetProps> = ({
             {/* Comment Button */}
             <button className={styles.actionButton} onClick={() => {
               setIsVisibleSubmitPost(!isVisibleSubmitPost); handleOpenPopup({
+                name: name,
+                username: username,
                 id_postagem: id,
                 content,
                 content_post: content,
@@ -145,6 +149,8 @@ const Tweet: React.FC<TweetProps> = ({
                 aria-hidden="true"
                 onClick={() => {
                   setIsVisibleSubmitPost(!isVisibleSubmitPost); handleOpenPopup({
+                    name: name,
+                    username: username,
                     id_postagem: id,
                     content,
                     content_post: content,
