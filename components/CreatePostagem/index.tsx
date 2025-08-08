@@ -135,7 +135,7 @@ const TweetPopup: React.FC<TweetPopupProps> = ({ isOpen, coment, postagemID_pai,
                     </>
                 )
                 }
-                <h2>O que você anda estudando?</h2>
+                <h2>{coment ? 'O que você achou disso?' : 'O que você anda estudando?'}</h2>
                 {error && <h1>{error}</h1>}
                 <textarea
                     className={styles.textarea}
