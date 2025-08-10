@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import styles from "@/styles/singlePostpage.module.scss"
+import Sidebar from "@/components/Sidebar";
+import LoadingComponent from "@/components/LoadingComponent";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useRouter } from 'next/router'
 import Api from '@/api'
@@ -22,6 +24,7 @@ export default function SinlgePostagem() {
     const router = useRouter()
     const { id_postagem } = router.query
     const [isVisible, setIsVisible] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [comentsVisible, setComentsVisible] = useState(false)
     const [coments, setComents] = useState<Postagem[]>([])
     const [postagem, setPostagem] = useState<Postagem[]>([])
@@ -74,12 +77,17 @@ export default function SinlgePostagem() {
             handleGetComentarios()
         } catch (error) {
             console.log(error)
+        } finally {
+            setLoading(false)
         }
 
     }, [id_postagem])
 
+
     return (
         <>
+            {loading && <LoadingComponent />}
+            {!loading && <Sidebar />}
             <div className={styles.main}>
                 <div className={styles.btnBack}>
                     <button onClick={() => router.back()}>
@@ -88,7 +96,7 @@ export default function SinlgePostagem() {
                 </div>
                 <div className={styles.postMain}>
                     {isVisible && postagem.length == 1 && postagem.map((post, idx) => (
-                        
+
                         < Tweet
                             key={post.id_postagem || idx}
                             id={post.id_postagem}

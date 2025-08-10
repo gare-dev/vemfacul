@@ -30,6 +30,7 @@ const TweetPopup: React.FC<TweetPopupProps> = ({ isOpen, coment, postagemID_pai,
     const [error, setError] = useState('');
 
     const handlePostTweet = async (e: React.FormEvent) => {
+        
         if (tweetText.trim()) {
             e.preventDefault();
             if (tweetText.length === 0) {
