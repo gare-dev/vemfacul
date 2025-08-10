@@ -22,9 +22,6 @@ interface Postagem {
     content: string;
     content_post?: string;
     created_at?: string | Date;
-    total_comments: number;
-    alredyliked: number | boolean;
-    total_likes: number;
     profileImage: string;
 }
 
