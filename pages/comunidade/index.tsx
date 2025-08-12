@@ -29,6 +29,10 @@ export default function Comunidade() {
         setIsPopupOpen(false);
     };
 
+    const handlePostTweet = (tweet: string) => {
+        console.log(tweet)
+    }
+
     const handleGetPosts = async () => {
         try {
             const response = await Api.selectAllPosts();
@@ -60,6 +64,7 @@ export default function Comunidade() {
 
             <Sidebar />
             <CreatePostagem
+                onPostTweet={handlePostTweet}
                 isOpen={isPopupOpen}
                 onClose={handleClosePopup}
                 onReload={() => router.reload()}
@@ -74,6 +79,7 @@ export default function Comunidade() {
                 <div className={styles.comunidadePosts}>
                     {posts.map((post, index) => (
                         <UserPost
+                            alredyLiked={false}
                             key={0 || index}
                             id={post.id_postagem}
                             name={post.nome}
