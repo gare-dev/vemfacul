@@ -1,6 +1,5 @@
 export type Register = {
     nome?: string;
-    foto?: File | null | Blob;
     estado?: "SP" | "RJ" | "MG" | "ES" | "BA" | "SE" | "AL" | "PE" | "PB" | "RN" | "CE" | "PI" | "MA" | "PA" | "AP" | "TO" | "MT" | "MS" | "GO" | "DF" | "RO" | "AC" | "AM" | "RR" | "";
     nivel?: "Aluno EM" | "Universitário" | "Vestibulando" | "Professor" | "";
     escola?: string;
@@ -13,6 +12,7 @@ export type Register = {
     trabalha: boolean | undefined
     instituicao?: string;
     materiasLecionadas?: string[];
+    foto?: File | null | Blob;
     username?: string
 }
 

@@ -11,7 +11,6 @@ interface TweetPopupProps {
     postagemID_pai?: number | string;
     postagemInfo_pai?: Postagem;
     onClose: () => void;
-    onPostTweet: (tweet: string) => void;
     onReload: () => void;
 }
 
@@ -44,7 +43,6 @@ const TweetPopup: React.FC<TweetPopupProps> = ({ isOpen, coment, postagemID_pai,
                 const response = await Api.createPostagem(tweetText);
 
                 if (response.data.code === "POSTAGEM_SUCESS") {
-                    onPostTweet(tweetText);
                     setTweetText('');
                     onClose();
                     onReload();

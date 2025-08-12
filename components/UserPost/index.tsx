@@ -1,3 +1,4 @@
+
 import Api from '@/api/'
 import TweetPopup from '../CreatePostagem';
 import React, { useEffect, useState } from 'react';
@@ -27,7 +28,7 @@ interface Postagem {
 }
 
 const Tweet: React.FC<TweetProps> = ({
-  id,
+  // id,
   content,
   name,
   username,
