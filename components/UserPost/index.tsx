@@ -28,7 +28,7 @@ interface Postagem {
 }
 
 const Tweet: React.FC<TweetProps> = ({
-  // id,
+  id,
   content,
   name,
   username,

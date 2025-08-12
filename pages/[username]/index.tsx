@@ -65,6 +65,10 @@ export default function UserProfile() {
         setIsPopupOpen(false);
     };
 
+    const handlePostTweet = (tweet: string) => {
+        console.log(tweet)
+    }
+
     const handleGetPostagens = async () => {
         if (typeof username !== "string") {
             return;
@@ -164,11 +168,12 @@ export default function UserProfile() {
             }
             {isVisibleSubmitPost &&
                 <CreatePostagem
+                    onPostTweet={handlePostTweet}
                     isOpen={isPopupOpen}
                     onClose={handleClosePopup}
                     onReload={() => router.reload()}
                 />
-                }
+            }
             <div className={styles.main}>
                 <Head>
                     <title>{`${userProfile.nome} | Perfil`}</title>
