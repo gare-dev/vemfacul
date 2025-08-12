@@ -3,14 +3,13 @@ import Styles from "@/styles/alterarSenha.module.scss";
 import { AxiosError } from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
-
 const AlterarSenha = () => {
     const [sucess, setSucess] = useState(true)
     const [value, setValue] = useState('')
     const router = useRouter();
-    const { email } = router.query;
+    const { cryptrEmail } = router.query;
 
-    if (!email || typeof email !== 'string') {
+    if (!cryptrEmail || typeof cryptrEmail !== 'string') {
         return <div>Carregando...</div>;
     }
     return (
@@ -26,9 +25,9 @@ const AlterarSenha = () => {
                 <form onSubmit={async (e) => {
                     e.preventDefault();
                     const password = (e.target as HTMLFormElement).password.value;
-                    console.log("Enviando para resetPassword:", { password, email });
+                    // console.log("Enviando para resetPassword:", { password, cryptrEmail });
                     try {
-                        await Api.resetPassword(password, email);
+                        await Api.resetPassword(password, cryptrEmail);
                         setSucess(true);
                         setValue('Senha redefinida com sucesso.')
                         router.push('/');

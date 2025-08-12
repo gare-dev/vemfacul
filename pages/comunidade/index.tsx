@@ -1,3 +1,4 @@
+
 import Api from "@/api";
 import LoadingComponent from "@/components/LoadingComponent";
 import Sidebar from "@/components/Sidebar";
@@ -105,6 +106,7 @@ export default function Comunidade() {
         </>
 
     )
+
 
 
 }

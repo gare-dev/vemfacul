@@ -20,7 +20,9 @@ type Postagem = {
     content: string;
     content_post?: string;
     created_at?: string | Date;
-    total_likes?: string;
+    total_comments: number;
+    alredyliked: number | boolean;
+    total_likes: number;
 };
 
 export default function UserProfile() {
@@ -68,7 +70,7 @@ export default function UserProfile() {
             return;
         } else {
             try {
-                const promise = await Api.getPostagem(username)
+                const promise = await Api.getPostagem(username);
 
                 if (promise.data.code === "POSTAGENS_FOUND") {
                     setPostagens(promise.data.postagens)
@@ -166,8 +168,7 @@ export default function UserProfile() {
                     onClose={handleClosePopup}
                     onReload={() => router.reload()}
                 />
-
-            }
+                }
             <div className={styles.main}>
                 <Head>
                     <title>{`${userProfile.nome} | Perfil`}</title>
@@ -249,8 +250,10 @@ export default function UserProfile() {
                             content={post.content}
                             profileImage={userProfile.foto}
                             timestamp={post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).getDate().toString() + " de " + monthsMap[new Date(post.created_at).getMonth()]) : ""}
-                            likes={+(post.total_likes ?? 0)}
-                            comments={0}
+
+                            alredyLiked={post.alredyliked}
+                            likes={post.total_likes}
+                            comments={post.total_comments}
                         />
                     ))}
                     {postagens.length === 0 && (

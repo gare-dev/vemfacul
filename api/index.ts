@@ -96,11 +96,11 @@ class _Api {
 
   }
 
-  public async resetPassword(password: string, email: string) {
+  public async resetPassword(password: string, cryptrEmail: string) {
     try {
       return await this._instance.patch("/user/forgot-password", {
         password,
-        email
+        cryptrEmail
       });
     } catch (error) {
       console.error("Error resetting password:", error);
@@ -208,9 +208,32 @@ class _Api {
       content
     })
   }
-
+  public async createComentario(postagem_pai: string | number, content: string) {
+    return await this._instance.post("/coment", {
+      content,
+      postagem_pai
+    })
+  }
   public async getPostagem(username: string) {
     return await this._instance.post(`/user/${username}/post`)
+  }
+  
+  public async getSinglePostagem(id_postagem: string | number) {
+    return await this._instance.get(`/post/${id_postagem}`)
+  }
+  
+  public async getComentarios(id_pai: string | number) {
+    return await this._instance.get(`/post/coment/${id_pai}`)
+  }
+  
+  public async likePostagem(id_postagem: number | string) {
+    return await this._instance.post('/user/post/like', { 
+      id_postagem 
+    });
+  }
+  
+  public async unLinkePostagem(id_postagem: number | string) {
+    return await this._instance.post('/user/post/unlike', { id_postagem });
   }
 
   public async getLikesCount(id_postagem: number | string) {
