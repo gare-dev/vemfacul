@@ -15,6 +15,8 @@ export const CourseApprovalCard = ({
     onReject,
     onDetails
 }: CourseApprovalCardProps) => {
+
+
     return (
         <div className={styles.courseApprovalCard}>
             <div className={styles.courseImage}>
