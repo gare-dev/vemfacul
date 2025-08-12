@@ -2,12 +2,13 @@
 
 .header {
     top: 0;
-    position: absolute;
+    position: fixed;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 50em;
     align-items: center;
     background-color: #D0D7FF;
-    // box-shadow: rgba(0, 0, 0, 0.24) 0px l3px 8px;
+    // box-shadow: 1rem 1rem 1.5rem rgb(151, 149, 149);
     height: 80px;
     width: 100%;
     z-index: 333;
@@ -16,7 +17,7 @@
 .header__logo {
     display: flex;
     align-items: center;
-
+    // left: 1rem
 }
 
 .header__image {
