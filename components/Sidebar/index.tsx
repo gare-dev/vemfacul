@@ -10,7 +10,12 @@ import { LuFilePenLine } from "react-icons/lu"
 import { MdAssignment, MdExitToApp, MdQuiz } from "react-icons/md"
 import { RiPagesLine } from "react-icons/ri"
 
-export default function Sidebar() {
+interface props {
+    setInfo?: React.Dispatch<React.SetStateAction<string[]>>
+    userInfo?: string[]
+}
+
+export default function Sidebar(props: props) {
     const router = useRouter()
     const [authData, setAuthData] = useState<AuthDataType>()
     const [profileOptionsVisible, setProfileOptionsVisible] = useState<boolean>(false)
@@ -45,6 +50,7 @@ export default function Sidebar() {
                 try {
                     const response = await Api.getProfileInfo()
                     if (response.data.code === "PROFILE_INFO") {
+                        props.setInfo && props.setInfo([response.data.data.nome, response.data.data.foto, response.data.data.username])
                         return setAuthData({
                             name: response.data.data.nome,
                             image: response.data.data.foto,

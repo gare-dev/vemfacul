@@ -76,8 +76,8 @@ export default function UserProfile() {
             try {
                 const promise = await Api.getPostagem(username);
 
-                if (promise.data.code === "POSTAGENS_FOUND") {
-                    setPostagens(promise.data.postagens)
+                if (promise.status === 200) {
+                    setPostagens(promise.data.data)
                     setPostVisibel(true)
                 } else if (promise.data.code === "POSTAGEM_NOT_FOUND") {
                     setPostagens([]);
@@ -124,10 +124,12 @@ export default function UserProfile() {
             setLoading(true);
             const response = await Api.getUserProfile(username.toString());
 
-            if (response.data.code === "USER_FOUND") {
-                setUserProfile(response.data.data);
+            if (response.status === 200) {
+                setUserProfile(response.data.data[0]);
+                setLoading(false);
             }
         } catch (error) {
+            console.log("ASd")
             if (error instanceof AxiosError && error.response?.data.code === "USER_NOT_FOUND") {
                 console.log("Usuário não encontrado");
                 setUserProfile({

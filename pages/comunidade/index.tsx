@@ -37,8 +37,8 @@ export default function Comunidade() {
         try {
             const response = await Api.selectAllPosts();
 
-            if (response.data.code === "POSTAGENS_FOUND") {
-                setPosts(response.data.postagens);
+            if (response.status === 200) {
+                setPosts(response.data.data);
             }
         } catch (error) {
             if (error instanceof AxiosError) {

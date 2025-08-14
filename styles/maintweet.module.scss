@@ -1,0 +1,216 @@
+// Variables
+$primary-color: #778CFE;
+$text-color: #333;
+$light-gray: #f5f5f5;
+$white: #ffffff;
+$border-radius: 12px;
+$shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+$light-text: #666;
+$border-color: #e1e8ed;
+
+// Tweet container
+.tweetContainer {
+    padding: 16px;
+    border-bottom: 1px solid $border-color;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+        background-color: rgba($primary-color, 0.02);
+    }
+}
+
+.tweetContent {
+    display: flex;
+    gap: 12px;
+    flex-direction: column;
+}
+
+// Profile image
+.profileImageContainer {
+    display: flex;
+    gap: 10px;
+
+
+    .profileImage {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+}
+
+// Tweet body
+.tweetBody {
+    flex: 1;
+    z-index: 1;
+
+
+    .divider {
+        border: none;
+        border-top: 1px solid $primary-color;
+        margin: 6px 0;
+    }
+
+    .respondePost {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding-top: 5px;
+        z-index: 9999999;
+
+        img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .submitButton {
+            background-color: $primary-color;
+            color: $white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+
+
+            &:hover {
+                background-color: darken($primary-color, 10%);
+            }
+        }
+
+        input {
+            border: 1px solid $border-color;
+            border-radius: 4px;
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
+
+            &:focus {
+                outline: none;
+                border-color: $primary-color;
+            }
+        }
+    }
+
+    .timestamp {
+        color: $light-text;
+        font-size: 14px;
+    }
+}
+
+// Tweet header
+.tweetHeader {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+
+    .name {
+        font-weight: 700;
+        color: $text-color;
+    }
+
+    .username,
+    .timestamp {
+        color: $light-text;
+        font-size: 14px;
+    }
+
+    .timestamp {
+        margin-left: auto;
+    }
+}
+
+// Tweet text
+.tweetText {
+    margin: 0 0 12px 0;
+    font-size: 15px;
+    line-height: 1.4;
+    color: $text-color;
+}
+
+// Tweet actions
+.tweetActions {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+
+    .actionButton {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        background: none;
+        border: none;
+        color: $light-text;
+        font-size: 13px;
+        cursor: pointer;
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background-color: rgba($primary-color, 0.1);
+            color: $primary-color;
+
+            .actionIcon {
+                fill: $primary-color;
+            }
+        }
+    }
+
+    .actionIcon {
+        width: 18px;
+        height: 18px;
+        fill: $light-text;
+        transition: fill 0.2s ease;
+    }
+
+    .liked {
+        color: #e0245e;
+
+        .actionIcon {
+            fill: #e0245e;
+        }
+
+        &:hover {
+            background-color: rgba(224, 36, 94, 0.1);
+        }
+    }
+}
+
+// Responsive adjustments
+@media (max-width: 480px) {
+    .tweetContainer {
+        padding: 12px;
+    }
+
+    .tweetHeader {
+        .name {
+            font-size: 15px;
+        }
+
+        .username,
+        .timestamp {
+            font-size: 13px;
+        }
+    }
+
+    .tweetText {
+        font-size: 14px;
+    }
+
+    .tweetActions {
+        gap: 8px;
+
+        .actionButton {
+            font-size: 12px;
+        }
+
+        .actionIcon {
+            width: 16px;
+            height: 16px;
+        }
+    }
+}
