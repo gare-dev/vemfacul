@@ -5,4 +5,9 @@ type AuthDataType = {
     username: string
 }
 
+type AdminAuthType = {
+    id: string
+    login: string
+}
+export type { AdminAuthType }
 export default AuthDataType

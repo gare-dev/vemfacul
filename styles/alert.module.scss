@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&display=swap');
+
+.alertContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 4em;
+    position: relative;
+    gap: 1em;
+    width: 100%;
+    padding: 0.5em 1em;
+    z-index: 9999999;
+}
+
+.alertText {
+    color: #fff;
+    font-family: "Kantumruy Pro", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    width: auto;
+}
+
+@media screen and (max-width: 680px) {
+
+    .alertText {
+        color: rgb(0, 0, 0);
+        font-family: "Roboto", sans-serif;
+        font-weight: 500;
+        font-style: normal;
+        font-size: 4em;
+        width: 100vw;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .alertContainer {
+        width: 100%;
+        height: 5em;
+
+
+        .alertText {
+            font-size: 20px;
+            width: 70%;
+        }
+    }
+}
+
+@keyframes fadeUpOut {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+}
+
+.fadeOut {
+    animation: fadeUpOut 0.5s ease-in forwards;
+}

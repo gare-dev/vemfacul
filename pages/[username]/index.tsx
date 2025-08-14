@@ -46,7 +46,9 @@ export default function UserProfile() {
         posts_number: "0",
         vestibulares: [],
         materias_lecionadas: [],
-        nivel: ""
+        nivel: "",
+
+
     });
 
     const typeEmojiMap: Record<string, string> = {
@@ -62,9 +64,10 @@ export default function UserProfile() {
     const handleClosePopup = () => {
         setIsPopupOpen(false);
     };
+
     const handlePostTweet = (tweet: string) => {
-        console.log('Tweet posted:', tweet);
-    };
+        console.log(tweet)
+    }
 
     const handleGetPostagens = async () => {
         if (typeof username !== "string") {
@@ -118,6 +121,7 @@ export default function UserProfile() {
         if (!username?.toString()) return router.push('/');
 
         try {
+            setLoading(true);
             const response = await Api.getUserProfile(username.toString());
 
             if (response.data.code === "USER_FOUND") {
@@ -137,10 +141,8 @@ export default function UserProfile() {
                     posts_number: "0",
                     vestibulares: [],
                     materias_lecionadas: [],
-                    nivel: ""
+                    nivel: "",
                 })
-
-
             }
         } finally {
             setLoading(false);
@@ -166,15 +168,15 @@ export default function UserProfile() {
             }
             {isVisibleSubmitPost &&
                 <CreatePostagem
+                    onPostTweet={handlePostTweet}
                     isOpen={isPopupOpen}
                     onClose={handleClosePopup}
-                    onPostTweet={handlePostTweet}
                     onReload={() => router.reload()}
                 />
-                }
+            }
             <div className={styles.main}>
                 <Head>
-                    <title>{userProfile.nome} | Perfil</title>
+                    <title>{`${userProfile.nome} | Perfil`}</title>
                     <meta name="description" content={`Profile page for ${userProfile.nome}`} />
                     <link rel="icon" href="/favicon.ico" />
                 </Head>
@@ -183,7 +185,7 @@ export default function UserProfile() {
 
                     <div className={styles.headerImageContainer}>
                         <img
-                            src={userProfile.header}
+                            src={userProfile.header === '' ? undefined : userProfile.header}
 
                             className={styles.headerImage}
                         />
@@ -192,7 +194,7 @@ export default function UserProfile() {
                     <div className={styles.profileInfoContainer}>
                         <div className={styles.profilePictureContainer}>
                             <img
-                                src={userProfile.foto}
+                                src={userProfile.foto === '' ? undefined : userProfile.foto}
                                 alt={`${userProfile.nome}'s profile`}
                                 className={styles.profilePicture}
                             />
@@ -239,7 +241,7 @@ export default function UserProfile() {
                 <div className={styles.containerProfilePost}>
                     {postVisible && postagens.length > 0 && postagens.map((post, idx) => (
                         <UserPost
-                            key={ 0 || idx}
+                            key={0 || idx}
                             id={post.id_postagem}
                             name={userProfile.nome}
                             username={userProfile.username}
@@ -253,6 +255,7 @@ export default function UserProfile() {
                             content={post.content}
                             profileImage={userProfile.foto}
                             timestamp={post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).getDate().toString() + " de " + monthsMap[new Date(post.created_at).getMonth()]) : ""}
+
                             alredyLiked={post.alredyliked}
                             likes={post.total_likes}
                             comments={post.total_comments}

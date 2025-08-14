@@ -61,7 +61,21 @@ const products = [
         imageAlt: "Image",
         title: "Cursinho Popular Emancipa",
         imageUrl: "https://inscricoes.redeemancipa.org.br/static/logo_verde-5af18a3e475f02661fc2797a5bf07151.png"
-    }
+    },
+    {
+        rating: 3.5,
+        location: "BH",
+        imageAlt: "Image",
+        title: "Acerta pré-vestibular",
+        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRG4P_wGkWofm6e4QfNGoJHu59SfEyRZqkBhw&s"
+    }, {
+        rating: 4,
+        location: "RJ",
+        imageAlt: "Image",
+        title: "Curso Conquista",
+        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTi-XiM3Xqr_rBoMH8cc7wbHOCcn9UoX6t5dQ&s"
+    },
+
 ];
 
 
