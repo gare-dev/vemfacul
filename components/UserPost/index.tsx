@@ -79,13 +79,13 @@ const Tweet: React.FC<TweetProps> = ({
   const handleLike = async () => {
     if (isLiked) {
       const promise = await Api.unLinkePostagem(id);
-      if (promise.data.code === 'UNLIKE_SUCESS') {
+      if (promise.status === 201) {
         setCurrentLikes((prev) => prev - 1);
         setIsLiked(false);
       }
     } else {
       const promise = await Api.likePostagem(id);
-      if (promise.data.code === "LIKE_SUCESS") {
+      if (promise.status === 201) {
         setCurrentLikes((prev) => prev + 1);
         setIsLiked(true);
       }

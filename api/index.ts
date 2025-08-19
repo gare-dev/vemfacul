@@ -233,7 +233,7 @@ class _Api {
   }
 
   public async unLinkePostagem(id_postagem: number | string) {
-    return await this._instance.post('/user/post/unlike', { id_postagem });
+    return await this._instance.patch('/user/post/unlike', { id_postagem });
   }
 
   public async getLikesCount(id_postagem: number | string) {
