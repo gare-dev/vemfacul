@@ -215,23 +215,23 @@ class _Api {
     })
   }
   public async getPostagem(username: string) {
-    return await this._instance.post(`/user/${username}/post`)
+    return await this._instance.get(`/user/${username}/post`)
   }
-  
+
   public async getSinglePostagem(id_postagem: string | number) {
     return await this._instance.get(`/post/${id_postagem}`)
   }
-  
+
   public async getComentarios(id_pai: string | number) {
     return await this._instance.get(`/post/coment/${id_pai}`)
   }
-  
+
   public async likePostagem(id_postagem: number | string) {
-    return await this._instance.post('/user/post/like', { 
-      id_postagem 
+    return await this._instance.patch('/user/post/like', {
+      id_postagem
     });
   }
-  
+
   public async unLinkePostagem(id_postagem: number | string) {
     return await this._instance.post('/user/post/unlike', { id_postagem });
   }

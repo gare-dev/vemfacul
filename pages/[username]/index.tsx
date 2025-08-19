@@ -35,6 +35,7 @@ export default function UserProfile() {
     const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
     const [postagens, setPostagens] = useState<Postagem[]>([]);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+
     const [userProfile, setUserProfile] = useState<UserProfileType>({
         nome: "",
         username: "",
@@ -74,10 +75,11 @@ export default function UserProfile() {
             return;
         } else {
             try {
+                setLoading(true)
                 const promise = await Api.getPostagem(username);
 
-                if (promise.data.code === "POSTAGENS_FOUND") {
-                    setPostagens(promise.data.postagens)
+                if (promise.status === 200) {
+                    setPostagens(promise.data.data)
                     setPostVisibel(true)
                 } else if (promise.data.code === "POSTAGEM_NOT_FOUND") {
                     setPostagens([]);
@@ -124,10 +126,12 @@ export default function UserProfile() {
             setLoading(true);
             const response = await Api.getUserProfile(username.toString());
 
-            if (response.data.code === "USER_FOUND") {
-                setUserProfile(response.data.data);
+            if (response.status === 200) {
+                setUserProfile(response.data.data[0]);
+                setLoading(false);
             }
         } catch (error) {
+            console.log("ASd")
             if (error instanceof AxiosError && error.response?.data.code === "USER_NOT_FOUND") {
                 console.log("Usuário não encontrado");
                 setUserProfile({
@@ -154,7 +158,7 @@ export default function UserProfile() {
     }, [username])
     return (
         <>
-            {loading && <LoadingComponent />}
+            {loading && <LoadingComponent isLoading={loading} />}
             {!loading && <Sidebar />}
             {isVisible && user === username &&
                 <EditProfilePopup
@@ -255,7 +259,6 @@ export default function UserProfile() {
                             content={post.content}
                             profileImage={userProfile.foto}
                             timestamp={post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).getDate().toString() + " de " + monthsMap[new Date(post.created_at).getMonth()]) : ""}
-
                             alredyLiked={post.alredyliked}
                             likes={post.total_likes}
                             comments={post.total_comments}

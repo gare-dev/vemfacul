@@ -1,6 +1,6 @@
 // types/course.ts
 export interface Course {
-    id: string;
+    id_cursinho: string;
     nome: string;
     nome_exibido: string;
     representante_legal: string;

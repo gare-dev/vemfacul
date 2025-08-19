@@ -12,12 +12,13 @@ export default function CoursesApprovalList() {
     const { showAlert } = useAlert()
 
     const handleApprove = async (id: string) => {
+        console.log(id)
         if (!id) return
 
         try {
             const response = await Api.approveCursinho(id)
 
-            if (response.data.code === "CURSINHO_APPROVED") {
+            if (response.status === 204) {
                 showAlert("Cursinho aprovado com sucesso!")
                 await handleGetApprovalList()
             }
@@ -41,7 +42,7 @@ export default function CoursesApprovalList() {
     const handleGetApprovalList = async () => {
         try {
             const response = await Api.selectAproveList();
-            if (response.data.code === "CURSINHOS_SELECTED") {
+            if (response.status === 200) {
                 setCourses(response.data.data);
             }
         } catch (error) {
@@ -58,7 +59,7 @@ export default function CoursesApprovalList() {
 
     return (
         <div className={styles.container}>
-            {loading && <LoadingComponent />}
+            {loading && <LoadingComponent isLoading={loading} />}
             {!loading && courses.map((course, index) => (
                 <CourseApprovalCard
                     key={index}
