@@ -54,7 +54,7 @@ const MainTweet: React.FC<TweetProps> = ({
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [postagemPai, setPostagemPai] = useState<Postagem | null>(null)
     const [answerText, setAnswerText] = useState('');
-    const [error, setError] = useState('');
+    const [, setError] = useState('');
 
     const liked = () => {
         if (alredyLiked) {
@@ -166,7 +166,7 @@ const MainTweet: React.FC<TweetProps> = ({
                 </div>
 
                 {/* Tweet Body */}
-                <div className={styles.tweetBody} style={{ 'cursor': 'pointer' }} onClick={(e) => { router.replace(`/postagem/${id}`) }}>
+                <div className={styles.tweetBody} style={{ 'cursor': 'pointer' }} onClick={() => { router.replace(`/postagem/${id}`) }}>
 
 
 

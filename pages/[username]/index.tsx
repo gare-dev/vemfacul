@@ -35,6 +35,7 @@ export default function UserProfile() {
     const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
     const [postagens, setPostagens] = useState<Postagem[]>([]);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+
     const [userProfile, setUserProfile] = useState<UserProfileType>({
         nome: "",
         username: "",
@@ -74,6 +75,7 @@ export default function UserProfile() {
             return;
         } else {
             try {
+                setLoading(true)
                 const promise = await Api.getPostagem(username);
 
                 if (promise.status === 200) {
@@ -156,7 +158,7 @@ export default function UserProfile() {
     }, [username])
     return (
         <>
-            {loading && <LoadingComponent />}
+            {loading && <LoadingComponent isLoading={loading} />}
             {!loading && <Sidebar />}
             {isVisible && user === username &&
                 <EditProfilePopup
@@ -257,7 +259,6 @@ export default function UserProfile() {
                             content={post.content}
                             profileImage={userProfile.foto}
                             timestamp={post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).getDate().toString() + " de " + monthsMap[new Date(post.created_at).getMonth()]) : ""}
-
                             alredyLiked={post.alredyliked}
                             likes={post.total_likes}
                             comments={post.total_comments}

@@ -59,7 +59,7 @@ export default function CoursesApprovalList() {
 
     return (
         <div className={styles.container}>
-            {loading && <LoadingComponent />}
+            {loading && <LoadingComponent isLoading={loading} />}
             {!loading && courses.map((course, index) => (
                 <CourseApprovalCard
                     key={index}

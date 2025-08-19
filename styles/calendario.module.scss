@@ -46,3 +46,172 @@
 
     }
 }
+
+// dashboard.module.scss
+.dashboard {
+    display: flex;
+    min-height: 100vh;
+    color: #000;
+}
+
+.contentContainer {
+    flex: 1;
+}
+
+.headerBlock {
+    color: #001ECB;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+
+}
+
+.headerContent {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 74%;
+    max-width: 1170px;
+
+    h1 {
+        margin: 0 0 1.5rem 0;
+        font-size: 2rem;
+        font-weight: 600;
+    }
+}
+
+.statsRow {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.statCard {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #D0D7FF;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    color: #001ECB;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mainContent {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 74%;
+    max-width: 1170px;
+}
+
+.viewControls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.viewButton {
+    background: none;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Kantumruy Pro', sans-serif;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+
+    &.active {
+        background-color: #001ECB;
+        color: white;
+    }
+
+    &:hover {
+        background-color: #D0D7FF;
+    }
+}
+
+.eventsList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.eventCard {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+    border-left: 4px solid transparent;
+
+    &.important {
+        border-left-color: #001ECB;
+    }
+
+    &.highlighted {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+    }
+
+    &.completed {
+        opacity: 0.7;
+
+        .eventDetails {
+            h3 {
+                text-decoration: line-through;
+            }
+        }
+    }
+}
+
+.eventIcon {
+    font-size: 1.5rem;
+    color: #001ECB;
+    margin-right: 1rem;
+}
+
+.eventDetails {
+    flex: 1;
+
+    h3 {
+        margin: 0;
+        font-weight: 500;
+        font-size: 1.1rem;
+    }
+
+    .eventDate {
+        font-size: 0.85rem;
+        color: #666;
+    }
+}
+
+.eventActions {
+    display: flex;
+    gap: 0.5rem;
+
+    button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.2rem;
+        color: #666;
+        transition: all 0.2s ease;
+        padding: 0.5rem;
+        border-radius: 4px;
+
+        &:hover {
+            background-color: #f0f0f0;
+        }
+
+        &.active {
+            color: #001ECB;
+        }
+    }
+}
+
+.loading {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.1rem;
+}

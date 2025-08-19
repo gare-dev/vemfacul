@@ -6,9 +6,8 @@ import { useRouter } from 'next/router'
 import Api from '@/api'
 import Tweet from '@/components/UserPost'
 import monthsMap from "@/utils/getMonth";
-import { IoMdArrowRoundBack } from 'react-icons/io';
 import MainTweet from '@/components/MainTweet';
-import { FaArrowLeft, FaArrowLeftLong } from 'react-icons/fa6';
+import { FaArrowLeft } from 'react-icons/fa6';
 
 
 export type Postagem = {
@@ -98,7 +97,7 @@ export default function SinlgePostagem() {
 
     return (
         <>
-            {loading && <LoadingComponent />}
+            {loading && <LoadingComponent isLoading={loading} />}
             {!loading && <Sidebar setInfo={setUserInfo} userInfo={userInfo} />}
             <div className={styles.btnBack}>
                 <div className={styles.btt}>

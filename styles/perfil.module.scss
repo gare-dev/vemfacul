@@ -1,188 +1,166 @@
-// Variables
-$primary-color: #778CFE;
-$text-color: #333;
-$light-gray: #f5f5f5;
-$white: #ffffff;
-$border-radius: 12px;
-$shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+// dashboard.module.scss
+.dashboard {
+  display: flex;
+  min-height: 100vh;
+  color: #000;
+}
 
-// Container styles
-.profileContainer {
-  max-width: 600px;
+.contentContainer {
+  flex: 1;
+  padding-left: 260px;
+}
+
+.headerBlock {
+  color: #001ECB;
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+}
+
+.headerContent {
+  max-width: 1200px;
   margin: 0 auto;
-  background-color: $white;
-  border-radius: $border-radius;
-  box-shadow: $shadow;
-  overflow: hidden;
-}
+  padding: 0 2rem;
 
-// Header image
-.headerImageContainer {
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
-  position: relative;
-  
-  .headerImage {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-}
-
-// Profile info section
-.profileInfoContainer {
-  padding: 0 20px 30px;
-  position: relative;
-}
-
-// Profile picture
-.profilePictureContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-top: -50px;
-  margin-bottom: 20px;
-  
-  .profilePicture {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    border: 4px solid $white;
-    object-fit: cover;
-    box-shadow: $shadow;
-    background-color: $white;
-  }
-}
-
-// Edit profile button
-.editProfileButton {
-  background-color: $white;
-  color: $primary-color;
-  border: 1px solid $primary-color;
-  border-radius: 20px;
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  
-  &:hover {
-    background-color: $primary-color;
-    color: $white;
-  }
-}
-
-// Name section
-.nameSection {
-  margin-bottom: 15px;
-  
-  .name {
-    font-size: 24px;
-    font-weight: 800;
-    margin: 0;
-    color: $text-color;
-  }
-  
-  .username {
-    font-size: 16px;
-    color: #666;
-    margin: 4px 0 0;
-  }
-}
-
-// Type indicator
-.typeIndicator {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 15px;
-  
-  .typeEmoji {
-    font-size: 20px;
-  }
-  
-  .typeText {
-    font-size: 14px;
-    color: $text-color;
-    font-weight: 500;
-    padding: 4px 10px;
-    background-color: rgba($primary-color, 0.1);
-    border-radius: 4px;
-  }
-}
-
-// Description
-.description {
-  font-size: 16px;
-  line-height: 1.5;
-  color: $text-color;
-  margin-bottom: 20px;
-}
-
-// University interests
-.universityInterests {
-  background-color: $light-gray;
-  padding: 15px;
-  border-radius: $border-radius;
-  
-  .interestsTitle {
-    font-size: 16px;
-    margin: 0 0 10px 0;
-    color: $primary-color;
+  h1 {
+    margin: 0 0 1.5rem 0;
+    font-size: 2rem;
     font-weight: 600;
   }
-  
-  .universityList {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+}
+
+.statsRow {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.statCard {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #D0D7FF;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  color: #001ECB;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mainContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.viewControls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.viewButton {
+  background: none;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Kantumruy Pro', sans-serif;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+
+  &.active {
+    background-color: #001ECB;
+    color: white;
   }
-  
-  .universityItem {
-    background-color: $white;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 14px;
-    color: $text-color;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    
-    &:hover {
-      background-color: $primary-color;
-      color: $white;
-      cursor: pointer;
+
+  &:hover {
+    background-color: #D0D7FF;
+  }
+}
+
+.eventsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.eventCard {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  border-left: 4px solid transparent;
+
+  &.important {
+    border-left-color: #001ECB;
+  }
+
+  &.highlighted {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  &.completed {
+    opacity: 0.7;
+
+    .eventDetails {
+      h3 {
+        text-decoration: line-through;
+      }
     }
   }
 }
 
-// Responsive adjustments
-@media (max-width: 480px) {
-  .headerImageContainer {
-    height: 150px;
+.eventIcon {
+  font-size: 1.5rem;
+  color: #001ECB;
+  margin-right: 1rem;
+}
+
+.eventDetails {
+  flex: 1;
+
+  h3 {
+    margin: 0;
+    font-weight: 500;
+    font-size: 1.1rem;
   }
-  
-  .profilePictureContainer {
-    flex-direction: column;
-    align-items: flex-start;
-    margin-top: -30px;
-    
-    .profilePicture {
-      width: 80px;
-      height: 80px;
-      margin-bottom: 10px;
+
+  .eventDate {
+    font-size: 0.85rem;
+    color: #666;
+  }
+}
+
+.eventActions {
+  display: flex;
+  gap: 0.5rem;
+
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #666;
+    transition: all 0.2s ease;
+    padding: 0.5rem;
+    border-radius: 4px;
+
+    &:hover {
+      background-color: #f0f0f0;
+    }
+
+    &.active {
+      color: #001ECB;
     }
   }
-  
-  .nameSection {
-    .name {
-      font-size: 20px;
-    }
-    
-    .username {
-      font-size: 14px;
-    }
-  }
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.1rem;
 }

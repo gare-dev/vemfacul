@@ -71,7 +71,7 @@ export default function Comunidade() {
             />
             {loading && (
                 <div className={styles.loadingContainer}>
-                    <LoadingComponent />
+                    <LoadingComponent isLoading={loading} />
                 </div>
 
             )}

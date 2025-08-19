@@ -50,7 +50,7 @@ export default function Sidebar(props: props) {
                 try {
                     const response = await Api.getProfileInfo()
                     if (response.data.code === "PROFILE_INFO") {
-                        props.setInfo && props.setInfo([response.data.data.nome, response.data.data.foto, response.data.data.username])
+                        props.setInfo?.([response.data.data.nome, response.data.data.foto, response.data.data.username])
                         return setAuthData({
                             name: response.data.data.nome,
                             image: response.data.data.foto,
