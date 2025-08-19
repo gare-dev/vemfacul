@@ -20,7 +20,9 @@ type Postagem = {
     content: string;
     content_post?: string;
     created_at?: string | Date;
-    total_likes?: string;
+    total_comments: number;
+    alredyliked: number | boolean;
+    total_likes: number;
 };
 
 export default function UserProfile() {
@@ -33,6 +35,7 @@ export default function UserProfile() {
     const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
     const [postagens, setPostagens] = useState<Postagem[]>([]);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+
     const [userProfile, setUserProfile] = useState<UserProfileType>({
         nome: "",
         username: "",
@@ -63,15 +66,20 @@ export default function UserProfile() {
         setIsPopupOpen(false);
     };
 
+    const handlePostTweet = (tweet: string) => {
+        console.log(tweet)
+    }
+
     const handleGetPostagens = async () => {
         if (typeof username !== "string") {
             return;
         } else {
             try {
-                const promise = await Api.getPostagem(username)
+                setLoading(true)
+                const promise = await Api.getPostagem(username);
 
-                if (promise.data.code === "POSTAGENS_FOUND") {
-                    setPostagens(promise.data.postagens)
+                if (promise.status === 200) {
+                    setPostagens(promise.data.data)
                     setPostVisibel(true)
                 } else if (promise.data.code === "POSTAGEM_NOT_FOUND") {
                     setPostagens([]);
@@ -118,10 +126,12 @@ export default function UserProfile() {
             setLoading(true);
             const response = await Api.getUserProfile(username.toString());
 
-            if (response.data.code === "USER_FOUND") {
-                setUserProfile(response.data.data);
+            if (response.status === 200) {
+                setUserProfile(response.data.data[0]);
+                setLoading(false);
             }
         } catch (error) {
+            console.log("ASd")
             if (error instanceof AxiosError && error.response?.data.code === "USER_NOT_FOUND") {
                 console.log("Usuário não encontrado");
                 setUserProfile({
@@ -148,7 +158,7 @@ export default function UserProfile() {
     }, [username])
     return (
         <>
-            {loading && <LoadingComponent />}
+            {loading && <LoadingComponent isLoading={loading} />}
             {!loading && <Sidebar />}
             {isVisible && user === username &&
                 <EditProfilePopup
@@ -162,15 +172,15 @@ export default function UserProfile() {
             }
             {isVisibleSubmitPost &&
                 <CreatePostagem
+                    onPostTweet={handlePostTweet}
                     isOpen={isPopupOpen}
                     onClose={handleClosePopup}
                     onReload={() => router.reload()}
                 />
-
             }
             <div className={styles.main}>
                 <Head>
-                    <title>{userProfile.nome} | Perfil</title>
+                    <title>{`${userProfile.nome} | Perfil`}</title>
                     <meta name="description" content={`Profile page for ${userProfile.nome}`} />
                     <link rel="icon" href="/favicon.ico" />
                 </Head>
@@ -179,7 +189,7 @@ export default function UserProfile() {
 
                     <div className={styles.headerImageContainer}>
                         <img
-                            src={userProfile.header}
+                            src={userProfile.header === '' ? undefined : userProfile.header}
 
                             className={styles.headerImage}
                         />
@@ -188,7 +198,7 @@ export default function UserProfile() {
                     <div className={styles.profileInfoContainer}>
                         <div className={styles.profilePictureContainer}>
                             <img
-                                src={userProfile.foto}
+                                src={userProfile.foto === '' ? undefined : userProfile.foto}
                                 alt={`${userProfile.nome}'s profile`}
                                 className={styles.profilePicture}
                             />
@@ -249,8 +259,9 @@ export default function UserProfile() {
                             content={post.content}
                             profileImage={userProfile.foto}
                             timestamp={post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).getDate().toString() + " de " + monthsMap[new Date(post.created_at).getMonth()]) : ""}
-                            likes={+(post.total_likes ?? 0)}
-                            comments={0}
+                            alredyLiked={post.alredyliked}
+                            likes={post.total_likes}
+                            comments={post.total_comments}
                         />
                     ))}
                     {postagens.length === 0 && (

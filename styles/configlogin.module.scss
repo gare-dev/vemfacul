@@ -1,0 +1,209 @@
+@use 'sass:color';
+// Variables
+$primary-light: #D0D7FF;
+$primary-dark: #001ECB;
+$error-red: #ff4444;
+$text-dark: #333333;
+$text-light: #ffffff;
+$border-radius: 8px;
+$transition-speed: 0.3s;
+$shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+// Container styles
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f7fa;
+    padding: 2rem;
+}
+
+// Login card styles
+.loginCard {
+    background: white;
+    border-radius: $border-radius;
+    box-shadow: $shadow;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 420px;
+    transition: all $transition-speed ease;
+
+    &:hover {
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+}
+
+// Logo and title styles
+.logoContainer {
+    text-align: center;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .logo {
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+
+    }
+
+    .title {
+        color: $primary-dark;
+        font-size: 1.75rem;
+        font-weight: 600;
+        margin: 0;
+        font-family: "Kantumruy Pro", sans-serif;
+    }
+}
+
+// Form styles
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.label {
+    font-size: 0.9rem;
+    color: $text-dark;
+    font-weight: 500;
+}
+
+.input {
+    padding: 0.75rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: $border-radius;
+    font-size: 1rem;
+    transition: border-color $transition-speed;
+
+    &:focus {
+        outline: none;
+        border-color: $primary-dark;
+        box-shadow: 0 0 0 2px rgba($primary-dark, 0.2);
+    }
+}
+
+// Password input wrapper
+.passwordWrapper {
+    position: relative;
+
+    .input {
+        width: 100%;
+        padding-right: 2.5rem; // Space for toggle button
+    }
+}
+
+.toggleButton {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    color: #777;
+    transition: color $transition-speed;
+
+    &:hover {
+        color: $primary-dark;
+    }
+
+    .eyeIcon {
+        width: 1.25rem;
+        height: 1.25rem;
+        fill: currentColor;
+    }
+}
+
+// Submit button styles
+.submitButton {
+    background-color: $primary-dark;
+    color: $text-light;
+    border: none;
+    padding: 0.75rem;
+    border-radius: $border-radius;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color $transition-speed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 46px;
+
+    &:hover:not(:disabled) {
+        background-color: color.adjust($primary-dark, $lightness: -5%);
+    }
+
+    &:disabled {
+        background-color: color.adjust($primary-dark, $lightness: 20%);
+        cursor: not-allowed;
+    }
+}
+
+.spinner {
+    animation: rotate 1s linear infinite;
+    width: 1.5rem;
+    height: 1.5rem;
+
+    circle {
+        stroke: $text-light;
+        stroke-linecap: round;
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes rotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+// Error message styles
+.error {
+    color: $error-red;
+    background-color: rgba($error-red, 0.1);
+    padding: 0.75rem;
+    border-radius: $border-radius;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+// Forgot password link
+.forgotLink {
+    text-align: center;
+    font-size: 0.9rem;
+
+    a {
+        color: $primary-dark;
+        text-decoration: none;
+        transition: color $transition-speed;
+
+        &:hover {
+            color: color.adjust($primary-dark, $lightness: -10%);
+            text-decoration: underline;
+        }
+    }
+}
+
+// Responsive adjustments
+@media (max-width: 480px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .loginCard {
+        padding: 1.5rem;
+    }
+}

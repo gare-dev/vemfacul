@@ -1,10 +1,30 @@
 
 import styles from "@/styles/loadingcomponent.module.scss"
+import { useEffect } from "react";
 
-export default function LoadingComponent() {
+interface props {
+    isLoading: boolean;
+}
+
+export default function LoadingComponent(props: props) {
+
+    useEffect(() => {
+        if (props.isLoading) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, [props.isLoading]);
+
+    if (!props.isLoading) return null;
+
     return (
-        <div >
-            <div style={{ zIndex: 9999999999999 }} className="flex items-center justify-center h-screen">
+        <div className={styles.loading}>
+            <div style={{ zIndex: 9999999999999 }} className="flex items-center justify-center h-screen relative">
 
 
                 <svg

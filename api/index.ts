@@ -1,4 +1,6 @@
+import { AcademicData, AddressData, FinancialData, InstitutionData, LoginData, MediaData } from "@/pages/cursinho/cadastro";
 import { handleDates } from "@/utils/date";
+import getAdminToken from "@/utils/getAdminToken";
 import getAuth from "@/utils/getAuth";
 import axios, { AxiosInstance } from "axios";
 
@@ -29,6 +31,11 @@ class _Api {
           config.headers['Authorization'] = `Bearer ${getAuth()}`;
         }
       }
+      if (getAdminToken()) {
+        if (config.headers) {
+          config.headers['Admin-Token'] = getAdminToken();
+        }
+      }
       return config;
     });
 
@@ -37,7 +44,7 @@ class _Api {
 
   public async registerAccount(email: string, password: string) {
 
-    return await this._instance.post("/api/createaccount", {
+    return await this._instance.post("/user/email", {
       email,
       password,
     });
@@ -46,7 +53,7 @@ class _Api {
 
   public async confirmAccount(token: string) {
     try {
-      return await this._instance.post('/api/confirmaccount', {
+      return await this._instance.patch('/user/auth/confirm', {
         token,
       });
     } catch (error) {
@@ -57,7 +64,7 @@ class _Api {
 
   public async loginAccount(email: string, password: string) {
 
-    return await this._instance.post("/api/loginaccount", {
+    return await this._instance.post("/user/login", {
       email,
       password,
     });
@@ -66,7 +73,7 @@ class _Api {
 
   public async createAccount(formData: any) {
     try {
-      return await this._instance.post("/api/registeraccount", formData, {
+      return await this._instance.post("/user/register", formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }
@@ -79,7 +86,7 @@ class _Api {
 
   public async forgotPassword(email: string) {
     try {
-      return await this._instance.post("/api/forgotpassword", {
+      return await this._instance.post("/user/forgot-password/email", {
         email,
       });
     } catch (error) {
@@ -89,11 +96,11 @@ class _Api {
 
   }
 
-  public async resetPassword(password: string, email: string) {
+  public async resetPassword(password: string, cryptrEmail: string) {
     try {
-      return await this._instance.post("/api/resetpassword", {
+      return await this._instance.patch("/user/forgot-password", {
         password,
-        email
+        cryptrEmail
       });
     } catch (error) {
       console.error("Error resetting password:", error);
@@ -105,7 +112,7 @@ class _Api {
   public async editProfile(formData: any) {
 
     try {
-      return await this._instance.post('/api/editprofile', formData, {
+      return await this._instance.put('/user/profile/edit', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }
@@ -117,12 +124,12 @@ class _Api {
   }
 
   public async getEvents() {
-    return await this._instance.post('/api/getevents')
+    return await this._instance.get('/events')
   }
 
   public async getPersonalEvents() {
     try {
-      return await this._instance.post('/api/getpevents')
+      return await this._instance.get('/user/event')
     } catch (error) {
       console.error("Error fetching personal events:", error);
       throw error;
@@ -131,7 +138,7 @@ class _Api {
 
   public async insertPersonalEvent(day: number, month: number, year: number, title: string, cursinho: string, descricao: string, foto: string, link: string, type: string, color: string, main_title: string) {
     try {
-      return await this._instance.post("/api/insertpevennts", {
+      return await this._instance.post("/user/event", {
         day,
         month,
         year,
@@ -146,13 +153,13 @@ class _Api {
       })
     } catch (error) {
       console.error("Error inserting personal event:", error);
-      throw error; // Re-throw the error to handle it in the calling function
+      throw error;
     }
   }
 
   public async insertPersonalLocalEvent(day: string, month: string, year: string, title: string, descricao: string, color: string, main_title: string, isImportant: boolean, hora: string) {
     try {
-      return await this._instance.post("/api/insertpelocal", {
+      return await this._instance.post("/user/local/event", {
         day,
         month,
         year,
@@ -171,9 +178,7 @@ class _Api {
 
   public async deletePersonalEvent(id: string) {
     try {
-      return await this._instance.post("/api/deletepevents", {
-        id_pevent: id,
-      });
+      return await this._instance.delete(`/user/event/${id}`);
     } catch (error) {
       console.error("Error deleting personal event:", error);
       throw error;
@@ -181,15 +186,13 @@ class _Api {
   }
 
   public async getUserProfile(username: string) {
-    return await this._instance.post("/api/getuserprofile", {
-      username,
-    });
+    return await this._instance.get(`/user/${username}/profile`);
 
   }
 
   public async getProfileInfo() {
     try {
-      return await this._instance.post("/api/getprofileinfo");
+      return await this._instance.get("/user/profile/info");
     } catch (error) {
       console.error("Error fetching profile info:", error);
       throw error;
@@ -197,36 +200,79 @@ class _Api {
   }
 
   public async validateProfile() {
-    try {
-      return await this._instance.post("/api/validateprofile");
-    } catch (error) {
-      console.error("Error validating profile:", error);
-      throw error;
-    }
+    return await this._instance.get("/user/validate");
   }
 
   public async createPostagem(content: string) {
-    return await this._instance.post("api/createPostagem", {
+    return await this._instance.post("/user/post", {
       content
     })
   }
-
+  public async createComentario(postagem_pai: string | number, content: string) {
+    return await this._instance.post("/coment", {
+      content,
+      postagem_pai
+    })
+  }
   public async getPostagem(username: string) {
-    return await this._instance.post(`/api/postagens/${username}`)
+    return await this._instance.get(`/user/${username}/post`)
+  }
+
+  public async getSinglePostagem(id_postagem: string | number) {
+    return await this._instance.get(`/post/${id_postagem}`)
+  }
+
+  public async getComentarios(id_pai: string | number) {
+    return await this._instance.get(`/post/coment/${id_pai}`)
+  }
+
+  public async likePostagem(id_postagem: number | string) {
+    return await this._instance.patch('/user/post/like', {
+      id_postagem
+    });
+  }
+
+  public async unLinkePostagem(id_postagem: number | string) {
+    return await this._instance.post('/user/post/unlike', { id_postagem });
   }
 
   public async getLikesCount(id_postagem: number | string) {
-    return await this._instance.post('/api/likePostagem/countlikes', {
-      id_postagem
-    })
+    return await this._instance.get(`/user/post/${id_postagem}/like`)
   }
 
   public async selectAllPosts() {
-    return await this._instance.post('/api/selectposts')
+    return await this._instance.get('/post')
+  }
+
+  public async insertCursinho(formData: any) {
+    return await this._instance.post('/course', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    })
+  }
+
+  public async loginAdmin(username: string, password: string) {
+    return await this._instance.post('/admin/login', {
+      username,
+      password
+    });
+  }
+
+  public async adminAuth() {
+    return await this._instance.get('/admin/auth');
+  }
+
+  public async selectAproveList() {
+    return await this._instance.get('/admin/course/approve')
+  }
+
+  public async approveCursinho(id: string) {
+    return await this._instance.patch(`/admin/course/${id}/approve`)
   }
 }
 
-const Api = new _Api(process.env.NEXT_PUBLIC_API_URL ?? ""); //https://invest-api-rose.vercel.app/
+const Api = new _Api(process.env.NEXT_PUBLIC_API_URL ?? ""); // https://invest-api-rose.vercel.app/
 
 
 export default Api;

@@ -7,7 +7,6 @@
     justify-content: space-between;
     align-items: center;
     background-color: #D0D7FF;
-    // box-shadow: rgba(0, 0, 0, 0.24) 0px l3px 8px;
     height: 80px;
     width: 100%;
     z-index: 333;
@@ -43,11 +42,14 @@
     font-optical-sizing: auto;
     font-weight: 600;
     font-style: normal;
-    padding: .5rem;
+    padding: .5rem .5rem .5rem .5rem;
     background-color: transparent;
     border: 0.1rem solid #001ECB;
     border-radius: .5rem;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
 }
 
@@ -164,6 +166,34 @@
                     }
                 }
             }
+        }
+    }
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%; // aparece abaixo do botão
+    left: 0;
+    margin-top: 8px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    min-width: 180px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    div {
+        padding: 10px 16px;
+        font-family: "Kantumruy Pro", sans-serif;
+        font-size: 14px;
+        cursor: pointer;
+        color: #001ECB;
+
+        &:hover {
+            background-color: #f0f0f0;
         }
     }
 }

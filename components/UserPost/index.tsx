@@ -1,5 +1,9 @@
-import React, { useState } from 'react';
+
+import Api from '@/api/'
+import TweetPopup from '../CreatePostagem';
+import React, { useEffect, useState } from 'react';
 import styles from '@/styles/userPost.module.scss';
+import { useRouter } from 'next/router';
 
 interface TweetProps {
   id: number | string;
@@ -8,54 +12,94 @@ interface TweetProps {
   username: string;
   profileImage: string;
   timestamp: string;
+  alredyLiked: number | boolean;
   likes: number;
   comments: number;
   date: string
 }
 
+interface Postagem {
+  name: string;
+  username: string;
+  id_postagem: string | number;
+  content: string;
+  content_post?: string;
+  profileImage: string;
+}
+
 const Tweet: React.FC<TweetProps> = ({
-  // id,
+  id,
   content,
   name,
   username,
   profileImage,
   timestamp,
+  alredyLiked,
   likes,
   comments,
 }) => {
-  const [isLiked, setIsLiked] = useState(false);
+  const router = useRouter()
+  const [isLiked, setIsLiked] = useState(alredyLiked);
   const [currentLikes, setCurrentLikes] = useState(likes);
+  const [currentComments, setCurrenComments] = useState(comments);
+  const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [postagemPai, setPostagemPai] = useState<Postagem | null>(null)
 
-  const handleLike = () => {
-    if (isLiked) {
-      setCurrentLikes(currentLikes - 1);
+  const liked = () => {
+    if (alredyLiked) {
+      setIsLiked(true)
     } else {
-      setCurrentLikes(currentLikes + 1);
+      setIsLiked(false)
     }
-    setIsLiked(!isLiked);
+  }
+  const handleOpenPopup = (post: Postagem) => {
+    setPostagemPai(post)
+    setIsPopupOpen(true);
+  };
+  const handleClosePopup = () => {
+    setIsPopupOpen(false);
+  };
+  const handlePostTweet = (tweet: string) => {
+    setCurrenComments((prev) => prev + 1)
+    console.log('Tweet posted:', tweet);
   };
 
-  // const handleGetLikes = async (id_postagem: number | string) => {
-  //   try {
-  //     const promise = await Api.getLikesCount(id_postagem)
+  const handleLike = async () => {
+    if (isLiked) {
+      const promise = await Api.unLinkePostagem(id);
+      if (promise.data.code === 'UNLIKE_SUCESS') {
+        setCurrentLikes((prev) => prev - 1);
+        setIsLiked(false);
+      }
+    } else {
+      const promise = await Api.likePostagem(id);
+      if (promise.data.code === "LIKE_SUCESS") {
+        setCurrentLikes((prev) => prev + 1);
+        setIsLiked(true);
+      }
+    }
+  };
+  useEffect(() => {
+    if (typeof id !== "string" && typeof id !== "number") {
+      liked();
+    }
+  }, [])
 
-  //     if (promise.data.code === "COUNT_LIKE_SUCESS") {
-  //       return setCurrentLikes(+promise.data.likes)
-  //     }
-  //     return setCurrentLikes(0)
-  //   } catch (erro) {
-  //     console.log(erro)
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   if (typeof id !== "string" && typeof id !== "number") {
-  //     console.log("que id é esse fi", id)
-  //   }
-  //   handleGetLikes(id)
-  // }, [])
   return (
-    <div className={styles.tweetContainer}>
+    <div className={styles.tweetContainer} >
+      {isVisibleSubmitPost && (id && typeof id === "string" || typeof id === "number") && (
+        <TweetPopup
+          coment
+          postagemID_pai={id}
+          postagemInfo_pai={postagemPai ?? undefined}
+          isOpen={isPopupOpen}
+          onClose={handleClosePopup}
+          onReload={() => router.reload()}
+          onPostTweet={handlePostTweet}
+        />
+      )
+      }
       <div className={styles.tweetContent}>
         {/* Profile Image */}
         <div className={styles.profileImageContainer}>
@@ -67,7 +111,7 @@ const Tweet: React.FC<TweetProps> = ({
         </div>
 
         {/* Tweet Body */}
-        <div className={styles.tweetBody}>
+        <div className={styles.tweetBody} style={{ 'cursor': 'pointer' }} onClick={() => { router.push(`/postagem/${id}`) }}>
           {/* Tweet Header (name, username, timestamp) */}
           <div className={styles.tweetHeader}>
             <span className={styles.name}>{name}</span>
@@ -76,12 +120,22 @@ const Tweet: React.FC<TweetProps> = ({
           </div>
 
           {/* Tweet Text */}
-          <p className={styles.tweetText}>{content}</p>
+          <p className={styles.tweetText}> {content}</p>
 
           {/* Tweet Actions */}
           <div className={styles.tweetActions}>
             {/* Comment Button */}
-            <button className={styles.actionButton}>
+            <button className={styles.actionButton} onClick={(e) => {
+              e.stopPropagation()
+              setIsVisibleSubmitPost(!isVisibleSubmitPost); handleOpenPopup({
+                name: name,
+                username: username,
+                id_postagem: id,
+                content,
+                content_post: content,
+                profileImage: profileImage
+              })
+            }}>
               <svg
                 className={styles.actionIcon}
                 viewBox="0 0 24 24"
@@ -91,14 +145,18 @@ const Tweet: React.FC<TweetProps> = ({
                   <path d="M14.046 2.242l-4.148-.01h-.002c-4.374 0-7.8 3.427-7.8 7.802 0 4.098 3.186 7.206 7.465 7.37v3.828c0 .108.044.286.12.403.142.225.384.347.632.347.138 0 .277-.038.402-.118.264-.168 6.473-4.14 8.088-5.506 1.902-1.61 3.04-3.97 3.043-6.312v-.017c-.006-4.367-3.43-7.787-7.8-7.788zm3.787 12.972c-1.134.96-4.862 3.405-6.772 4.643V16.67c0-.414-.335-.75-.75-.75h-.396c-3.66 0-6.318-2.476-6.318-5.886 0-3.534 2.768-6.302 6.3-6.302l4.147.01h.002c3.532 0 6.3 2.766 6.302 6.296-.003 1.91-.942 3.844-2.514 5.176z"></path>
                 </g>
               </svg>
-              <span>{comments}</span>
+              <span>{+currentComments}</span>
             </button>
 
             {/* Like Button */}
             <button
               className={`${styles.actionButton} ${isLiked ? styles.liked : ''}`}
-              onClick={handleLike}
+              onClick={(e) => {
+                e.stopPropagation()
+                handleLike()
+              }}
             >
+
               <svg
                 className={styles.actionIcon}
                 viewBox="0 0 24 24"
@@ -116,7 +174,7 @@ const Tweet: React.FC<TweetProps> = ({
             </button>
 
             {/* Share Button */}
-            <button className={styles.actionButton}>
+            <button className={styles.actionButton} onClick={(e) => e.stopPropagation()}>
               <svg
                 className={styles.actionIcon}
                 viewBox="0 0 24 24"
@@ -131,7 +189,7 @@ const Tweet: React.FC<TweetProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

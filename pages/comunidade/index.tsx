@@ -1,3 +1,4 @@
+
 import Api from "@/api";
 import LoadingComponent from "@/components/LoadingComponent";
 import Sidebar from "@/components/Sidebar";
@@ -28,12 +29,16 @@ export default function Comunidade() {
         setIsPopupOpen(false);
     };
 
+    const handlePostTweet = (tweet: string) => {
+        console.log(tweet)
+    }
+
     const handleGetPosts = async () => {
         try {
             const response = await Api.selectAllPosts();
 
-            if (response.data.code === "POSTAGENS_FOUND") {
-                setPosts(response.data.postagens);
+            if (response.status === 200) {
+                setPosts(response.data.data);
             }
         } catch (error) {
             if (error instanceof AxiosError) {
@@ -59,13 +64,14 @@ export default function Comunidade() {
 
             <Sidebar />
             <CreatePostagem
+                onPostTweet={handlePostTweet}
                 isOpen={isPopupOpen}
                 onClose={handleClosePopup}
                 onReload={() => router.reload()}
             />
             {loading && (
                 <div className={styles.loadingContainer}>
-                    <LoadingComponent />
+                    <LoadingComponent isLoading={loading} />
                 </div>
 
             )}
@@ -73,6 +79,7 @@ export default function Comunidade() {
                 <div className={styles.comunidadePosts}>
                     {posts.map((post, index) => (
                         <UserPost
+                            alredyLiked={false}
                             key={0 || index}
                             id={post.id_postagem}
                             name={post.nome}
@@ -105,6 +112,7 @@ export default function Comunidade() {
         </>
 
     )
+
 
 
 }

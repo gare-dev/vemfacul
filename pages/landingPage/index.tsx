@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import { AxiosError } from "axios";
 import useAlert from "@/hooks/useAlert";
 import getAuth from "@/utils/getAuth";
+import LoadingComponent from "@/components/LoadingComponent";
 
 export default function LandingPage() {
     const router = useRouter()
@@ -81,12 +82,6 @@ export default function LandingPage() {
         getEvents()
     }, [])
 
-
-    useEffect(() => {
-        console.log("filtroEventos", filtroEventos)
-    }, [filtroEventos])
-
-
     function getFilter() {
         if (
             filtroEventos[0].tipoDeEvento.length === 0 &&
@@ -109,18 +104,8 @@ export default function LandingPage() {
         setEvents(retorno);
     }
 
-
-
-
     if (isLoading) {
-        return (
-            <div style={{
-                position: "fixed",
-                height: "100%",
-                width: "100%"
-            }}>
-            </div>
-        )
+        return <LoadingComponent isLoading={isLoading} />
     }
     const cardCursos = [
         {
