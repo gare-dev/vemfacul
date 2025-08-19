@@ -7,46 +7,49 @@ import DemoWrapper from "@/hooks/DemoWrapper"
 import useCalendarData from "@/hooks/useCalendarData"
 import usePersonalEvents from "@/hooks/usePersonalEvents"
 import styles from "@/styles/calendario.module.scss"
-import PopupType from "@/types/data"
 import { FiltrosType } from "@/types/filtrosType"
+import PopupType from "@/types/data"   // ✅ Usa o tipo centralizado
 import { useEffect, useState } from "react"
-
-
+import { FiAlertTriangle, FiCalendar, FiCheckCircle, FiEdit3, FiStar } from "react-icons/fi"
+import LoadingComponent from "@/components/LoadingComponent"
 
 export default function Calendario() {
-    const [isVisible, setIsVisible] = useState<boolean>(false)
-    const [isClose, setIsClose] = useState<boolean>(false)
-    const [hasOpened, setHasOpened] = useState<boolean>(false)
+    const [isVisible, setIsVisible] = useState(false)
+    const [isClose, setIsClose] = useState(false)
+    const [hasOpened, setHasOpened] = useState(false)
     const { calendarData } = useCalendarData()
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [popupVisible, setPopupVisible] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState(false)
+    const [popupVisible, setPopupVisible] = useState(false)
     const [events, setEvents] = useState<PopupType[]>([])
-    const [originalEvents, setOriginalEvents] = useState<PopupType[]>([])
+    const [userInfo, setUserInfo] = useState<string[]>([])
+    const [, setOriginalEvents] = useState<PopupType[]>([])
     const { setPersonalEventsData } = usePersonalEvents()
+    const [highlighted, setHighlighted] = useState<string | null>(null)
+    const [viewMode, setViewMode] = useState<'today' | 'week' | 'month' | "all">('today')
     const [filtroEventos, setFiltroEventos] = useState<FiltrosType[]>([{
         tipoDeEvento: [],
         tipodeCursinho: []
-    }]);
+    }])
 
-
+    // ✅ Carregar eventos
     const handleGetPersonalEvents = async () => {
-
         try {
             setIsLoading(true)
             const response = await Api.getPersonalEvents()
 
-            if (response.data.code === "EVENTS_FOUND") {
+            if (response.status === 200) {
+                console.log(response.data.data[0])
                 setEvents(response.data.data)
                 setOriginalEvents(response.data.data)
             }
         } catch (error) {
-            console.log(error)
+            console.error(error)
         } finally {
             setIsLoading(false)
         }
-
     }
 
+    // ✅ Remover evento
     const handleRemovePersonalEvents = async () => {
         if (!calendarData.id_pevent) return
 
@@ -57,137 +60,71 @@ export default function Calendario() {
                 handleGetPersonalEvents()
             }
         } catch (error) {
-            console.log(error)
+            console.error(error)
         }
-
     }
-    function getOverview(info: "totalEvents" | "next31Days" | "next7Days" | "getRedacao" | "getSimulado" | "getTodayEvents" | "getImportantEvents") {
 
+    // ✅ Contadores de visão geral
+    const getOverview = (info: "totalEvents" | "next31Days" | "next7Days" | "getRedacao" | "getSimulado" | "getTodayEvents" | "getImportantEvents") => {
         const overview = {
-            totalEvents: events.length,
-            next31Days: getNext31DaysEvents(),
-            next7Days: getNext7DaysEvents(),
-            getRedacao: getType("redacao"),
-            getSimulado: getType("simulado"),
-            getTodayEvents: getTodayEvents(),
-            getImportantEvents: getImportantEvents()
+            totalEvents: events,
+            next31Days: events.filter(e => isWithinDays(e, 31)),
+            next7Days: events.filter(e => isWithinDays(e, 7)),
+            getRedacao: events.filter(e => e.type === "redacao"),
+            getSimulado: events.filter(e => e.type === "simulado"),
+            getTodayEvents: events.filter(e => isToday(e)),
+            getImportantEvents: events.filter(e => e.isimportant)
         }
-
-        return overview[info as keyof typeof overview]
+        return overview[info]
     }
 
-    function getFilter() {
-        const filtro = filtroEventos[0];
-
-        const nenhumFiltroMarcado =
-            filtro.tipoDeEvento.length === 0 &&
-            filtro.tipodeCursinho.length === 0 &&
-            !filtro.importante;
-
-        if (nenhumFiltroMarcado) {
-            setPopupVisible(false);
-            return setEvents(originalEvents);
-        }
-
-        const retorno = originalEvents.filter((dado) => {
-            return filtroEventos.some((f) => {
-                const tipoOk = f.tipoDeEvento.length === 0 || f.tipoDeEvento.includes(dado.type);
-                const cursinhoOk = f.tipodeCursinho.length === 0 || f.tipodeCursinho.includes(dado.cursinho?.toLowerCase());
-                const importanteOk = !f.importante || dado.isimportant === true;
-
-                return tipoOk && cursinhoOk && importanteOk;
-            });
-        });
-
-        setPopupVisible(false);
-        setEvents(retorno);
-    }
-
-
-    function getNext31DaysEvents() {
-        const hoje = new Date();
-        const limite = new Date();
-        limite.setDate(hoje.getDate() + 31);
-
-        let contador = 0;
-
-        events.forEach((evento) => {
-
-            const dia = evento.day
-            const mes = evento.month
-            const ano = evento.year
-
-            const dataEvento = new Date(ano, mes, dia);
-
-            if (dataEvento >= hoje && dataEvento <= limite) {
-                contador++;
-            }
-        });
-
-        return contador;
-    }
-
-    function getNext7DaysEvents() {
-        const hoje = new Date();
-        const limite = new Date();
-        limite.setDate(hoje.getDate() + 7);
-
-        let contador = 0;
-
-        events.forEach((evento) => {
-
-            const dia = evento.day
-            const mes = evento.month
-            const ano = evento.year
-
-            const dataEvento = new Date(ano, mes, dia);
-
-            if (dataEvento >= hoje && dataEvento <= limite) {
-                contador++;
-            }
-        });
-
-        return contador;
-    }
-
-    function getType(type: string) {
-        let count = 0
-
-
-        events.forEach((evento) => {
-            if (evento.type === type) {
-                count++
-            }
-        })
-        return count
-    }
-
-    function getTodayEvents() {
+    // ✅ Helpers
+    const isToday = (event: PopupType) => {
         const today = new Date()
-        let count = 0
-
-        events.forEach((evento) => {
-
-            if (+evento.day === today.getDate() && +evento.month === today.getMonth() && +evento.year === today.getFullYear()) {
-                count++
-            }
-        })
-
-        return count
+        return (
+            +event.day === today.getDate() &&
+            +event.month === today.getMonth() &&
+            +event.year === today.getFullYear()
+        )
     }
 
+    const isWithinDays = (event: PopupType, days: number) => {
+        const hoje = new Date()
+        const limite = new Date()
+        limite.setDate(hoje.getDate() + days)
+        const dataEvento = new Date(event.year, event.month, event.day)
+        return dataEvento >= hoje && dataEvento <= limite
+    }
 
+    const getEventTypeIcon = (type: PopupType['type']) => {
+        switch (type) {
+            case 'essay':
+                return <FiEdit3 />
+            case 'meeting':
+                return <FiCalendar />
+            case 'reminder':
+                return <FiAlertTriangle />
+            default:
+                return <FiCheckCircle />
+        }
+    }
 
-    function getImportantEvents() {
-        let count = 0
+    const toggleImportant = (id: string) => {
+        setEvents(events.map(event =>
+            event.id_pevent === id ? { ...event, isimportant: !event.isimportant } : event
+        ))
+        setOriginalEvents(events.map(event =>
+            event.id_pevent === id ? { ...event, isimportant: !event.isimportant } : event
+        ))
+    }
 
-        events.forEach((evento) => {
-            if (evento.isimportant) {
-                count++
-            }
-        })
-
-        return count
+    const toggleComplete = (id: string) => {
+        setEvents(events.map(event =>
+            event.id_pevent === id ? { ...event, completed: !event.completed } : event
+        ))
+        setOriginalEvents(events.map(event =>
+            event.id_pevent === id ? { ...event, completed: !event.completed } : event
+        ))
     }
 
     useEffect(() => {
@@ -199,89 +136,105 @@ export default function Calendario() {
         setIsVisible(true)
     }, [calendarData])
 
-    if (isLoading) {
-        return (
-            <div style={{
-                position: "fixed",
-                height: "100%",
-                width: "100%",
-            }}>
-            </div>
-        )
-    }
+
+
     return (
         <>
+            <LoadingComponent isLoading={isLoading} />
             <PopupPersonalEvents onClose={() => setIsClose(!isClose)} isVisible={isClose} />
             <Popup
                 isVisible={isVisible}
                 setIsVisible={() => setIsVisible(false)}
                 canAdd={false}
-                canRemove={true}
-                canEdit={true}
+                canRemove
+                canEdit
                 removeFunction={handleRemovePersonalEvents}
-
             />
             <PopupFilter
                 setFiltroEventos={setFiltroEventos}
                 filtroEventos={filtroEventos}
                 isVisible={popupVisible}
-                callFilter={() => getFilter()}
+                callFilter={() => {/* TODO: implementar filtro */ }}
             />
-            <Sidebar />
+            <Sidebar setInfo={setUserInfo} userInfo={userInfo} />
 
-
-            <div className={`${styles.eventosCountDiv} pt-16`}>
-                <div className={styles.eventosBox}>
-                    <div>
-                        <p>{getOverview("totalEvents")}</p>
-                        <h1>EVENTOS REGISTRADOS</h1>
-                    </div>
-                    <div>
-                        <p>{getOverview("next31Days")}</p>
-                        <h1>EVENTOS NOS PRÓXIMOS 31 DIAS</h1>
-                    </div>
-                    <div>
-                        <p>{getOverview("next7Days")}</p>
-                        <h1>EVENTOS NOS PRÓXIMOS 7 DIAS</h1>
-                    </div>
-                    <div>
-                        <p>{getOverview("getTodayEvents")}</p>
-                        <h1>EVENTOS HOJE</h1>
-                    </div>
-                    <div>
-                        <p>{getOverview("getRedacao")}</p>
-                        <h1>REDAÇÕES MARCADAS</h1>
-                    </div>
-                    <div>
-                        <p>{getOverview("getSimulado")}</p>
-                        <h1>SIMULADOS MARCADOS</h1>
-                    </div>
-                    <div>
-                        <p>{getOverview("getImportantEvents")}</p>
-                        <h1>EVENTOS IMPORTANTES</h1>
+            <header className={styles.headerBlock}>
+                <div className={styles.headerContent}>
+                    <h1>Bem-Vindo de volta, {userInfo[0]}.</h1>
+                    <div className={styles.statsRow}>
+                        <div className={styles.statCard}><FiCalendar /> Hoje: {getOverview("getTodayEvents").length}</div>
+                        <div className={styles.statCard}><FiCalendar /> Semana: {getOverview("next7Days").length}</div>
+                        <div className={styles.statCard}><FiCalendar /> Mês: {getOverview("next31Days").length}</div>
+                        <div className={styles.statCard}><FiStar /> Importantes: {getOverview("getImportantEvents").length}</div>
+                        <div className={styles.statCard}><FiEdit3 /> Redações: {getOverview("getRedacao").length}</div>
+                        <div className={styles.statCard}><FiEdit3 /> Simulados: {getOverview("getSimulado").length}</div>
                     </div>
                 </div>
-            </div>
+            </header>
 
+            <main className={styles.mainContent}>
+                <div className={styles.viewControls}>
+                    {['all', 'today', 'week', 'month'].map(mode => (
+                        <button
+                            key={mode}
+                            className={`${styles.viewButton} ${viewMode === mode ? styles.active : ''}`}
+                            onClick={() => setViewMode(mode as typeof viewMode)}
+                        >
+                            {mode === 'today' ? 'Hoje' : mode === 'week' ? 'Próximos 7 dias' : mode === "all" ? "Todos" : 'Próximos 31 dias'}
+                        </button>
+                    ))}
+                </div>
 
-            <div>
-                <DemoWrapper
-                    isEditable
-                    eventos={events}
-                    popUpClick={() => setIsVisible(true)}
-                    popupFilterClick={() => setPopupVisible(true)}
-                    onDateClick={(day, month, year) => {
-                        setIsClose(true)
-                        setPersonalEventsData((prev) => ({
-                            ...prev,
-                            day: String(day),
-                            month: String(month),
-                            year: String(year),
-                        }))
-                    }}
-                />
+                <div className={styles.eventsList}>
+                    {(viewMode === 'today'
+                        ? getOverview("getTodayEvents")
+                        : viewMode === 'week'
+                            ? getOverview("next7Days")
+                            : viewMode === 'all'
+                                ? getOverview("totalEvents")
+                                : getOverview("next31Days")
+                    ).map(event => (
+                        <div
+                            key={event.id_pevent}
+                            className={`${styles.eventCard} ${event.isimportant ? styles.important : ''} ${highlighted === event.id_pevent ? styles.highlighted : ''} ${event.completed || (event.day < new Date().getDate() || event.month < new Date().getMonth()) ? styles.completed : ''}`}
+                            onMouseEnter={() => setHighlighted(event.id_pevent)}
+                            onMouseLeave={() => setHighlighted(null)}
+                        >
+                            <div className={styles.eventIcon}>
+                                {getEventTypeIcon(event.type)}
+                            </div>
+                            <div className={styles.eventDetails}>
+                                <h3>{event.title}</h3>
+                                <span className={styles.eventDate}>{`${event.day.toString().padStart(2, '0')}/${(+event.month + 1).toString().padStart(2, '0')}/${event.year}`}</span>
+                            </div>
+                            <div className={styles.eventActions}>
+                                <button
+                                    className={`${styles.actionButton} ${event.isimportant ? styles.active : ''
+                                        }`} onClick={() => toggleImportant(event.id_pevent)}><FiStar /></button>
+                                <button
+                                    className={`${styles.actionButton} ${event.completed ? styles.active : ''
+                                        }`} onClick={() => toggleComplete(event.id_pevent)}><FiCheckCircle /></button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </main>
 
-            </div>
+            <DemoWrapper
+                isEditable
+                eventos={events}
+                popUpClick={() => setIsVisible(true)}
+                popupFilterClick={() => setPopupVisible(true)}
+                onDateClick={(day, month, year) => {
+                    setIsClose(true)
+                    setPersonalEventsData(prev => ({
+                        ...prev,
+                        day: String(day),
+                        month: String(month),
+                        year: String(year),
+                    }))
+                }}
+            />
         </>
     )
 }

@@ -48,7 +48,7 @@ export const CourseApprovalCard = ({
 
             <div className={styles.actionButtons}>
                 <button
-                    onClick={() => onApprove(course.id)}
+                    onClick={() => onApprove(course.id_cursinho)}
                     className={`${styles.btn} ${styles.approve}`}
                     aria-label="Approve course"
                 >
@@ -56,7 +56,7 @@ export const CourseApprovalCard = ({
                     <span>Aprovar</span>
                 </button>
                 <button
-                    onClick={() => onReject(course.id)}
+                    onClick={() => onReject(course.id_cursinho)}
                     className={`${styles.btn} ${styles.reject}`}
                     aria-label="Reject course"
                 >
@@ -65,7 +65,7 @@ export const CourseApprovalCard = ({
                 </button>
 
                 <button
-                    onClick={() => onDetails(course.id)}
+                    onClick={() => onDetails(course.id_cursinho)}
                     className={`${styles.btn} ${styles.details}`}
                     aria-label="View details"
                 >

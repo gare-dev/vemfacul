@@ -70,7 +70,7 @@ export default function EditProfilePopup(props: Props) {
             <div className={styles.editProfilePopup} onClick={props.closePopup}>
                 {loading && (
                     <div style={{ position: "fixed", height: "100%", width: "100%", top: "50%", left: "50%", transform: "translate(-50%, -50%)", zIndex: 999999999999, backgroundColor: "rgba(0, 0, 0, 0.4)" }}>
-                        <LoadingComponent />
+                        <LoadingComponent isLoading={loading} />
                     </div>
                 )}
                 <div className={styles.boxDiv} onClick={(e) => e.stopPropagation()}>

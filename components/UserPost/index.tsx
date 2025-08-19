@@ -82,7 +82,6 @@ const Tweet: React.FC<TweetProps> = ({
   };
   useEffect(() => {
     if (typeof id !== "string" && typeof id !== "number") {
-      console.log("que id é esse fi", id)
       liked();
     }
   }, [])
@@ -112,7 +111,7 @@ const Tweet: React.FC<TweetProps> = ({
         </div>
 
         {/* Tweet Body */}
-        <div className={styles.tweetBody} style={{ 'cursor': 'pointer' }} onClick={() => { router.replace(`/postagem/${id}`) }}>
+        <div className={styles.tweetBody} style={{ 'cursor': 'pointer' }} onClick={() => { router.push(`/postagem/${id}`) }}>
           {/* Tweet Header (name, username, timestamp) */}
           <div className={styles.tweetHeader}>
             <span className={styles.name}>{name}</span>

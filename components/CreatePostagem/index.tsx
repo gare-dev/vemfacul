@@ -79,7 +79,7 @@ const TweetPopup: React.FC<TweetPopupProps> = ({ isOpen, coment, postagemID_pai,
                 setError('');
                 const response = await Api.createComentario(postagemID_pai, tweetText);
                 console.log('api')
-                if (response.data.code === "COMENT_SUCESS") {
+                if (response.status === 201) {
                     onPostTweet(tweetText);
                     setTweetText('');
                     onClose();
