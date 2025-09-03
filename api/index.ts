@@ -282,6 +282,11 @@ class _Api {
       content
     });
   }
+
+  public async tokenTeste() {
+    return await this._instance.get('/token/teste');
+  }
+
 }
 
 const Api = new _Api(process.env.NEXT_PUBLIC_API_URL ?? "");
