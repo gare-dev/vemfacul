@@ -43,7 +43,7 @@ const TweetPopup: React.FC<TweetPopupProps> = ({ isOpen, coment, postagemID_pai,
                 setError('');
                 const response = await Api.createPostagem(tweetText);
 
-                if (response.data.code === "POSTAGEM_SUCESS") {
+                if (response.status === 201) {
                     setTweetText('');
                     onClose();
                     onReload();

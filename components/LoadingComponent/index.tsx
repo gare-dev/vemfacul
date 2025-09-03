@@ -24,9 +24,7 @@ export default function LoadingComponent(props: props) {
 
     return (
         <div className={styles.loading}>
-            <div style={{ zIndex: 9999999999999 }} className="flex items-center justify-center h-screen relative">
-
-
+            <div style={{ zIndex: 9999999999999 }} className="flex items-center justify-center h-screen ">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     height="200px"
