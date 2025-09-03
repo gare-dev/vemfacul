@@ -14,7 +14,7 @@ type Props = {
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
     try {
-        const cookies = context.req.headers.cookie
+        const cookies = context.req.cookies.token
         console.log(context.req.headers)
         Api.setCookie(cookies || "")
         console.log(cookies)
