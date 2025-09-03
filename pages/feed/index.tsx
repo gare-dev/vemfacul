@@ -6,7 +6,7 @@ import Sidebar from "@/components/Sidebar";
 import styles from "@/styles/feed.module.scss";
 import { Course } from "@/types/coursetype";
 import { GetServerSideProps } from "next";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type Props = {
     cursinho: Course[] | null;
@@ -34,7 +34,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
 }
 
 export default function Feed({ cursinho }: Props) {
-    const [cursinhos, setCursinhos] = useState<Course[]>(cursinho || []);
+    const [cursinhos,] = useState<Course[]>(cursinho || []);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     // useEffect(() => {
