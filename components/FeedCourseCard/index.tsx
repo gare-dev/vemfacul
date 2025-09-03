@@ -3,8 +3,6 @@ import { Course } from '@/types/coursetype';
 import styles from "@/styles/feedcourse.module.scss";
 import { MdLocationOn, MdMoneyOffCsred, MdOutlineAttachMoney, MdStar, MdStarBorder, MdStarHalf } from 'react-icons/md';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
-import LoadingComponent from '../LoadingComponent';
 
 interface CourseApprovalCardProps {
     course: Course;
