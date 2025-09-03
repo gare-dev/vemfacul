@@ -6,6 +6,7 @@ import Sidebar from "@/components/Sidebar";
 import styles from "@/styles/feed.module.scss";
 import { Course } from "@/types/coursetype";
 import { GetServerSideProps } from "next";
+import { cookies } from "next/headers";
 import { useState } from "react";
 
 type Props = {
@@ -14,10 +15,9 @@ type Props = {
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
     try {
-        // const cookies = context
-        console.log(context)
-        // Api.setCookie(cookies || "")
-        // console.log(cookies)
+        const cookies = context.req.headers.cookie
+        console.log(cookies)
+        Api.setCookie(cookies || "")
         const cursinho = await Api.getCursinho()
 
         return {
