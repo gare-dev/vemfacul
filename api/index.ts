@@ -43,6 +43,8 @@ class _Api {
     // });
   }
   public setCookie(cookie: string) {
+    console.log(this._instance)
+    console.log(this._instance.defaults)
     this._instance.defaults.headers.common['Cookie'] = cookie;
   }
 
