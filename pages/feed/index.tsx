@@ -15,8 +15,8 @@ type Props = {
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
     try {
         const cookies = context.req.headers.cookie
-        Api.setCookie(cookies || "")
         console.log(cookies)
+        Api.setCookie(cookies || "")
         const cursinho = await Api.getCursinho()
 
         return {
