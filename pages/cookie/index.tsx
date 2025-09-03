@@ -2,7 +2,7 @@ import Api from "@/api";
 import { useEffect } from "react";
 
 
-export default function teste() {
+export default function Teste() {
 
     useEffect(() => {
         (async () => {
@@ -11,4 +11,9 @@ export default function teste() {
         })();
     }, [])
 
+    return (
+        <>
+            <h2>teste</h2>
+        </>
+    )
 }
