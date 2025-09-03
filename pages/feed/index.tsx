@@ -6,7 +6,6 @@ import Sidebar from "@/components/Sidebar";
 import styles from "@/styles/feed.module.scss";
 import { Course } from "@/types/coursetype";
 import { GetServerSideProps } from "next";
-import { cookies } from "next/headers";
 import { useState } from "react";
 
 type Props = {
