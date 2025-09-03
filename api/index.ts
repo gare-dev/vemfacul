@@ -25,19 +25,25 @@ class _Api {
       return { ...response, data: handleDates(response.data) };
     });
 
-    this._instance.interceptors.request.use((config) => {
-      if (getAuth()) {
-        if (config.headers) {
-          config.headers['Authorization'] = `Bearer ${getAuth()}`;
-        }
-      }
-      if (getAdminToken()) {
-        if (config.headers) {
-          config.headers['Admin-Token'] = getAdminToken();
-        }
-      }
-      return config;
-    });
+
+
+
+    // this._instance.interceptors.request.use((config) => {
+    //   // if (getAuth()) {
+    //   //   if (config.headers) {
+    //   //     config.headers['Authorization'] = `Bearer ${getAuth()}`;
+    //   //   }
+    //   // }
+    //   // if (getAdminToken()) {
+    //   //   if (config.headers) {
+    //   //     config.headers['Admin-Token'] = getAdminToken();
+    //   //   }
+    //   // }
+    //   return config;
+    // });
+  }
+  public setCookie(cookie: string) {
+    this._instance.defaults.headers.common['Cookie'] = cookie;
   }
 
   public async registerAccount(email: string, password: string) {
