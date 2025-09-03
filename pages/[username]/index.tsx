@@ -128,7 +128,6 @@ export default function UserProfile() {
 
             if (response.status === 200) {
                 setUserProfile(response.data.data[0]);
-                setLoading(false);
             }
         } catch (error) {
             console.log("ASd")
@@ -156,9 +155,14 @@ export default function UserProfile() {
     useEffect(() => {
         if (username?.toString()) handleGetUserProfile()
     }, [username])
+
+    useEffect(() => {
+        console.log(loading)
+    }, [loading])
+
     return (
         <>
-            {loading && <LoadingComponent isLoading={loading} />}
+            {!loading && <LoadingComponent isLoading={loading} />}
             {!loading && <Sidebar isLoading={loading} setIsLoading={setLoading} />}
             {isVisible && user === username &&
                 <EditProfilePopup
