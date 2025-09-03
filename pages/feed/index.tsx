@@ -48,9 +48,11 @@ export default function Feed() {
                 <div className={styles.feedContainer}>
                     {cursinhos.map((item, index) => (
                         <FeedCourseCard
+
                             key={index}
                             onFollow={() => console.log(`Seguindo o curso: ${item.nome}`)}
                             course={item}
+                            setLoading={(loading) => setIsLoading(loading)}
                         />
                     ))}
                     {cursinhos.length === 0 && (

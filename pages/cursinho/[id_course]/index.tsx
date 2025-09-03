@@ -137,15 +137,19 @@ export default function CursinhoPage({ id_course }: Props) {
 
             try {
                 const response = await Api.getCursinhoById(id_course);
-                console.log(response.data.data)
                 setCursinho(response.data.data);
-                setLoading(false)
             } catch (error) {
                 console.error("Error fetching cursinho data:", error);
             }
         })()
 
     }, [])
+
+    useEffect(() => {
+        setTimeout(() => {
+            setLoading(false);
+        }, 1000);
+    }, [cursinho])
 
 
     return (

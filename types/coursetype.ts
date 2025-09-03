@@ -9,5 +9,8 @@ export interface Course {
     logo: string
     media: string
     total_avaliacoes: string
+    representante_legal: string
+    email_contato: string
+    telefone: string
 
 }
