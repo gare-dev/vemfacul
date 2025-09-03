@@ -62,7 +62,7 @@ export default function Comunidade() {
     return (
         <>
 
-            <Sidebar />
+            <Sidebar isLoading={loading} setIsLoading={setLoading} />
             <CreatePostagem
                 onPostTweet={handlePostTweet}
                 isOpen={isPopupOpen}

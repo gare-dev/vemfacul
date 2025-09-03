@@ -37,6 +37,7 @@ export default function Calendario() {
             setIsLoading(true)
             const response = await Api.getPersonalEvents()
 
+
             if (response.status === 200) {
                 console.log(response.data.data[0])
                 setEvents(response.data.data)
@@ -156,7 +157,7 @@ export default function Calendario() {
                 isVisible={popupVisible}
                 callFilter={() => {/* TODO: implementar filtro */ }}
             />
-            <Sidebar setInfo={setUserInfo} userInfo={userInfo} />
+            <Sidebar setInfo={setUserInfo} userInfo={userInfo} isLoading={isLoading} setIsLoading={setIsLoading} />
 
             <header className={styles.headerBlock}>
                 <div className={styles.headerContent}>

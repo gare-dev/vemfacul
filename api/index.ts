@@ -38,9 +38,7 @@ class _Api {
       }
       return config;
     });
-
   }
-
 
   public async registerAccount(email: string, password: string) {
 
@@ -48,7 +46,6 @@ class _Api {
       email,
       password,
     });
-
   }
 
   public async confirmAccount(token: string) {
@@ -68,7 +65,6 @@ class _Api {
       email,
       password,
     });
-
   }
 
   public async createAccount(formData: any) {
@@ -233,7 +229,7 @@ class _Api {
   }
 
   public async unLinkePostagem(id_postagem: number | string) {
-    return await this._instance.post('/user/post/unlike', { id_postagem });
+    return await this._instance.patch('/user/post/unlike', { id_postagem });
   }
 
   public async getLikesCount(id_postagem: number | string) {
@@ -270,9 +266,25 @@ class _Api {
   public async approveCursinho(id: string) {
     return await this._instance.patch(`/admin/course/${id}/approve`)
   }
+
+  public async getCursinho() {
+    return await this._instance.get('/courses')
+  }
+
+  public async getCursinhoById(id_course: string) {
+    return await this._instance.get(`/course/${id_course}`);
+  }
+
+  public async insertReview(id_cursinho: string, stars: number, content: string) {
+    return await this._instance.post("/course/review", {
+      id_cursinho,
+      stars,
+      content
+    });
+  }
 }
 
-const Api = new _Api(process.env.NEXT_PUBLIC_API_URL ?? ""); // https://invest-api-rose.vercel.app/
+const Api = new _Api(process.env.NEXT_PUBLIC_API_URL ?? "");
 
 
 export default Api;

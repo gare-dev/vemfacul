@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 
 export default function Eventos() {
     const [events, setEvents] = useState<PopupType[]>([])
-    const [, setIsLoading] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const [originalEvents, setOriginalEvents] = useState<PopupType[]>([])
     const { showAlert } = useAlert()
     const [isVisible, setIsVisible] = useState<boolean>(false)
@@ -30,7 +30,7 @@ export default function Eventos() {
             setIsLoading(true)
             const response = await Api.getEvents()
 
-            if (response.data.code === "EVENTS_SUCCESSFULLY") {
+            if (response.status === 200) {
                 setEvents(response.data.data)
                 setOriginalEvents(response.data.data)
             }
@@ -91,7 +91,7 @@ export default function Eventos() {
                 canRemove={false}
                 canEdit={false}
             />
-            <Sidebar />
+            <Sidebar isLoading={isLoading} setIsLoading={setIsLoading} />
 
             <div>
                 <DemoWrapper

@@ -98,7 +98,7 @@ export default function SinlgePostagem() {
     return (
         <>
             {loading && <LoadingComponent isLoading={loading} />}
-            {!loading && <Sidebar setInfo={setUserInfo} userInfo={userInfo} />}
+            {!loading && <Sidebar setInfo={setUserInfo} userInfo={userInfo} isLoading={loading} setIsLoading={setLoading} />}
             <div className={styles.btnBack}>
                 <div className={styles.btt}>
                     <button onClick={() => router.back()}>

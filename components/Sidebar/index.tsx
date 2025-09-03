@@ -2,6 +2,7 @@ import Api from "@/api"
 import styles from "@/styles/sidebar.module.scss"
 import AuthDataType from "@/types/authDataType"
 import getAuth from "@/utils/getAuth"
+import { AxiosError } from "axios"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { FaCalendar, FaCalendarAlt, FaRegUserCircle } from "react-icons/fa"
@@ -13,6 +14,8 @@ import { RiPagesLine } from "react-icons/ri"
 interface props {
     setInfo?: React.Dispatch<React.SetStateAction<string[]>>
     userInfo?: string[]
+    isLoading: boolean
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default function Sidebar(props: props) {
@@ -31,7 +34,7 @@ export default function Sidebar(props: props) {
         { icon: <FaRegUserCircle />, name: "Perfil", path: `/${authData?.username}` },
     ]
 
-    const activeIndex = navItems.findIndex(item => item.path === router.pathname) == -1 ? 7 : navItems.findIndex(item => item.path === router.pathname)
+    const activeIndex = navItems.findIndex(item => item.path === router.pathname) == -2 ? 7 : navItems.findIndex(item => item.path === router.pathname)
 
     function handleSignout() {
         if (getAuth()) {
@@ -45,11 +48,14 @@ export default function Sidebar(props: props) {
     }
 
     useEffect(() => {
-        const handleGetProfileIfo = async () => {
+        (async () => {
             if (getAuth()) {
+                props.setIsLoading(true)
                 try {
                     const response = await Api.getProfileInfo()
                     if (response.data.code === "PROFILE_INFO") {
+
+                        props.setIsLoading(false)
                         props.setInfo?.([response.data.data.nome, response.data.data.foto, response.data.data.username])
                         return setAuthData({
                             name: response.data.data.nome,
@@ -58,12 +64,19 @@ export default function Sidebar(props: props) {
                         })
                     }
                 } catch (error) {
-                    console.error("Error fetching profile info:", error);
+                    if (error instanceof AxiosError) {
+                        if (error.response?.data.code === "INVALID_TOKEN") {
+                            localStorage.removeItem('auth');
+                            router.push('/')
+                            props.setIsLoading(false)
+
+                        }
+                    }
                 }
             }
+
             router.push('/')
-        }
-        handleGetProfileIfo()
+        })()
     }, [])
 
     return (

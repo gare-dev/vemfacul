@@ -159,7 +159,7 @@ export default function UserProfile() {
     return (
         <>
             {loading && <LoadingComponent isLoading={loading} />}
-            {!loading && <Sidebar />}
+            {!loading && <Sidebar isLoading={loading} setIsLoading={setLoading} />}
             {isVisible && user === username &&
                 <EditProfilePopup
                     closePopup={() => setIsVisible(false)}

@@ -17,7 +17,7 @@ interface props {
 export default function DemoWrapper(props: props) {
 
   return (
-    <div className="relative flex h-screen max-h-screen w-full flex-col gap-4 px-4 pt-4 items-center justify-center">
+    <div className="relative flex h-screen max-h-screen w-full flex-col gap-4 px-4 pt-4 items-center justify-center pb-10 mb-10">
       <div className="relative h-full overflow-auto">
         <ContinuousCalendar isEditable={props.isEditable} onClick={props.onDateClick} eventos={props.eventos} popUpClick={props.popUpClick} popupFilterClick={props.popupFilterClick} />
       </div>
