@@ -5,23 +5,49 @@ import FilterBar from "@/components/SearchHeader";
 import Sidebar from "@/components/Sidebar";
 import styles from "@/styles/feed.module.scss";
 import { Course } from "@/types/coursetype";
+import { GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
 
-export default function Feed() {
-    const [cursinhos, setCursinhos] = useState<Course[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
+type Props = {
+    cursinho: Course[] | null;
+};
 
-    useEffect(() => {
-        (async () => {
-            setIsLoading(true)
-            const response = await Api.getCursinho()
+export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
+    try {
+        const cookies = context.req.headers.cookie
+        Api.setCookie(cookies || "")
+        const cursinho = await Api.getCursinho()
 
-            if (response.status === 200) {
-                setCursinhos(response.data.data);
-                setIsLoading(false);
+        return {
+            props: {
+                cursinho: cursinho.status === 200 ? cursinho.data.data : null
             }
-        })()
-    }, [])
+        }
+    } catch (error) {
+        console.error("Error fetching cursinho:", error);
+        return {
+            props: {
+                cursinho: null
+            }
+        }
+    }
+}
+
+export default function Feed({ cursinho }: Props) {
+    const [cursinhos, setCursinhos] = useState<Course[]>(cursinho || []);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    // useEffect(() => {
+    //     (async () => {
+    //         setIsLoading(true)
+    //         const response = await Api.getCursinho()
+
+    //         if (response.status === 200) {
+    //             setCursinhos(response.data.data);
+    //             setIsLoading(false);
+    //         }
+    //     })()
+    // }, [])
 
 
     // function handleFilterChange(filters: { location: string; state: string; city: string; query: string }) {
