@@ -9,11 +9,12 @@ import { UserProfileType } from "@/types/userProfileType";
 import EditProfilePopup from "@/components/EditProfilePopup";
 import CreatePostagem from "@/components/CreatePostagem";
 import UserPost from "@/components/UserPost";
-import getAuth from "@/utils/getAuth";
-import { AxiosError } from "axios";
 import { FaPen } from "react-icons/fa";
 import Head from "next/head";
 import monthsMap from "@/utils/getMonth";
+import { GetServerSideProps } from "next";
+import { RESERVED_ROUTES } from "@/middleware";
+import AuthDataType from "@/types/authDataType";
 
 type Postagem = {
     id_postagem: string | number;
@@ -25,18 +26,62 @@ type Postagem = {
     total_likes: number;
 };
 
-export default function UserProfile() {
+type Props = {
+    userProfileProp: UserProfileType;
+    postagensProp: Postagem[];
+    authData?: AuthDataType | null | undefined;
+}
+
+export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
+    if (RESERVED_ROUTES.includes(context.params?.username as string) || context.params?.username === "null") {
+        return {
+            notFound: true
+        }
+    }
+
+    try {
+        const cookie = context.req.headers.cookie
+        Api.setCookie(cookie || "")
+        const [userProfile, postagens, authData] = await Promise.all([
+            Api.getUserProfile(context.params?.username as string),
+            Api.getPostagem(context.params?.username as string),
+            Api.getProfileInfo()
+        ]);
+
+        const post = postagens.data.data.map((post: Postagem) => ({
+            ...post,
+            created_at: post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).toLocaleDateString()) : "Data não informada"
+        }));
+
+        return {
+            props: {
+                userProfileProp: userProfile.data.data[0],
+                postagensProp: post,
+                authData: authData.data.code === "PROFILE_INFO" ? authData.data.data : null
+            }
+        }
+    } catch (error) {
+        console.error("Error fetching user profile or postagens:", error);
+        return {
+            props: {
+                userProfileProp: null,
+                postagensProp: [],
+                authData: null
+            }
+        }
+    }
+}
+
+export default function UserProfile({ userProfileProp, postagensProp, authData }: Props) {
     const router = useRouter()
     const { username } = router.query;
     const [loading, setLoading] = useState(true);
     const [isVisible, setIsVisible] = useState(false);
     const [user, setUser] = useState<string | null>(null);
-    const [postVisible, setPostVisibel] = useState(false)
     const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
-    const [postagens, setPostagens] = useState<Postagem[]>([]);
+    const [postagens,] = useState<Postagem[]>(postagensProp || []);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-
-    const [userProfile, setUserProfile] = useState<UserProfileType>({
+    const [userProfile,] = useState<UserProfileType>(userProfileProp || {
         nome: "",
         username: "",
         foto: "",
@@ -48,8 +93,6 @@ export default function UserProfile() {
         vestibulares: [],
         materias_lecionadas: [],
         nivel: "",
-
-
     });
 
     const typeEmojiMap: Record<string, string> = {
@@ -70,100 +113,92 @@ export default function UserProfile() {
         console.log(tweet)
     }
 
-    const handleGetPostagens = async () => {
-        if (typeof username !== "string") {
-            return;
-        } else {
-            try {
-                setLoading(true)
-                const promise = await Api.getPostagem(username);
+    // const handleGetPostagens = async () => {
+    //     if (typeof username !== "string") {
+    //         return;
+    //     } else {
+    //         try {
+    //             setLoading(true)
+    //             const promise = await Api.getPostagem(username);
 
-                if (promise.status === 200) {
-                    setPostagens(promise.data.data)
-                    setPostVisibel(true)
-                } else if (promise.data.code === "POSTAGEM_NOT_FOUND") {
-                    setPostagens([]);
-                    setPostVisibel(false);
-                } else {
-                    console.log("nao ta aparecendo nada")
+    //             if (promise.status === 200) {
+    //                 setPostagens(promise.data.data)
+    //                 setPostVisibel(true)
+    //             } else if (promise.data.code === "POSTAGEM_NOT_FOUND") {
+    //                 setPostagens([]);
+    //                 setPostVisibel(false);
+    //             } else {
+    //                 console.log("nao ta aparecendo nada")
+    //             }
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    //     }
+    // }
+
+    // useEffect(() => {
+    //     if (typeof username === "string") {
+    //         handleGetPostagens()
+    //     }
+    // }, [username])
+
+    useEffect(() => {
+
+        (async () => {
+            try {
+                const response = await Api.validateProfile()
+
+                if (response.data.code === "PROFILE_VALIDATED") {
+                    setUser(response.data.data.username);
                 }
             } catch (error) {
-                console.log(error)
+                console.log(error);
             }
-        }
-    }
-
-    useEffect(() => {
-        if (typeof username === "string") {
-            handleGetPostagens()
-        }
-    }, [username])
-
-    useEffect(() => {
-
-        const handleValidateProfile = async () => {
-            if (getAuth()) {
-                try {
-                    const response = await Api.validateProfile()
-
-                    if (response.data.code === "PROFILE_VALIDATED") {
-                        setUser(response.data.data.username);
-                    }
-                } catch (error) {
-                    console.log(error);
-                }
-
-            }
-        }
-        handleValidateProfile()
+        })()
     }, []);
 
 
-    const handleGetUserProfile = async () => {
-        if (!username?.toString()) return router.push('/');
+    // const handleGetUserProfile = async () => {
+    //     if (!username?.toString()) return router.push('/');
 
-        try {
-            setLoading(true);
-            const response = await Api.getUserProfile(username.toString());
+    //     try {
+    //         setLoading(true);
+    //         const response = await Api.getUserProfile(username.toString());
 
-            if (response.status === 200) {
-                setUserProfile(response.data.data[0]);
-            }
-        } catch (error) {
-            console.log("ASd")
-            if (error instanceof AxiosError && error.response?.data.code === "USER_NOT_FOUND") {
-                console.log("Usuário não encontrado");
-                setUserProfile({
-                    nome: "",
-                    username: username?.toString() || "",
-                    foto: "",
-                    header: "",
-                    descricao: "Essa conta não existe.",
-                    followers_number: "0",
-                    following_number: "0",
-                    posts_number: "0",
-                    vestibulares: [],
-                    materias_lecionadas: [],
-                    nivel: "",
-                })
-            }
-        } finally {
-            setLoading(false);
-        }
-    }
+    //         if (response.status === 200) {
+    //             setUserProfile(response.data.data[0]);
+    //         }
+    //     } catch (error) {
+    //         console.log("ASd")
+    //         if (error instanceof AxiosError && error.response?.data.code === "USER_NOT_FOUND") {
+    //             console.log("Usuário não encontrado");
+    //             setUserProfile({
+    //                 nome: "",
+    //                 username: username?.toString() || "",
+    //                 foto: "",
+    //                 header: "",
+    //                 descricao: "Essa conta não existe.",
+    //                 followers_number: "0",
+    //                 following_number: "0",
+    //                 posts_number: "0",
+    //                 vestibulares: [],
+    //                 materias_lecionadas: [],
+    //                 nivel: "",
+    //             })
+    //         }
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // }
 
-    useEffect(() => {
-        if (username?.toString()) handleGetUserProfile()
-    }, [username])
-
-    useEffect(() => {
-        console.log(loading)
-    }, [loading])
+    // useEffect(() => {
+    //     if (username?.toString()) handleGetUserProfile()
+    // }, [username])
 
     return (
         <>
             {!loading && <LoadingComponent isLoading={loading} />}
-            {!loading && <Sidebar isLoading={loading} setIsLoading={setLoading} />}
+            {<Sidebar isLoading={loading} setIsLoading={setLoading} authData={authData} />}
             {isVisible && user === username &&
                 <EditProfilePopup
                     closePopup={() => setIsVisible(false)}
@@ -247,7 +282,7 @@ export default function UserProfile() {
                     </div>
                 </div>
                 <div className={styles.containerProfilePost}>
-                    {postVisible && postagens.length > 0 && postagens.map((post, idx) => (
+                    {postagensProp.length > 0 && postagensProp.map((post, idx) => (
                         <UserPost
                             key={0 || idx}
                             id={post.id_postagem}

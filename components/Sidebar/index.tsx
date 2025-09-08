@@ -1,8 +1,6 @@
-import Api from "@/api"
 import styles from "@/styles/sidebar.module.scss"
 import AuthDataType from "@/types/authDataType"
 import getAuth from "@/utils/getAuth"
-import { AxiosError } from "axios"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { FaCalendar, FaCalendarAlt, FaRegUserCircle } from "react-icons/fa"
@@ -16,11 +14,64 @@ interface props {
     userInfo?: string[]
     isLoading: boolean
     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
+    authData: AuthDataType | null | undefined
 }
+
+
+// export const getServerSideProps: GetServerSideProps<PropsAuthData> = async (ctx) => {
+//     const cookie = ctx.req.headers.cookie
+//     Api.setCookie(cookie || "")
+
+//     console.log('aqui')
+
+
+//     try {
+//         const response = await Api.getProfileInfo()
+//         if (response.data.code === "PROFILE_INFO") {
+
+//             return {
+//                 props: {
+//                     authData: {
+//                         name: response.data.data.nome,
+//                         image: response.data.data.foto,
+//                         username: response.data.data.username,
+//                     }
+//                 }
+//             }
+//         }
+//         return {
+//             props: {
+//                 authData: null
+//             }
+//         }
+//     } catch (error) {
+//         if (error instanceof AxiosError) {
+//             if (error.response?.data.code === "INVALID_TOKEN") {
+
+//                 return {
+//                     props: {
+//                         authData: null
+//                     }
+//                 }
+//             }
+//             return {
+//                 props: {
+//                     authData: null
+//                 }
+//             }
+//         }
+//         return {
+//             props: {
+//                 authData: null
+//             }
+//         }
+//     }
+
+// }
 
 export default function Sidebar(props: props) {
     const router = useRouter()
-    const [authData, setAuthData] = useState<AuthDataType>()
+    const [authData,] = useState<AuthDataType | null | undefined>(props.authData)
     const [profileOptionsVisible, setProfileOptionsVisible] = useState<boolean>(false)
 
     const navItems = [
@@ -36,44 +87,23 @@ export default function Sidebar(props: props) {
 
     const activeIndex = navItems.findIndex(item => item.path === router.pathname) == -1 ? 7 : navItems.findIndex(item => item.path === router.pathname)
 
-    function handleSignout() {
-        if (getAuth()) {
-            localStorage.removeItem('auth');
-            if (router.pathname === '/') {
-                router.reload();
-            } else {
-                router.push('/');
-            }
+    async function handleSignout() {
+        if (await getAuth()) {
+            router.push("/")
         }
     }
 
     useEffect(() => {
-        (async () => {
-            if (getAuth()) {
-                try {
-                    const response = await Api.getProfileInfo()
-                    if (response.data.code === "PROFILE_INFO") {
+        console.log(props.authData)
+        if (props.authData !== undefined && props.authData !== null) {
+            return props.setInfo?.([props.authData.nome, props.authData.foto, props.authData.username])
+        }
+        alert("Você precisa estar logado para acessar essa página.")
+        router.push("/")
 
-                        props.setInfo?.([response.data.data.nome, response.data.data.foto, response.data.data.username])
-                        return setAuthData({
-                            name: response.data.data.nome,
-                            image: response.data.data.foto,
-                            username: response.data.data.username,
-                        })
-                    }
-                } catch (error) {
-                    if (error instanceof AxiosError) {
-                        if (error.response?.data.code === "INVALID_TOKEN") {
-                            localStorage.removeItem('auth');
-                            router.push('/')
-                        }
-                    }
-                }
-            }
+    }, [props.authData])
 
-            router.push('/')
-        })()
-    }, [])
+
 
     return (
         <section className={styles.page}>
@@ -101,9 +131,9 @@ export default function Sidebar(props: props) {
                         ))}
                         <div style={{ marginTop: "auto" }}>
                             <button onClick={() => setProfileOptionsVisible(true)} type="button">
-                                <img className={styles.imageProfile} style={{ borderRadius: "50%", height: "40px", width: "40px", objectFit: "cover" }} src={authData?.image} alt="Logo" />
+                                <img className={styles.imageProfile} style={{ borderRadius: "50%", height: "40px", width: "40px", objectFit: "cover" }} src={authData?.foto} alt="Logo" />
                                 <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "2px" }}>
-                                    <p className={styles.text}>{authData?.name}</p>
+                                    <p className={styles.text}>{authData?.nome}</p>
                                     <p className={styles.textUser}>@{authData?.username}</p>
                                 </div>
 
@@ -118,7 +148,7 @@ export default function Sidebar(props: props) {
                                                         <p><IoMdSettings />Configurações</p>
                                                     </div>
                                                     <div onClick={handleSignout}>
-                                                        <p><MdExitToApp color="black" />Sair de {authData?.name}</p>
+                                                        <p><MdExitToApp color="black" />Sair de {authData?.nome}</p>
                                                     </div>
                                                 </div>
                                             </div>

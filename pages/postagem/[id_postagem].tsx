@@ -8,6 +8,8 @@ import Tweet from '@/components/UserPost'
 import monthsMap from "@/utils/getMonth";
 import MainTweet from '@/components/MainTweet';
 import { FaArrowLeft } from 'react-icons/fa6';
+import AuthDataType from '@/types/authDataType';
+import { GetServerSideProps } from 'next';
 
 
 export type Postagem = {
@@ -22,7 +24,34 @@ export type Postagem = {
     alredyliked: number | boolean;
     total_likes: number;
 };
-export default function SinlgePostagem() {
+
+interface Props {
+    authData?: AuthDataType | null | undefined;
+
+}
+
+export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
+    try {
+        const cookie = ctx.req.headers.cookie
+        Api.setCookie(cookie || "")
+
+        const authData = await Api.getProfileInfo()
+
+        return {
+            props: {
+                authData: authData.data.code === "PROFILE_INFO" ? authData.data.data : null
+            }
+        }
+    } catch (error) {
+        console.log(error)
+        return {
+            props: {
+                authData: null
+            }
+        }
+    }
+}
+export default function SinlgePostagem({ authData }: Props) {
     const router = useRouter()
     const { id_postagem } = router.query
     const [isVisible, setIsVisible] = useState(false)
@@ -98,7 +127,7 @@ export default function SinlgePostagem() {
     return (
         <>
             {loading && <LoadingComponent isLoading={loading} />}
-            {!loading && <Sidebar setInfo={setUserInfo} userInfo={userInfo} isLoading={loading} setIsLoading={setLoading} />}
+            {!loading && <Sidebar setInfo={setUserInfo} userInfo={userInfo} isLoading={loading} setIsLoading={setLoading} authData={authData} />}
             <div className={styles.btnBack}>
                 <div className={styles.btt}>
                     <button onClick={() => router.back()}>

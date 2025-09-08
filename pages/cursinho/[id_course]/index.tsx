@@ -4,12 +4,14 @@ import LoadingComponent from '@/components/LoadingComponent';
 import Sidebar from '@/components/Sidebar';
 import useAlert from '@/hooks/useAlert';
 import styles from '@/styles/perfil.module.scss';
+import AuthDataType from '@/types/authDataType';
 import maskCEP from '@/utils/maskCEP';
 import { GetServerSideProps } from 'next';
 import { useState, useRef, useEffect } from 'react';
 
 type Cursinho = {
     id_cursinho: string
+    created_at: Date
     nome: string
     nome_exibido: string
     rua: string
@@ -46,15 +48,61 @@ type Avaliacao = {
 
 interface Props {
     id_course: string;
+    cursinhoProp: Cursinho | null;
+    authData: AuthDataType | null | undefined;
 }
 
-export default function CursinhoPage({ id_course }: Props) {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const { id_course } = ctx.params as { id_course: string };
+
+    try {
+        const cookie = ctx.req.headers.cookie
+        Api.setCookie(cookie || "")
+
+        const [cursinho, authData] = await Promise.all([
+            Api.getCursinhoById(id_course as string),
+            Api.getProfileInfo()
+        ])
+
+
+        const cursinhoData = cursinho.status === 200 ? cursinho.data.data.avaliacoes.map((cursinho: Cursinho) => ({
+            ...cursinho,
+            created_at: new Date(cursinho.created_at!).toLocaleDateString('pt-BR', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            })
+        })) : []
+
+        return {
+            props: {
+                cursinho: cursinhoData,
+                id_course: id_course as string,
+                authData: authData.data.code === "PROFILE_INFO" ? authData.data.data : null
+            }
+        };
+    } catch (error) {
+        console.error("Error fetching cursinho:", error);
+        return {
+            props: {
+                id_course: id_course as string,
+                cursinho: null,
+                authData: null
+            }
+        };
+    }
+
+
+
+}
+
+export default function CursinhoPage({ id_course, authData, cursinhoProp }: Props) {
     const [newComment, setNewComment] = useState('');
     const [userRating, setUserRating] = useState(0);
     const [hoverRating, setHoverRating] = useState(0);
     const [currentSlide, setCurrentSlide] = useState(0);
     const [loading, setLoading] = useState(true);
-    const [cursinho, setCursinho] = useState<Cursinho | null>(null);
+    const [cursinho, setCursinho] = useState<Cursinho | null>(cursinhoProp);
     const slideInterval = useRef<NodeJS.Timeout>(null);
     const { showAlert } = useAlert();
     // const [comments, setComments] = useState<Avaliacao[]>(cursinho?.avaliacoes || []);
@@ -156,7 +204,7 @@ export default function CursinhoPage({ id_course }: Props) {
 
         <>
             {loading && <LoadingComponent isLoading={loading} />}
-            <Sidebar isLoading={loading} setIsLoading={setLoading} setInfo={setInfo} userInfo={info} />
+            <Sidebar isLoading={loading} setIsLoading={setLoading} setInfo={setInfo} userInfo={info} authData={authData} />
             <div className={styles.pageContainer}>
                 <div className={styles.header}>
                     <img
@@ -326,7 +374,7 @@ export default function CursinhoPage({ id_course }: Props) {
                                             <span key={i} className={i < comment.stars ? styles.filled : ''}>★</span>
                                         ))}
                                     </div>
-                                    {/* <span className={styles.date}>{comment.created_at}</span> */}
+                                    <span className={styles.date}>{new Date(comment.created_at!).toLocaleDateString('pt-BR')}</span>
                                 </div>
                                 <p className={styles.commentText}>{comment.content}</p>
                                 {/* <div className={styles.commentActions}>
@@ -342,21 +390,8 @@ export default function CursinhoPage({ id_course }: Props) {
                     </div>
                 </div>
             </div>
-
         </>
-
     );
 }
 
 
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-    const { id_course } = context.query;
-
-
-    return {
-        props: {
-            id_course,
-        },
-    };
-};

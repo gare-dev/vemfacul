@@ -14,6 +14,7 @@ type PopupType = {
     id_pevent: string
     isimportant: boolean
     completed: boolean
+    created_at?: Date | string | number
 }
 
 export default PopupType

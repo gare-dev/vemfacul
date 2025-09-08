@@ -4,39 +4,47 @@ import LoadingComponent from "@/components/LoadingComponent";
 import FilterBar from "@/components/SearchHeader";
 import Sidebar from "@/components/Sidebar";
 import styles from "@/styles/feed.module.scss";
+import AuthDataType from "@/types/authDataType";
 import { Course } from "@/types/coursetype";
 import { GetServerSideProps } from "next";
 import { useState } from "react";
 
 type Props = {
     cursinho: Course[] | null;
+    authData?: AuthDataType | null;
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
     try {
-        const cookies = context.req.headers.cookie
-        Api.setCookie(cookies || "")
-        console.log(cookies)
-        const cursinho = await Api.getCursinho()
+        const cookie = context.req.headers.cookie
+        Api.setCookie(cookie || "")
+        const [cursinho, authData] = await Promise.all([
+            Api.getCursinho(),
+            Api.getProfileInfo()
+        ])
 
         return {
             props: {
-                cursinho: cursinho.status === 200 ? cursinho.data.data : null
+                cursinho: cursinho.status === 200 ? cursinho.data.data : null,
+                authData: authData.data.code === "PROFILE_INFO" ? authData.data.data : null
             }
         }
     } catch (error) {
         console.error("Error fetching cursinho:", error);
         return {
             props: {
-                cursinho: null
+                cursinho: null,
+                authData: null
             }
+
         }
     }
 }
 
-export default function Feed({ cursinho }: Props) {
+export default function Feed({ cursinho, authData }: Props) {
     const [cursinhos,] = useState<Course[]>(cursinho || []);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+
 
     // useEffect(() => {
     //     (async () => {
@@ -68,7 +76,7 @@ export default function Feed({ cursinho }: Props) {
     return (
         <div>
             {isLoading && <LoadingComponent isLoading={isLoading} />}
-            <Sidebar isLoading={isLoading} setIsLoading={setIsLoading} />
+            <Sidebar isLoading={isLoading} setIsLoading={setIsLoading} authData={authData} />
             <div className={styles.feedPageContainer}>
 
                 <FilterBar onSearch={() => console.log("teste")} />
