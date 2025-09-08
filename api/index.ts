@@ -14,7 +14,7 @@ class _Api {
     this._instance = axios.create({
       timeout: 30000,
       baseURL: this._baseUrl,
-      withCredentials: true,
+      withCredentials: false,
       headers: {
         "Content-Type": "application/json",
       },
@@ -273,6 +273,11 @@ class _Api {
     return await this._instance.patch(`/admin/course/${id}/approve`)
   }
 
+
+  public async questoes(year: number) {
+    return await this._instance.get(`https://api.enem.dev/v1/exams/${year}/questions?limit=10`)
+  }
+
   public async getCursinho() {
     return await this._instance.get('/courses')
   }
@@ -299,6 +304,7 @@ class _Api {
 }
 
 const Api = new _Api(process.env.NEXT_PUBLIC_API_URL ?? "");
+
 
 
 export default Api;

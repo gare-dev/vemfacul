@@ -2,9 +2,10 @@
 
 .header {
     top: 0;
-    position: absolute;
+    position: fixed;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 50em;
     align-items: center;
     background-color: #D0D7FF;
     height: 80px;
@@ -15,7 +16,7 @@
 .header__logo {
     display: flex;
     align-items: center;
-
+    // left: 1rem
 }
 
 .header__image {
