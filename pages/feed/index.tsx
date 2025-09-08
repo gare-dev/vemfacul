@@ -20,7 +20,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
         Api.setCookie(cookie || "")
         const [cursinho, authData] = await Promise.all([
             Api.getCursinho(),
-            Api.getProfileInfo()
+            Api.getProfileInfo(),
         ])
 
         return {
@@ -42,6 +42,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
 }
 
 export default function Feed({ cursinho, authData }: Props) {
+    console.log(authData)
     const [cursinhos,] = useState<Course[]>(cursinho || []);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 

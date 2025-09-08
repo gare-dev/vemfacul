@@ -31,22 +31,22 @@ export default function LandingPage() {
         tipodeCursinho: []
     }]);
 
-    const handleIsLogged = async () => {
-        if (await getAuth()) {
-            try {
-                const response = await Api.validateProfile()
-                if (response.data.code === "PROFILE_VALIDATED") {
-                    await router.push('/feed')
-                }
-            } catch (error) {
-                console.log(error)
-            }
-        }
-    }
+    // const handleIsLogged = async () => {
+    //     if (await getAuth()) {
+    //         try {
+    //             const response = await Api.validateProfile()
+    //             if (response.data.code === "PROFILE_VALIDATED") {
+    //                 await router.push('/feed')
+    //             }
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    //     }
+    // }
 
-    useEffect(() => {
-        handleIsLogged()
-    }, [])
+    // useEffect(() => {
+    //     // handleIsLogged()
+    // }, [])
 
     const getEvents = async () => {
         try {
