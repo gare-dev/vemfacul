@@ -1,9 +1,45 @@
+import Api from "@/api";
 import QuickTest from "@/components/QuickTest";
 import Sidebar from "@/components/Sidebar"
-export default function Main() {
+import AuthDataType from "@/types/authDataType";
+import { GetServerSideProps } from "next";
+import { useState } from "react";
+
+interface Props {
+    authData?: AuthDataType | null | undefined;
+
+}
+
+export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
+    try {
+        const cookie = ctx.req.headers.cookie
+        Api.setCookie(cookie || "")
+
+        const authData = await Api.getProfileInfo()
+
+        return {
+            props: {
+                authData: authData.data.code === "PROFILE_INFO" ? authData.data.data : null
+            }
+        }
+    } catch (error) {
+        console.log(error)
+        return {
+            props: {
+                authData: null
+            }
+        }
+    }
+}
+
+export default function Main({ authData }: Props) {
+    const [userInfo, setUserInfo] = useState<string[]>([])
+    const [isLoading, setIsLoading] = useState(false)
+
+
     return (
         <>
-            <Sidebar></Sidebar>
+            <Sidebar isLoading={isLoading} setIsLoading={setIsLoading} setInfo={setUserInfo} userInfo={userInfo} authData={authData} />
             <QuickTest></QuickTest>
         </>
     )
