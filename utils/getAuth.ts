@@ -15,6 +15,7 @@ async function getAuth() {
             }
         }
     }
+
 }
 
 export default getAuth

@@ -13,7 +13,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { AxiosError } from "axios";
 import useAlert from "@/hooks/useAlert";
-import getAuth from "@/utils/getAuth";
 import LoadingComponent from "@/components/LoadingComponent";
 
 export default function LandingPage() {
@@ -31,22 +30,23 @@ export default function LandingPage() {
         tipodeCursinho: []
     }]);
 
-    const handleIsLogged = async () => {
-        if (await getAuth()) {
-            try {
-                const response = await Api.validateProfile()
-                if (response.data.code === "PROFILE_VALIDATED") {
-                    await router.push('/feed')
-                }
-            } catch (error) {
-                console.log(error)
-            }
-        }
-    }
+    // TODO implementar a logica pra ver se ja ta logado, esse endpoint nao serve mais pra isso
+    // const handleIsLogged = async () => {
+    //     if (await getAuth()) {
+    //         try {
+    //             const response = await Api.validateProfile()
+    //             if (response.data.code === "PROFILE_VALIDATED") {
+    //                 await router.push('/feed')
+    //             }
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    //     }
+    // }
 
-    useEffect(() => {
-        handleIsLogged()
-    }, [])
+    // useEffect(() => {
+    //     // handleIsLogged()
+    // }, [])
 
     const getEvents = async () => {
         try {

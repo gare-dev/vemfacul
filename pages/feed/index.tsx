@@ -20,7 +20,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
         Api.setCookie(cookie || "")
         const [cursinho, authData] = await Promise.all([
             Api.getCursinho(),
-            Api.getProfileInfo()
+            Api.getProfileInfo(),
         ])
 
         return {
