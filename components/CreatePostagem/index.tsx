@@ -43,7 +43,7 @@ const TweetPopup: React.FC<TweetPopupProps> = ({ isOpen, coment, postagemID_pai,
                 setError('');
                 const response = await Api.createPostagem(tweetText);
 
-                if (response.data.code === "POSTAGEM_SUCESS") {
+                if (response.status === 201) {
                     setTweetText('');
                     onClose();
                     onReload();
@@ -52,7 +52,7 @@ const TweetPopup: React.FC<TweetPopupProps> = ({ isOpen, coment, postagemID_pai,
 
             } catch (error) {
                 if (error instanceof AxiosError) {
-                    if (error.response?.data.code === "POSTAGEM_ERROR") {
+                    if (error.status === 400) {
                         setError("Ocorreu um erro ao postar o tweet. Tente novamente mais tarde.");
                     }
                 }
