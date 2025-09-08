@@ -6,6 +6,7 @@ import maskCNPJ from '@/utils/maskCNPJ';
 import maskCEP from '@/utils/maskCEP';
 import { maskPhone } from '@/utils/maskPhone';
 import Api from '@/api';
+import LoadingComponent from '@/components/LoadingComponent';
 
 export interface InstitutionData {
     nome: string;
@@ -32,7 +33,7 @@ export interface AcademicData {
     modalidades: string[];
     disciplinasFoco: string[];
     mediaAlunosPorTurma: string;
-    diferenciais: string;
+    diferenciais: string[];
 }
 
 export interface FinancialData {
@@ -52,8 +53,16 @@ export interface LoginData {
     password: string;
 }
 
+interface PhraseItem {
+    id: string;
+    text: string;
+}
+
 export default function InstitutionRegistration() {
+    const [loading, setLoading] = useState(false);
     const [overlay, setOverlay] = useState(false);
+    const [inputValue, setInputValue] = useState('');
+    const [phrases, setPhrases] = useState<PhraseItem[]>([]);
     const [instituicao, setInstitutionData] = useState<InstitutionData>({
         nome: '',
         nomeExibido: '',
@@ -79,7 +88,7 @@ export default function InstitutionRegistration() {
         modalidades: [],
         disciplinasFoco: [],
         mediaAlunosPorTurma: '',
-        diferenciais: ''
+        diferenciais: []
     });
 
     const [financeiro, setFinancialData] = useState<FinancialData>({
@@ -99,7 +108,22 @@ export default function InstitutionRegistration() {
         password: ''
     });
 
-    // Handle CEP API consultation
+    const handleAddPhrase = () => {
+        if (inputValue.trim()) {
+            setPhrases([...phrases, {
+                id: Date.now().toString(),
+                text: inputValue.trim()
+            }]);
+            setInputValue('');
+        }
+    };
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            handleAddPhrase();
+        }
+    };
+
+
     useEffect(() => {
         if (endereco.cep.length === 8) {
             fetch(`https://viacep.com.br/ws/${endereco.cep}/json/`)
@@ -209,10 +233,14 @@ export default function InstitutionRegistration() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
+            setLoading(true)
             const dataToSend = {
                 instituicao,
                 endereco,
-                academico,
+                academico: {
+                    ...academico,
+                    diferenciais: phrases // Convert array to string
+                },
                 financeiro,
                 login,
                 imagens: {
@@ -231,8 +259,9 @@ export default function InstitutionRegistration() {
 
             const response = await Api.insertCursinho(formData);
 
-            if (response.data.code === "CURSINHO_INSERTED") {
+            if (response.status === 201) {
                 setOverlay(true);
+                setLoading(false)
                 setInstitutionData({
                     nome: '',
                     nomeExibido: '',
@@ -256,7 +285,7 @@ export default function InstitutionRegistration() {
                     modalidades: [],
                     disciplinasFoco: [],
                     mediaAlunosPorTurma: '',
-                    diferenciais: ''
+                    diferenciais: []
                 });
                 setFinancialData({
                     faixaPreco: '',
@@ -275,6 +304,8 @@ export default function InstitutionRegistration() {
             }
         } catch (error) {
             console.log(error)
+        } finally {
+            setLoading(false)
         }
 
     };
@@ -282,6 +313,7 @@ export default function InstitutionRegistration() {
     return (
         <>
             <Header />
+            <LoadingComponent isLoading={loading} />
             <div className={styles.container}>
                 <form onSubmit={handleSubmit} className={styles.form}>
                     <div className={styles.formSection}>
@@ -427,18 +459,35 @@ export default function InstitutionRegistration() {
                         </div>
 
                         <div className={styles.inputGroup}>
-                            <label htmlFor="differentials">Diferenciais</label>
-                            <textarea
-                                id="diferenciais"
-                                name="diferenciais"
-                                value={academico.diferenciais}
-                                onChange={(e) => setAcademicData({
-                                    ...academico,
-                                    diferenciais: e.target.value
-                                })}
-                                rows={4}
-                                placeholder="Descreva os principais diferenciais da sua instituição"
-                            />
+                            <label htmlFor="averageStudentsPerClass">Diferenciais</label>
+
+                            <div className={styles.containerInput}>
+                                <div className={styles.phrasesContainer}>
+                                    {phrases.map((phrase) => (
+                                        <ul key={phrase.id} className={styles.phraseBox}>
+                                            <li>{phrase.text}</li>
+                                        </ul>
+                                    ))}
+                                </div>
+
+                                <div className={styles.inputContainer}>
+                                    <input
+                                        type="text"
+                                        value={inputValue}
+                                        onChange={(e) => setInputValue(e.target.value)}
+                                        onKeyDown={handleKeyDown}
+                                        placeholder="Digite os diferenciais..."
+                                        className={styles.input}
+                                    />
+                                    <button
+                                        onClick={handleAddPhrase}
+                                        className={styles.button}
+                                        disabled={!inputValue.trim()}
+                                    >
+                                        Adicionar
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -512,6 +561,7 @@ export default function InstitutionRegistration() {
                             <input
                                 type="file"
                                 id="logo"
+                                required
                                 name="logo"
                                 accept="image/*"
                                 onChange={(e) => handleFileUpload(e, 'logo')}
@@ -527,6 +577,7 @@ export default function InstitutionRegistration() {
                                 name="spacePhotos"
                                 accept="image/*"
                                 multiple
+                                required
                                 onChange={(e) => {
                                     if (e.target.files && e.target.files.length > 5) {
                                         return alert('Você pode enviar no máximo 5 fotos.');

@@ -1,6 +1,6 @@
 type AuthDataType = {
-    image: string
-    name: string
+    foto: string
+    nome: string
     email?: string
     username: string
 }

@@ -6,7 +6,7 @@ interface props {
     estado: string | undefined
     interesses: string[] | undefined | string
     level: "Aluno EM" | "Universitário" | "Vestibulando" | "Professor"
-    photo: File | Blob | MediaSource
+    photo: File | Blob | MediaSource | string
     escola: string | undefined
     ano: string | undefined
     step: number
@@ -31,11 +31,10 @@ export default function MiniProfile(props: props) {
     return (
         <div className={s.mainDiv}>
             <div className={s.imageDiv}>
-                {props.step >= 1 && <img src={URL.createObjectURL(props.photo)} alt="" />}
+                {props.step >= 1 && <img src={typeof props.photo === "string" ? props.photo : URL.createObjectURL(props.photo)} alt="" />}
             </div>
             <div className={s.nameDiv}>
                 <p>{props.name}{getEmoji(props.level)}</p>
-
             </div>
             <div className={s.schoolDiv}>
                 <p>{props.ano} {props.escola}</p>

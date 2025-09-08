@@ -25,22 +25,26 @@ class _Api {
       return { ...response, data: handleDates(response.data) };
     });
 
-    this._instance.interceptors.request.use((config) => {
-      if (getAuth()) {
-        if (config.headers) {
-          config.headers['Authorization'] = `Bearer ${getAuth()}`;
-        }
-      }
-      if (getAdminToken()) {
-        if (config.headers) {
-          config.headers['Admin-Token'] = getAdminToken();
-        }
-      }
-      return config;
-    });
 
+
+
+    // this._instance.interceptors.request.use((config) => {
+    //   // if (getAuth()) {
+    //   //   if (config.headers) {
+    //   //     config.headers['Authorization'] = `Bearer ${getAuth()}`;
+    //   //   }
+    //   // }
+    //   // if (getAdminToken()) {
+    //   //   if (config.headers) {
+    //   //     config.headers['Admin-Token'] = getAdminToken();
+    //   //   }
+    //   // }
+    //   return config;
+    // });
   }
-
+  public setCookie(cookie: string) {
+    this._instance.defaults.headers.common['Cookie'] = cookie;
+  }
 
   public async registerAccount(email: string, password: string) {
 
@@ -48,7 +52,6 @@ class _Api {
       email,
       password,
     });
-
   }
 
   public async confirmAccount(token: string) {
@@ -68,7 +71,6 @@ class _Api {
       email,
       password,
     });
-
   }
 
   public async createAccount(formData: any) {
@@ -271,13 +273,38 @@ class _Api {
     return await this._instance.patch(`/admin/course/${id}/approve`)
   }
 
+
   public async questoes(year: number) {
     return await this._instance.get(`https://api.enem.dev/v1/exams/${year}/questions?limit=10`)
   }
+
+  public async getCursinho() {
+    return await this._instance.get('/courses')
+  }
+
+  public async getCursinhoById(id_course: string) {
+    return await this._instance.get(`/course/${id_course}`);
+  }
+
+  public async insertReview(id_cursinho: string, stars: number, content: string) {
+    return await this._instance.post("/course/review", {
+      id_cursinho,
+      stars,
+      content
+    });
+  }
+
+  public async tokenTeste() {
+    return await this._instance.get('/token/teste');
+  }
+
+  public async removeAuthToken() {
+    return await this._instance.delete('/user/auth');
+  }
 }
 
+const Api = new _Api(process.env.NEXT_PUBLIC_API_URL ?? "");
 
-const Api = new _Api(process.env.NEXT_PUBLIC_API_URL ?? ""); // https://invest-api-rose.vercel.app/
 
 
 export default Api;

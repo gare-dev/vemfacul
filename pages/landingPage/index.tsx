@@ -32,7 +32,7 @@ export default function LandingPage() {
     }]);
 
     const handleIsLogged = async () => {
-        if (getAuth()) {
+        if (await getAuth()) {
             try {
                 const response = await Api.validateProfile()
                 if (response.data.code === "PROFILE_VALIDATED") {
