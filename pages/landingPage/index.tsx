@@ -13,7 +13,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { AxiosError } from "axios";
 import useAlert from "@/hooks/useAlert";
-import getAuth from "@/utils/getAuth";
 import LoadingComponent from "@/components/LoadingComponent";
 
 export default function LandingPage() {
@@ -31,6 +30,7 @@ export default function LandingPage() {
         tipodeCursinho: []
     }]);
 
+    // TODO implementar a logica pra ver se ja ta logado, esse endpoint nao serve mais pra isso
     // const handleIsLogged = async () => {
     //     if (await getAuth()) {
     //         try {

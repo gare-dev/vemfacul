@@ -42,7 +42,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
 }
 
 export default function Feed({ cursinho, authData }: Props) {
-    console.log(authData)
     const [cursinhos,] = useState<Course[]>(cursinho || []);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
