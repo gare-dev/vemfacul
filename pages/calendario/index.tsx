@@ -12,17 +12,59 @@ import PopupType from "@/types/data"   // ✅ Usa o tipo centralizado
 import { useEffect, useState } from "react"
 import { FiAlertTriangle, FiCalendar, FiCheckCircle, FiEdit3, FiStar } from "react-icons/fi"
 import LoadingComponent from "@/components/LoadingComponent"
+import { GetServerSideProps } from "next"
+import AuthDataType from "@/types/authDataType"
 
-export default function Calendario() {
+type Props = {
+    eventsProp: PopupType[]
+    authData?: AuthDataType | null | undefined;
+
+}
+
+export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
+    try {
+        const cookie = ctx.req.headers.cookie
+        Api.setCookie(cookie || "")
+
+        const [response, authData] = await Promise.all([
+            Api.getPersonalEvents(),
+            Api.getProfileInfo()
+        ])
+
+        const eventos = response.data.data.map((evento: PopupType) => ({
+            ...evento,
+            created_at: evento.created_at ? (typeof evento.created_at === "string" ? evento.created_at : new Date(evento.created_at).toLocaleDateString()) : "Data não informada"
+        }))
+
+        return {
+            props: {
+                eventsProp: response.status === 200 ? eventos : [],
+                authData: authData.data.code === "PROFILE_INFO" ? authData.data.data : null
+
+            }
+        }
+
+    } catch (error) {
+        console.error("Error fetching calendar events:", error)
+        return {
+            props: {
+                eventsProp: [],
+                authData: null
+            }
+        }
+    }
+}
+
+export default function Calendario({ eventsProp, authData }: Props) {
     const [isVisible, setIsVisible] = useState(false)
     const [isClose, setIsClose] = useState(false)
     const [hasOpened, setHasOpened] = useState(false)
     const { calendarData } = useCalendarData()
     const [isLoading, setIsLoading] = useState(false)
     const [popupVisible, setPopupVisible] = useState(false)
-    const [events, setEvents] = useState<PopupType[]>([])
+    const [events, setEvents] = useState<PopupType[]>(eventsProp || [])
     const [userInfo, setUserInfo] = useState<string[]>([])
-    const [, setOriginalEvents] = useState<PopupType[]>([])
+    const [, setOriginalEvents] = useState<PopupType[]>(eventsProp || [])
     const { setPersonalEventsData } = usePersonalEvents()
     const [highlighted, setHighlighted] = useState<string | null>(null)
     const [viewMode, setViewMode] = useState<'today' | 'week' | 'month' | "all">('today')
@@ -31,15 +73,12 @@ export default function Calendario() {
         tipodeCursinho: []
     }])
 
-    // ✅ Carregar eventos
     const handleGetPersonalEvents = async () => {
         try {
             setIsLoading(true)
             const response = await Api.getPersonalEvents()
 
-
             if (response.status === 200) {
-                console.log(response.data.data[0])
                 setEvents(response.data.data)
                 setOriginalEvents(response.data.data)
             }
@@ -129,10 +168,6 @@ export default function Calendario() {
     }
 
     useEffect(() => {
-        handleGetPersonalEvents()
-    }, [])
-
-    useEffect(() => {
         if (!hasOpened) return setHasOpened(true)
         setIsVisible(true)
     }, [calendarData])
@@ -157,7 +192,7 @@ export default function Calendario() {
                 isVisible={popupVisible}
                 callFilter={() => {/* TODO: implementar filtro */ }}
             />
-            <Sidebar setInfo={setUserInfo} userInfo={userInfo} isLoading={isLoading} setIsLoading={setIsLoading} />
+            <Sidebar setInfo={setUserInfo} userInfo={userInfo} isLoading={isLoading} setIsLoading={setIsLoading} authData={authData} />
 
             <header className={styles.headerBlock}>
                 <div className={styles.headerContent}>

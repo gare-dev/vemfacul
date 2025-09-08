@@ -73,15 +73,13 @@ export default function PopupRegistro(props: props) {
             if (response.data.code === "LOGIN_SUCCESS") {
                 setError('')
                 props.setClose()
-                localStorage.setItem('auth', response.data.auth)
                 router.push('/feed')
                 return
             }
         } catch (error) {
             if (error instanceof AxiosError) {
                 if (error.response?.data.code === "INVALID_EMAIL_OR_PASSWORD") {
-                    setError(error.response?.data.message)
-                    console.log("AQUI")
+                    setError(error.response?.data.error)
                     return
                 }
             }

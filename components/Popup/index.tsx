@@ -2,7 +2,6 @@ import Api from "@/api";
 import useAlert from "@/hooks/useAlert";
 import useCalendarData from "@/hooks/useCalendarData";
 import s from "@/styles/popup.module.scss"
-import getAuth from "@/utils/getAuth";
 import { IoMdAdd } from "react-icons/io";
 import { MdDeleteOutline, MdModeEdit } from "react-icons/md";
 
@@ -27,18 +26,14 @@ export default function Popup(props: props) {
     }
 
     async function saveEvent() {
-        if (getAuth()) {
-            try {
-                const response = await Api.insertPersonalEvent(calendarData.day, calendarData.month, calendarData.year, calendarData.title, calendarData.cursinho, calendarData.descricao, calendarData.foto, calendarData.link, calendarData.type, calendarData.color, calendarData.main_title)
-                if (response.data.code === "EVENT_ADDED") {
-                    showAlert('Evento adicionado à sua agenda pessoal!', 'success')
-                }
-            } catch (error) {
-                console.log("NAo REGISTROu" + error)
+        try {
+            const response = await Api.insertPersonalEvent(calendarData.day, calendarData.month, calendarData.year, calendarData.title, calendarData.cursinho, calendarData.descricao, calendarData.foto, calendarData.link, calendarData.type, calendarData.color, calendarData.main_title)
+            if (response.data.code === "EVENT_ADDED") {
+                showAlert('Evento adicionado à sua agenda pessoal!', 'success')
             }
+        } catch (error) {
+            console.log("NAo REGISTROu" + error)
         }
-
-
     }
 
     // TODOFIXMETODOFIXMETODOFIXMETODO

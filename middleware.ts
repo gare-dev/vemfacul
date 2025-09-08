@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const RESERVED_ROUTES = [
+export const RESERVED_ROUTES = [
     'adminn',
     'feed',
     'calendario',

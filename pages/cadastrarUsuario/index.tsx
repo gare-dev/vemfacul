@@ -2,6 +2,7 @@
 import Api from "@/api";
 import MiniProfile from "@/components/MiniProfile";
 import RegisterAccountLoadingComponent from "@/components/RegisterAccountLoadingComponent";
+import useAlert from "@/hooks/useAlert";
 import useEmail from "@/hooks/useEmail";
 import s from "@/styles/cadastrarusuario.module.scss";
 import { Register } from "@/types/registerType";
@@ -14,6 +15,7 @@ export default function CadastrarUsuario() {
     const [step, setStep] = useState(0)
     const [nivel, setNivel] = useState("")
     const [isFinish, setIsfinish] = useState(true)
+    const { showAlert } = useAlert()
     const router = useRouter()
     const [isLoading, setIsloading] = useState(false)
     const { email } = useEmail()
@@ -35,9 +37,6 @@ export default function CadastrarUsuario() {
         username: ""
     })
 
-    useEffect(() => {
-        console.log(nivel)
-    }, [nivel])
 
 
     function handleSubmit(level: string) {
@@ -52,7 +51,7 @@ export default function CadastrarUsuario() {
                     ano: user.ano,
                     vestibulares: user.vestibulares,
                     email: email,
-                    username: user.username
+                    username: user.username?.trim()
                 }
 
                 const formData = new FormData()
@@ -67,8 +66,6 @@ export default function CadastrarUsuario() {
                     const response = await Api.createAccount(formData)
 
                     if (response.data.code === "REGISTERED_ACCOUNT") {
-                        localStorage.setItem("auth", response.data.auth)
-
                         router.push('/feed')
                     }
                 } catch (error) {
@@ -100,8 +97,6 @@ export default function CadastrarUsuario() {
                     const response = await Api.createAccount(formData)
 
                     if (response.data.code === "REGISTERED_ACCOUNT") {
-                        localStorage.setItem("auth", response.data.auth)
-
                         router.push('/feed')
                     }
                 } catch (error) {
@@ -133,8 +128,6 @@ export default function CadastrarUsuario() {
                     const response = await Api.createAccount(formData)
 
                     if (response.data.code === "REGISTERED_ACCOUNT") {
-                        localStorage.setItem("auth", response.data.auth)
-
                         router.push('/feed')
                     }
                 } catch (error) {
@@ -149,7 +142,7 @@ export default function CadastrarUsuario() {
                     instituicao_leciona: user.instituicao,
                     materias_lecionadas: user.materiasLecionadas,
                     email: email,
-                    username: user.username 
+                    username: user.username
                 }
 
                 const formData = new FormData()
@@ -164,7 +157,6 @@ export default function CadastrarUsuario() {
                     const response = await Api.createAccount(formData)
 
                     if (response.data.code === "REGISTERED_ACCOUNT") {
-                        localStorage.setItem("auth", response.data.auth)
                         router.push('/feed')
                     }
                 } catch (error) {
@@ -207,19 +199,62 @@ export default function CadastrarUsuario() {
         });
     }
 
+    useEffect(() => {
+        console.log(step)
+    }, [step])
+
 
 
     const checkMandatoryFields = () => {
-    if (step === 0 && user.nome === "") {
-        alert("Nome é obrigatório");
-        return false;
-    }
-    if (step === 3 && user.username === "") {
-        alert("Username é obrigatório");
-        return false;
-    }
-    return true;
-}
+        const currentInput = inputs[step];
+
+        if (currentInput?.type === "textName" && user.nome?.trim() === "") {
+            showAlert("Nome é obrigatório", "warning");
+            return false;
+        }
+
+        if (currentInput?.type === "selectImage" && !user.foto) {
+            showAlert("Foto de perfil é obrigatória", "warning");
+            return false;
+        }
+
+        if (currentInput?.type === "textUsername" && user.username?.trim() === "") {
+            showAlert("Username é obrigatório", "warning");
+            return false;
+        }
+
+        // inputs específicos por nível
+        if (nivel === "Aluno EM") {
+            const currentAlunoInput = inputAlunoEM[step - 5];
+            if (currentAlunoInput?.type === "textEscola" && user.escola?.trim() === "") {
+                showAlert("Escola é obrigatória", "warning");
+                return false;
+            }
+        }
+
+        if (nivel === "Universitário") {
+            const currentUniversitarioInput = universitarioInputs[step - 5];
+            if (currentUniversitarioInput?.type === "textEscola" && user.universidade?.trim() === "") {
+                showAlert("Universidade é obrigatória", "warning");
+                return false;
+            }
+            if (currentUniversitarioInput?.type === "textCurso" && user.curso?.trim() === "") {
+                showAlert("Curso é obrigatório", "warning");
+                return false;
+            }
+        }
+
+        if (nivel === "Professor") {
+            const currentProfessorInput = professorInputs[step - 5];
+            if (currentProfessorInput?.type === "textEscola" && user.instituicao?.trim() === "") {
+                showAlert("Instituição é obrigatória", "warning");
+                return false;
+            }
+        }
+
+        return true;
+    };
+
 
 
     useEffect(() => {
@@ -344,10 +379,6 @@ export default function CadastrarUsuario() {
 
         }
     }
-
-    useEffect(( ) => {
-        console.log(step    )
-    }, [step])
 
     function renderVestibulando() {
         switch (vestibulandoInputs[step - 5]?.type) {
@@ -514,7 +545,7 @@ export default function CadastrarUsuario() {
                             </div>
                             <div className={s.inputDiv}>
 
-                                <input value={user.nome} onChange={(e) => updateState("nome", e.target.value)} placeholder={inputs[step].placeholder} className={s.input} type="text" />
+                                <input maxLength={25} value={user.nome} onChange={(e) => updateState("nome", e.target.value)} placeholder={inputs[step].placeholder} className={s.input} type="text" />
                             </div>
                         </>
                     ) : inputs[step]?.type === "selectEstado" ? (
@@ -550,7 +581,7 @@ export default function CadastrarUsuario() {
                             </div>
                         </>
                     ) : inputs[step]?.type === "textUsername" ? (
-                     <>
+                        <>
                             <div className={s.titleDiv}>
                                 <p className={s.titleText}>{inputs[step]?.title}</p>
                             </div>
@@ -558,9 +589,9 @@ export default function CadastrarUsuario() {
                                 <p className={s.subtitleText}>{inputs[step]?.subtitle}</p>
                             </div>
                             <div className={s.inputDiv}>
-                                <input value={user.username} onChange={(e) => updateState("username", e.target.value)} placeholder={inputs[step].placeholder} className={s.input} type="text" />
+                                <input maxLength={20} value={user.username?.trim()} onChange={(e) => updateState("username", e.target.value)} placeholder={inputs[step].placeholder} className={s.input} type="text" />
                             </div>
-                        </>  
+                        </>
                     ) :
                         nivel === "Aluno EM" ? (
                             <>
@@ -618,15 +649,11 @@ export default function CadastrarUsuario() {
                 }
 
                 <div className={s.nextDiv}>
-                    {step !== 4 ? <button onClick={
-                        () => {
-                            const validMandatory = checkMandatoryFields()
-                            if (validMandatory !== false) {
-                                setStep(!isFinish ? step + 1 : step);
-                            }
-
-
-                        }} className={s.button}>{step === 1 ? user.foto ? "Continuar" : "Pular " : isFinish !== true ? "Continuar" : "Finalizar"}</button> : null}
+                    {step !== 4 ? <button onClick={() => {
+                        if (checkMandatoryFields()) {
+                            setStep(!isFinish ? step + 1 : step);
+                        }
+                    }} className={s.button}>{step === 1 ? user.foto ? "Continuar" : isFinish !== true ? "Continuar" : "Finalizar" : "Continuar"}</button> : null}
                     {!isFinish && <button disabled={isFinish ? true : false} onClick={() => setStep(step - 1)} className={s.buttonBack}>Voltar</button>}
                 </div>
                 <div className={s.barDiv}>
@@ -641,7 +668,7 @@ export default function CadastrarUsuario() {
                     step={step}
                     ano={nivel === "Aluno EM" ? user.ano + " Ano," : ""}
                     escola={nivel === "Aluno EM" ? user.escola : nivel === "Universitário" ? user.universidade : user.instituicao}
-                    photo={user.foto ?? new Blob()}
+                    photo={user.foto ?? "https://static.vecteezy.com/system/resources/previews/060/605/418/non_2x/default-avatar-profile-icon-social-media-user-free-vector.jpg"}
                     level={nivel as "Aluno EM" | "Universitário" | "Vestibulando" | "Professor"}
                     name={user.nome}
                     estado={user.estado}

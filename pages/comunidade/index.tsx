@@ -12,10 +12,47 @@ import monthsMap from "@/utils/getMonth";
 import CreatePostagem from "@/components/CreatePostagem";
 import { useRouter } from "next/router";
 import { FaPen } from "react-icons/fa";
+import { GetServerSideProps } from "next";
+import AuthDataType from "@/types/authDataType";
 
+interface Props {
+    postsProp: PostsType[];
+    authData?: AuthDataType | null | undefined;
+}
 
-export default function Comunidade() {
-    const [posts, setPosts] = useState<PostsType[]>([])
+export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
+    const cookie = ctx.req.headers.cookie
+    Api.setCookie(cookie || "")
+    try {
+        const [posts, authData] = await Promise.all([
+            Api.selectAllPosts(),
+            Api.getProfileInfo()
+        ])
+
+        const eventos = posts.status === 200 ? posts.data.data.map((post: PostsType) => ({
+            ...post,
+            created_at: post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).toLocaleDateString()) : "Data não informada"
+        })) : []
+
+        return {
+            props: {
+                postsProp: eventos,
+                authData: authData.data.code === "PROFILE_INFO" ? authData.data.data : null
+            }
+        }
+    } catch (error) {
+        console.error("Error fetching posts:", error)
+        return {
+            props: {
+                postsProp: [],
+                authData: null
+            }
+        }
+    }
+}
+
+export default function Comunidade({ postsProp, authData }: Props) {
+    const [posts, setPosts] = useState<PostsType[]>(postsProp || [])
     const [loading, setLoading] = useState(true);
     const { showAlert } = useAlert()
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -62,7 +99,7 @@ export default function Comunidade() {
     return (
         <>
 
-            <Sidebar isLoading={loading} setIsLoading={setLoading} />
+            <Sidebar isLoading={loading} setIsLoading={setLoading} authData={authData} />
             <CreatePostagem
                 onPostTweet={handlePostTweet}
                 isOpen={isPopupOpen}
