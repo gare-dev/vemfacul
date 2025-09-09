@@ -1,5 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..700;1,100..700&display=swap');
 
+.closeDiv {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-right: 5px;
+    font-size: 18px;
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
 .mainDiv {
     position: fixed;
     top: 0;
@@ -13,9 +23,9 @@
     z-index: 999;
     transition: opacity 0.3s ease, transform 0.3s ease;
 
-
     .popupBox {
         width: 450px;
+        max-width: 95%; // responsividade
         min-height: 200px;
         background-color: #fff;
         border-radius: 10px;
@@ -25,40 +35,11 @@
         padding: 20px;
         position: relative;
 
-        .errorDiv {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-
-            .errorText {
-                font-family: "Kantumruy Pro", sans-serif;
-                font-weight: 500;
-                font-size: 1rem;
-                color: #ff3535;
-                text-align: center;
-                margin: 0;
-            }
-        }
-
-        .sucessDiv {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-
-            .sucessText {
-                font-family: "Kantumruy Pro", sans-serif;
-                font-weight: 500;
-                font-size: 1rem;
-                color: #239a2f;
-                text-align: center;
-                margin: 0;
-            }
-        }
-
         .welcomeDiv {
             display: flex;
             justify-content: center;
             margin-bottom: 20px;
+            text-align: center;
 
             .welcomeToText,
             .vemfaculText {
@@ -94,7 +75,7 @@
                 }
 
                 input {
-                    width: 95%;
+                    width: 100%;
                     height: 50px;
                     border-radius: 5px;
                     background-color: #D0D7FF;
@@ -110,21 +91,63 @@
                 }
             }
 
+            .buttonDiv {
+                display: flex;
+                justify-content: center;
+                width: 100%;
+
+                .buttonEntrar {
+                    width: 100%;
+                    height: 40px;
+                    background-color: #001ECB;
+                    border-radius: 5px;
+                    border: none;
+                    color: #fff;
+                    font-family: "Kantumruy Pro", sans-serif;
+                    font-weight: 600;
+                    font-size: 16px;
+                    cursor: pointer;
+                    transition: background-color 0.3s ease;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+                    &:hover {
+                        background-color: #0041FF;
+                    }
+
+                    &:active {
+                        background-color: #000EA1;
+                        transition: background-color 0.1s ease;
+                    }
+                }
+            }
+
             .noAccountDiv {
                 display: flex;
                 justify-content: center;
-                margin-bottom: 10px;
-                padding-top: 20px;
+                margin-top: 15px;
                 gap: 5px;
+                flex-wrap: wrap;
 
-                .noAccountText {
+                .noAccountText,
+                .createAccountText {
                     font-family: "Kantumruy Pro", sans-serif;
                     font-weight: 500;
                     font-size: 16px;
-                    color: #000;
                 }
 
                 .createAccountText {
+                    color: #001ECB;
+                    cursor: pointer;
+                    text-decoration: underline;
+                }
+            }
+
+            .forgotPasswordDiv {
+                display: flex;
+                justify-content: center;
+                margin-bottom: 20px;
+
+                .forgotPasswordText {
                     font-family: "Kantumruy Pro", sans-serif;
                     font-weight: 500;
                     font-size: 16px;
@@ -135,151 +158,118 @@
             }
         }
 
-        .forgotPasswordDiv {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-
-            .forgotPasswordText {
-                font-family: "Kantumruy Pro", sans-serif;
-                font-weight: 500;
-                font-size: 16px;
-                color: #001ECB;
-                cursor: pointer;
-                text-decoration: underline;
-            }
-        }
-
-        .buttonDiv {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-
-            .buttonEntrar {
-                width: 100%;
-                height: 40px;
-                background-color: #001ECB;
-                border-radius: 5px;
-                border: none;
-                color: #fff;
-                font-family: "Kantumruy Pro", sans-serif;
-                font-weight: 600;
-                font-size: 16px;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-
-
-                &:hover {
-                    background-color: #0041FF;
-                }
-
-                &:active {
-                    background-color: #000EA1;
-                    transition: background-color 0.1s ease;
-                }
-            }
-
-
-        }
-    }
-
-
-    .checkEmailDiv {
-
-        margin-bottom: 20px;
-
-        .checkEmail {
-            display: flex;
-            justify-content: center;
-
-            .checkEmailText {
-                font-family: "Kantumruy Pro", sans-serif;
-                font-weight: 500;
-                font-size: 22px;
-                color: #000EA1;
-                margin: 0;
-            }
-        }
-
-        .checkEmailDescription {
-            display: flex;
-            justify-content: center;
-            margin-top: 10px;
+        .checkEmailDiv {
             width: 100%;
             text-align: center;
 
+            .checkEmail {
+                display: flex;
+                justify-content: center;
 
-            .checkEmailDescriptionText {
-                font-family: "Kantumruy Pro", sans-serif;
-                font-weight: 500;
-                font-size: 16px;
-                color: #000;
-                margin: 0;
+                .checkEmailText {
+                    font-family: "Kantumruy Pro", sans-serif;
+                    font-weight: 500;
+                    font-size: 20px;
+                    color: #000EA1;
+                    margin: 0;
+                }
+            }
+
+            .checkEmailDescription {
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                margin-top: 10px;
+                width: 100%;
+                text-align: center;
+
+                .checkEmailDescriptionText {
+                    font-family: "Kantumruy Pro", sans-serif;
+                    font-weight: 500;
+                    font-size: 16px;
+                    color: #000;
+                    margin: 5px 0;
+                }
             }
         }
+    }
+}
 
-        .checkEmailText {
-            font-family: "Kantumruy Pro", sans-serif;
-            font-weight: 500;
-            font-size: 16px;
-            color: #000;
-            margin: 0;
+/* Responsividade */
+@media (max-width: 640px) {
+    .mainDiv .popupBox {
+        width: 95%;
+        padding: 15px;
+
+        .welcomeDiv .welcomeToText,
+        .welcomeDiv .vemfaculText {
+            font-size: 18px;
+        }
+
+        .mainFormDiv .emailDiv label,
+        .mainFormDiv .passwordDiv label,
+        .mainFormDiv .buttonDiv .buttonEntrar,
+        .mainFormDiv .noAccountDiv .noAccountText,
+        .mainFormDiv .noAccountDiv .createAccountText,
+        .mainFormDiv .forgotPasswordDiv .forgotPasswordText {
+            font-size: 14px;
+        }
+
+        .mainFormDiv .emailDiv input,
+        .mainFormDiv .passwordDiv input {
+            height: 45px;
+            font-size: 14px;
+        }
+
+        .checkEmailDiv .checkEmail .checkEmailText {
+            font-size: 18px;
+        }
+
+        .checkEmailDiv .checkEmailDescription .checkEmailDescriptionText {
+            font-size: 14px;
+        }
+
+        .closeDiv {
+            position: absolute;
+            right: 0;
+            top: 0;
+            margin-right: 5px;
+            font-size: 18px;
+            padding: 0.5rem;
         }
     }
-
 }
 
-.closeDiv {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    cursor: pointer;
-    font-size: 20px;
-    color: #ffff;
-    background-color: #001ECB;
-    font-family: "Kantumruy Pro", sans-serif;
-    font-weight: 300;
-    padding: .6rem;
-    border: .1rem solid;
-    border-radius: .5rem;
-    transition: color 0.3s ease;
+@media (max-width: 400px) {
+    .mainDiv .popupBox {
+        padding: 10px;
 
-    .closeText {
-        font-family: "Kantumruy Pro", sans-serif;
-        font-weight: bold;
-        font-size: 1rem;
-        color: #000;
-        cursor: pointer;
-        transition: color 0.3s ease;
+        .welcomeDiv .welcomeToText,
+        .welcomeDiv .vemfaculText {
+            font-size: 16px;
+        }
+
+        .mainFormDiv .emailDiv label,
+        .mainFormDiv .passwordDiv label,
+        .mainFormDiv .buttonDiv .buttonEntrar,
+        .mainFormDiv .noAccountDiv .noAccountText,
+        .mainFormDiv .noAccountDiv .createAccountText,
+        .mainFormDiv .forgotPasswordDiv .forgotPasswordText {
+            font-size: 12px;
+        }
+
+        .mainFormDiv .emailDiv input,
+        .mainFormDiv .passwordDiv input {
+            height: 40px;
+            font-size: 12px;
+        }
+
+        .checkEmailDiv .checkEmail .checkEmailText {
+            font-size: 16px;
+        }
+
+        .checkEmailDiv .checkEmailDescription .checkEmailDescriptionText {
+            font-size: 12px;
+        }
     }
-
-    &:hover {
-        border-color: #001ECB;
-        background-color: white;
-        color: #001ECB;
-    }
-
-
-}
-
-.fadeIn {
-    opacity: 1;
-    transform: scale(1);
-}
-
-.fadeOut {
-    opacity: 0;
-    transform: scale(0.95);
-}
-
-.reenviarText {
-    font-family: "Kantumruy Pro", sans-serif;
-    font-weight: 500;
-    font-size: 16px;
-    color: #001ECB;
-    cursor: pointer;
-    text-decoration: underline;
-    margin-top: 10px;
-    margin-bottom: 20px;
 }
