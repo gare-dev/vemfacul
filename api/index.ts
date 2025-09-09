@@ -275,7 +275,9 @@ class _Api {
 
 
   public async questoes(year: number) {
-    return await this._instance.get(`https://api.enem.dev/v1/exams/${year}/questions?limit=10`)
+    return await this._instance.get(`https://api.enem.dev/v1/exams/${year}/questions?limit=10`, {
+      withCredentials: false
+    })
   }
 
   public async getCursinho() {
