@@ -2,8 +2,10 @@ import Api from "@/api";
 import useAlert from "@/hooks/useAlert";
 import useCalendarData from "@/hooks/useCalendarData";
 import s from "@/styles/popup.module.scss"
+import { useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { MdDeleteOutline, MdModeEdit } from "react-icons/md";
+import LoadingBar from "../LoadingBar";
 
 
 interface props {
@@ -19,7 +21,29 @@ interface props {
 export default function Popup(props: props) {
     const { calendarData } = useCalendarData()
     // const { setIsOpen } = useOpenPopup()
+    const [progress, setProgress] = useState(0);
+    const [loading, setLoading] = useState(false);
+    let intervalId: NodeJS.Timeout;
     const { showAlert } = useAlert()
+
+    const startLoading = () => {
+        setLoading(true);
+        setProgress(10);
+
+        intervalId = setInterval(() => {
+            setProgress((prev) => (prev < 90 ? prev + 5 : prev));
+        }, 200);
+    };
+
+    const stopLoading = () => {
+        clearInterval(intervalId);
+        setProgress(100);
+        setTimeout(() => {
+            setLoading(false);
+            setProgress(0);
+        }, 400);
+    };
+
 
     function padZero(n: number): string {
         return n < 10 ? `0${n}` : `${n}`;
@@ -27,12 +51,15 @@ export default function Popup(props: props) {
 
     async function saveEvent() {
         try {
+            startLoading()
             const response = await Api.insertPersonalEvent(calendarData.day, calendarData.month, calendarData.year, calendarData.title, calendarData.cursinho, calendarData.descricao, calendarData.foto, calendarData.link, calendarData.type, calendarData.color, calendarData.main_title)
-            if (response.data.code === "EVENT_ADDED") {
+            if (response.status === 201) {
                 showAlert('Evento adicionado à sua agenda pessoal!', 'success')
             }
         } catch (error) {
-            console.log("NAo REGISTROu" + error)
+            console.log("NAo REGISTROU" + error)
+        } finally {
+            stopLoading()
         }
     }
 
@@ -46,6 +73,7 @@ export default function Popup(props: props) {
     return (
         props.isVisible &&
         (<div className={s.mainDiv}>
+            {loading && <LoadingBar progress={progress} />}
             <div className={s.popupBox}>
                 <div className={s.divBox}>
                     <div className={s.dateAndImageDiv}>

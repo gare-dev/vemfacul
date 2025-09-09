@@ -4,6 +4,8 @@ import usePersonalEvents from "@/hooks/usePersonalEvents";
 import styles from "@/styles/popuuppersonalevents.module.scss"
 import padZero from "@/utils/padZero";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import LoadingBar from "../LoadingBar";
 
 
 
@@ -16,6 +18,27 @@ export default function FormModal({ onClose, isVisible }: FormModalProps) {
     const { setPersonalEventsData, personalEventsData } = usePersonalEvents()
     const router = useRouter()
     const { showAlert } = useAlert()
+    const [progress, setProgress] = useState(0);
+    const [loading, setLoading] = useState(false);
+    let intervalId: NodeJS.Timeout;
+
+    const startLoading = () => {
+        setLoading(true);
+        setProgress(10);
+
+        intervalId = setInterval(() => {
+            setProgress((prev) => (prev < 90 ? prev + 5 : prev));
+        }, 200);
+    };
+
+    const stopLoading = () => {
+        clearInterval(intervalId);
+        setProgress(100);
+        setTimeout(() => {
+            setLoading(false);
+            setProgress(0);
+        }, 400);
+    };
 
 
     async function handleSubmit() {
@@ -25,9 +48,9 @@ export default function FormModal({ onClose, isVisible }: FormModalProps) {
         }
 
         try {
+            startLoading()
             const response = await Api.insertPersonalLocalEvent(personalEventsData.day, personalEventsData.month, personalEventsData.year, personalEventsData.title, personalEventsData.descricao, personalEventsData.color, personalEventsData.main_title, personalEventsData.isImportant, personalEventsData.hora)
-
-            if (response.data.code === "EVENT_ADDED") {
+            if (response.status === 201) {
                 showAlert("Evento adicionado com sucesso", "success");
                 setPersonalEventsData((prev) => ({
                     ...prev,
@@ -44,7 +67,8 @@ export default function FormModal({ onClose, isVisible }: FormModalProps) {
         } catch (error) {
             console.log(error);
             alert("Erro ao criar evento");
-
+        } finally {
+            stopLoading()
         }
 
     }
@@ -53,7 +77,10 @@ export default function FormModal({ onClose, isVisible }: FormModalProps) {
     if (!isVisible) return null; // não renderiza nada se não for visível
 
     return (
+
         <div className={styles.overlay} onClick={onClose}>
+            {loading && <LoadingBar progress={progress} />}
+
             <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <button className={styles.close} onClick={onClose}>
                     X
@@ -73,7 +100,7 @@ export default function FormModal({ onClose, isVisible }: FormModalProps) {
                     </label>
                     <label>
                         Nome
-                        <input onChange={(e) =>
+                        <input value={personalEventsData.main_title} onChange={(e) =>
                             setPersonalEventsData((prev) => ({
                                 ...prev,
                                 main_title: e.target.value,
@@ -84,7 +111,7 @@ export default function FormModal({ onClose, isVisible }: FormModalProps) {
                 <div className={styles.row}>
                     <label>
                         Descrição
-                        <textarea onChange={(e) =>
+                        <textarea value={personalEventsData.descricao} onChange={(e) =>
                             setPersonalEventsData((prev) => ({
                                 ...prev,
                                 descricao: e.target.value,
@@ -104,6 +131,7 @@ export default function FormModal({ onClose, isVisible }: FormModalProps) {
                     <label>
                         Hora
                         <input
+                            value={personalEventsData.hora}
                             type="time"
                             onChange={(e) =>
                                 setPersonalEventsData((prev) => ({

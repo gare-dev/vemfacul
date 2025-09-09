@@ -14,6 +14,8 @@ import { FiAlertTriangle, FiCalendar, FiCheckCircle, FiEdit3, FiStar } from "rea
 import LoadingComponent from "@/components/LoadingComponent"
 import { GetServerSideProps } from "next"
 import AuthDataType from "@/types/authDataType"
+import LoadingBar from "@/components/LoadingBar"
+import useAlert from "@/hooks/useAlert"
 
 type Props = {
     eventsProp: PopupType[]
@@ -61,10 +63,11 @@ export default function Calendario({ eventsProp, authData }: Props) {
     const [hasOpened, setHasOpened] = useState(false)
     const { calendarData } = useCalendarData()
     const [isLoading, setIsLoading] = useState(false)
+    const { showAlert } = useAlert()
     const [popupVisible, setPopupVisible] = useState(false)
     const [events, setEvents] = useState<PopupType[]>(eventsProp || [])
     const [userInfo, setUserInfo] = useState<string[]>([])
-    const [, setOriginalEvents] = useState<PopupType[]>(eventsProp || [])
+    const [originalEvents, setOriginalEvents] = useState<PopupType[]>(eventsProp || [])
     const { setPersonalEventsData } = usePersonalEvents()
     const [highlighted, setHighlighted] = useState<string | null>(null)
     const [viewMode, setViewMode] = useState<'today' | 'week' | 'month' | "all">('today')
@@ -72,10 +75,31 @@ export default function Calendario({ eventsProp, authData }: Props) {
         tipoDeEvento: [],
         tipodeCursinho: []
     }])
+    const [progress, setProgress] = useState(0);
+    const [loading, setLoading] = useState(false);
+    let intervalId: NodeJS.Timeout;
+
+    const startLoading = () => {
+        setLoading(true);
+        setProgress(10);
+
+        intervalId = setInterval(() => {
+            setProgress((prev) => (prev < 90 ? prev + 5 : prev));
+        }, 200);
+    };
+
+    const stopLoading = () => {
+        clearInterval(intervalId);
+        setProgress(100);
+        setTimeout(() => {
+            setLoading(false);
+            setProgress(0);
+        }, 400);
+    };
 
     const handleGetPersonalEvents = async () => {
         try {
-            setIsLoading(true)
+            startLoading()
             const response = await Api.getPersonalEvents()
 
             if (response.status === 200) {
@@ -85,7 +109,7 @@ export default function Calendario({ eventsProp, authData }: Props) {
         } catch (error) {
             console.error(error)
         } finally {
-            setIsLoading(false)
+            stopLoading()
         }
     }
 
@@ -94,13 +118,16 @@ export default function Calendario({ eventsProp, authData }: Props) {
         if (!calendarData.id_pevent) return
 
         try {
+            startLoading()
             const response = await Api.deletePersonalEvent(calendarData.id_pevent)
-            if (response.data.code === "EVENT_DELETED") {
+            if (response.status === 200) {
                 setIsVisible(false)
                 handleGetPersonalEvents()
             }
         } catch (error) {
             console.error(error)
+        } finally {
+            stopLoading()
         }
     }
 
@@ -149,22 +176,71 @@ export default function Calendario({ eventsProp, authData }: Props) {
         }
     }
 
-    const toggleImportant = (id: string) => {
-        setEvents(events.map(event =>
-            event.id_pevent === id ? { ...event, isimportant: !event.isimportant } : event
-        ))
-        setOriginalEvents(events.map(event =>
-            event.id_pevent === id ? { ...event, isimportant: !event.isimportant } : event
-        ))
+    const toggleImportant = async (id: string) => {
+
+
+        try {
+            startLoading()
+            const response = await Api.setPersonalEventImportant(id)
+
+            if (response.status === 200) {
+                setEvents(events.map(event =>
+                    event.id_pevent === id ? { ...event, isimportant: !event.isimportant } : event
+                ))
+                setOriginalEvents(events.map(event =>
+                    event.id_pevent === id ? { ...event, isimportant: !event.isimportant } : event
+                ))
+                stopLoading()
+                showAlert("Evento atualizado com sucesso!", "success")
+            }
+        } catch (error) {
+            console.log("Erro ao atualizar evento. " + error)
+        } finally {
+            stopLoading()
+        }
     }
 
-    const toggleComplete = (id: string) => {
-        setEvents(events.map(event =>
-            event.id_pevent === id ? { ...event, completed: !event.completed } : event
-        ))
-        setOriginalEvents(events.map(event =>
-            event.id_pevent === id ? { ...event, completed: !event.completed } : event
-        ))
+    const toggleComplete = async (id: string) => {
+        try {
+            startLoading()
+            const response = await Api.setPersonalEventDone(id)
+
+            if (response.status === 200) {
+                stopLoading()
+                setEvents(events.map(event =>
+                    event.id_pevent === id ? { ...event, isdone: !event.isdone } : event
+                ))
+                setOriginalEvents(events.map(event =>
+                    event.id_pevent === id ? { ...event, isdone: !event.isdone } : event
+                ))
+                showAlert("Evento atualizado com sucesso!", "success")
+            }
+        } catch (error) {
+            console.log("Erro ao atualizar evento! " + error)
+        } finally {
+            stopLoading()
+        }
+    }
+
+    function getFilter() {
+        if (
+            filtroEventos[0].tipoDeEvento.length === 0 &&
+            filtroEventos[0].tipodeCursinho.length === 0
+        ) {
+            setPopupVisible(false);
+            return setEvents(originalEvents);
+        }
+
+        const retorno = originalEvents.filter((dado) => {
+            return filtroEventos.some((f) => {
+                const tipoOk = f.tipoDeEvento.length === 0 || f.tipoDeEvento.includes(dado.type);
+                const cursinhoOk = f.tipodeCursinho.length === 0 || f.tipodeCursinho.includes(dado.cursinho?.toLowerCase());
+                return tipoOk && cursinhoOk;
+            });
+        });
+
+        setPopupVisible(false);
+        setEvents(retorno);
     }
 
     useEffect(() => {
@@ -177,6 +253,7 @@ export default function Calendario({ eventsProp, authData }: Props) {
     return (
         <>
             <LoadingComponent isLoading={isLoading} />
+            {loading && <LoadingBar progress={progress} />}
             <PopupPersonalEvents onClose={() => setIsClose(!isClose)} isVisible={isClose} />
             <Popup
                 isVisible={isVisible}
@@ -190,7 +267,7 @@ export default function Calendario({ eventsProp, authData }: Props) {
                 setFiltroEventos={setFiltroEventos}
                 filtroEventos={filtroEventos}
                 isVisible={popupVisible}
-                callFilter={() => {/* TODO: implementar filtro */ }}
+                callFilter={() => getFilter()}
             />
             <Sidebar setInfo={setUserInfo} userInfo={userInfo} isLoading={isLoading} setIsLoading={setIsLoading} authData={authData} />
 
@@ -198,12 +275,12 @@ export default function Calendario({ eventsProp, authData }: Props) {
                 <div className={styles.headerContent}>
                     <h1>Bem-Vindo de volta, {userInfo[0]}.</h1>
                     <div className={styles.statsRow}>
-                        <div className={styles.statCard}><FiCalendar /> Hoje: {getOverview("getTodayEvents").length}</div>
-                        <div className={styles.statCard}><FiCalendar /> Semana: {getOverview("next7Days").length}</div>
-                        <div className={styles.statCard}><FiCalendar /> Mês: {getOverview("next31Days").length}</div>
-                        <div className={styles.statCard}><FiStar /> Importantes: {getOverview("getImportantEvents").length}</div>
-                        <div className={styles.statCard}><FiEdit3 /> Redações: {getOverview("getRedacao").length}</div>
-                        <div className={styles.statCard}><FiEdit3 /> Simulados: {getOverview("getSimulado").length}</div>
+                        <div className={styles.statCard}><FiCalendar /> Hoje: <strong>{getOverview("getTodayEvents").length}</strong></div>
+                        <div className={styles.statCard}><FiCalendar /> Semana: <strong>{getOverview("next7Days").length}</strong></div>
+                        <div className={styles.statCard}><FiCalendar /> Mês: <strong>{getOverview("next31Days").length}</strong></div>
+                        <div className={styles.statCard}><FiStar /> Importantes: <strong>{getOverview("getImportantEvents").length}</strong></div>
+                        <div className={styles.statCard}><FiEdit3 /> Redações: <strong>{getOverview("getRedacao").length}</strong></div>
+                        <div className={styles.statCard}><FiEdit3 /> Simulados: <strong>{getOverview("getSimulado").length}</strong></div>
                     </div>
                 </div>
             </header>
@@ -232,7 +309,7 @@ export default function Calendario({ eventsProp, authData }: Props) {
                     ).map(event => (
                         <div
                             key={event.id_pevent}
-                            className={`${styles.eventCard} ${event.isimportant ? styles.important : ''} ${highlighted === event.id_pevent ? styles.highlighted : ''} ${event.completed || (event.day < new Date().getDate() || event.month < new Date().getMonth()) ? styles.completed : ''}`}
+                            className={`${styles.eventCard} ${event.isimportant ? styles.important : ''} ${highlighted === event.id_pevent ? styles.highlighted : ''} ${event.completed || event.isdone || (event.day < new Date().getDate() || event.month < new Date().getMonth()) ? styles.completed : ''}`}
                             onMouseEnter={() => setHighlighted(event.id_pevent)}
                             onMouseLeave={() => setHighlighted(null)}
                         >
@@ -240,7 +317,7 @@ export default function Calendario({ eventsProp, authData }: Props) {
                                 {getEventTypeIcon(event.type)}
                             </div>
                             <div className={styles.eventDetails}>
-                                <h3>{event.title}</h3>
+                                <h3>{event.main_title}</h3>
                                 <span className={styles.eventDate}>{`${event.day.toString().padStart(2, '0')}/${(+event.month + 1).toString().padStart(2, '0')}/${event.year}`}</span>
                             </div>
                             <div className={styles.eventActions}>

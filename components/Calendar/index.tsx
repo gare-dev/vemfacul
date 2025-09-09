@@ -135,7 +135,7 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
                 }}>
                     {eventos?.map((opcao: PopupType, index: number) => {
 
-                        if (+opcao.day === day && +opcao.month === month) {
+                        if (+opcao.day === day && +opcao.month === month && +opcao.year === year) {
                             return (
                                 <div
 

@@ -305,6 +305,14 @@ class _Api {
   public async getBestCourses() {
     return await this._instance.get("/course/bests")
   }
+
+  public async setPersonalEventImportant(id_pevent: string) {
+    return await this._instance.patch(`/user/event/important/${id_pevent}`)
+  }
+
+  public async setPersonalEventDone(id_pevent: string) {
+    return await this._instance.patch(`/user/event/done/${id_pevent}`)
+  }
 }
 
 const Api = new _Api(process.env.NEXT_PUBLIC_API_URL ?? "");
