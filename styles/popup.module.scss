@@ -10,10 +10,14 @@
 
     .popupBox {
         width: 900px;
+        max-width: 95%; // responsividade
         height: 300px;
+        max-height: 90%; // responsividade vertical
         background-color: #fff;
         border-radius: 10px;
         position: relative;
+        display: flex;
+        flex-direction: column;
 
         .divBox {
             height: 100%;
@@ -21,11 +25,14 @@
             display: flex;
             justify-content: left;
             align-items: center;
-
             gap: 30px;
             padding-left: 30px;
 
             .dateAndImageDiv {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
 
                 .imageDiv {
                     height: 150px;
@@ -34,14 +41,10 @@
                     display: flex;
                     align-items: center;
 
-
                     img {
                         height: auto;
-
                         width: 150px;
-                        background-repeat: no-repeat;
-                        background-size: cover;
-                        background-position: center;
+                        object-fit: cover;
                     }
                 }
 
@@ -55,11 +58,10 @@
             }
 
             .titleAndDescDiv {
-
                 display: flex;
-                padding-top: 40px;
                 flex-direction: column;
                 height: 100%;
+                padding-top: 40px;
 
                 .titleDiv {
                     display: flex;
@@ -73,7 +75,6 @@
                         font-family: "Kantumruy Pro", sans-serif;
                     }
 
-
                     .type {
                         font-size: 1.5rem;
                         font-weight: 700;
@@ -83,7 +84,6 @@
                 }
 
                 .descDiv {
-
                     p {
                         font-size: 1.3rem;
                         font-weight: 500;
@@ -91,131 +91,147 @@
                         color: #000;
                     }
                 }
-
             }
         }
 
         .closeDiv {
-
             position: absolute;
             top: 0;
             right: 0;
             padding: 5px 15px 10px 10px;
 
             p {
-
                 font-weight: 600;
                 font-size: 20px;
                 cursor: pointer;
             }
         }
 
-        .addDiv {
+        .bttsDiv {
             position: absolute;
-            bottom: 0;
-            right: 0;
-            margin: 10px;
+            bottom: 10px;
+            right: 10px;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #001ECB;
-            height: 40px;
-            width: 40px;
-            text-align: center;
-            border-radius: 50%;
-            cursor: pointer;
+            gap: 10px;
 
+            div {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 40px;
+                width: 40px;
+                border-radius: 50%;
+                cursor: pointer;
+                font-size: 2em;
 
-            &:hover {
-                background-color: #3c59ff;
-
+                p {
+                    margin: 0;
+                    font-family: "Kantumruy Pro", sans-serif;
+                    color: #fff;
+                }
             }
 
-            p {
-                font-weight: 500;
-                font-size: 2em; // Reduz um pouco para caber melhor
-                color: #fff;
-                margin: 0;
+            .addDiv {
+                background-color: #001ECB;
 
-                font-family: "Kantumruy Pro", sans-serif;
-
+                &:hover {
+                    background-color: #3c59ff;
+                }
             }
 
+            .removeDiv {
+                background-color: #cb0000;
 
+                &:hover {
+                    background-color: #ff4e4e;
+                }
+            }
+
+            .editDiv {
+                background-color: #f3ff47;
+
+                &:hover {
+                    background-color: #c7d31d;
+                }
+            }
         }
-
-        .removeDiv {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            margin: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #cb0000;
-            height: 40px;
-            width: 40px;
-            text-align: center;
-            border-radius: 50%;
-            cursor: pointer;
-            margin-right: 60px;
-
-
-            &:hover {
-                background-color: #ff4e4e;
-
-            }
-
-            p {
-                font-weight: 500;
-                font-size: 2em; // Reduz um pouco para caber melhor
-                color: #fff;
-                margin: 0;
-                font-family: "Kantumruy Pro", sans-serif;
-
-            }
-
-
-        }
-
-        .editDiv {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            margin: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #f3ff47;
-            height: 40px;
-            width: 40px;
-            text-align: center;
-            border-radius: 50%;
-            cursor: pointer;
-
-
-            &:hover {
-                background-color: #c7d31d;
-
-            }
-
-            p {
-                font-weight: 500;
-                font-size: 2em; // Reduz um pouco para caber melhor
-                color: #fff;
-                margin: 0;
-
-                font-family: "Kantumruy Pro", sans-serif;
-
-            }
-
-
-        }
-
-
-
     }
+}
+
+/* Responsividade */
+@media (max-width: 1024px) {
+    .mainDiv .popupBox {
+        width: 700px;
+        height: auto;
+        flex-direction: column;
+        padding: 20px;
+
+        .divBox {
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+
+            .dateAndImageDiv .imageDiv {
+                height: 120px;
+                width: 120px;
+
+                img {
+                    width: 120px;
+                }
+            }
+
+            .titleAndDescDiv .titleDiv .title {
+                font-size: 2rem;
+            }
+
+            .titleAndDescDiv .titleDiv .type {
+                font-size: 1.3rem;
+            }
+
+            .titleAndDescDiv .descDiv p {
+                font-size: 1.1rem;
+            }
+        }
+    }
+}
+
+@media (max-width: 640px) {
+    .mainDiv .popupBox {
+        width: 95%;
+        height: auto;
+        padding: 10px;
+
+        .divBox {
+            gap: 10px;
+            padding: 0;
 
 
+            .dateAndImageDiv .imageDiv {
+                height: 100px;
+                width: 100px;
 
+                img {
+                    width: 100px;
+                }
+            }
+
+            .titleAndDescDiv .titleDiv .title {
+                font-size: 1.5rem;
+            }
+
+            .titleAndDescDiv .titleDiv .type {
+                font-size: 1rem;
+            }
+
+            .titleAndDescDiv .descDiv p {
+                font-size: 0.9rem;
+            }
+        }
+
+        .bttsDiv div {
+            height: 35px;
+            width: 35px;
+            font-size: 1.5em;
+        }
+    }
 }

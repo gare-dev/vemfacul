@@ -138,13 +138,13 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
                         if (+opcao.day === day && +opcao.month === month) {
                             return (
                                 <div
+
                                     key={index}
                                     style={{
                                         display: "flex",
                                         justifyContent: "center",
                                         alignItems: "center",
                                         width: "100%",
-                                        height: "30px",
                                         backgroundColor: opcao.color,
                                         backgroundImage: `url(${opcao.foto})`,
                                         backgroundRepeat: "no-repeat",
@@ -196,16 +196,23 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
 
                             {getEventsRender(day, month)}
 
-                            <span style={{ fontSize: 30 }} className={`absolute left-1 top-1 flex size-5 items-center justify-center rounded-full text-2xl sm:size-6 sm:text-sm lg:left-2 lg:top-2 lg:size-9 lg:text-base ${isToday ? 'bg-blue-500 font-semibold text-white' : ''} ${month < 0 ? 'text-slate-400' : 'text-slate-800'}`}>
+                            <span className={`absolute left-1 top-1 flex size-5 items-center justify-center rounded-full sm:size-6 sm:text-sm lg:text-3xl text-sm lg:left-2 md:text-2xl  lg:top-2 lg:size-9  ${isToday ? 'bg-blue-500 font-semibold text-white' : ''} ${month < 0 ? 'text-slate-400' : 'text-slate-800'}`}>
                                 {day}
                             </span>
-                            {
-                                isNewMonth && (
-                                    <span className="absolute bottom-0.5 left-0 w-full truncate px-1.5 text-sm font-semibold text-slate-800 sm:bottom-0 sm:text-lg lg:bottom-2.5 lg:left-3.5 lg:-mb-1 lg:w-fit lg:px-0 lg:text-xl 2xl:mb-[-4px] 2xl:text-2xl">
-                                        {monthNames[month]}
-                                    </span>
-                                )
-                            }
+                            {isNewMonth && (
+                                <span className="
+    absolute bottom-0.5 left-0 w-full truncate px-1.5 
+    text-[10px] font-semibold text-slate-800   /* base bem pequena */
+    sm:bottom-0 sm:text-sm                     /* >= 640px */
+    md:text-base                              /* >= 768px */
+    lg:bottom-2.5 lg:left-3.5 lg:-mb-1 lg:w-fit lg:px-0 lg:text-lg  /* >= 1024px */
+    xl:text-xl                                /* >= 1280px */
+    2xl:mb-[-4px] 2xl:text-2xl
+    ">
+                                    {monthNames[month]}
+                                </span>
+                            )}
+
                             <button type="button" className="absolute right-2 top-2 rounded-full opacity-0 transition-all focus:opacity-100 group-hover:opacity-100">
                                 <svg className="size-8 scale-90 text-blue-500 transition-all hover:scale-100 group-focus:scale-100" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                                     <path fillRule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4.243a1 1 0 1 0-2 0V11H7.757a1 1 0 1 0 0 2H11v3.243a1 1 0 1 0 2 0V13h3.243a1 1 0 1 0 0-2H13V7.757Z" clipRule="evenodd" />
@@ -305,11 +312,18 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
                 </div>
                 <div className="grid w-full grid-cols-7 justify-between text-slate-700 text-xl">
                     {daysOfWeek.map((day, index) => (
-                        <div key={index} className="w-full border-b border-slate-200 py-2 text-center font-semibold">
-                            {day}
+                        <div
+                            key={index}
+                            className="w-full border-b border-slate-200 py-2 text-center font-semibold"
+                        >
+                            {/* versão curta */}
+                            <span className="block md:hidden">{day[0]}</span>
+                            {/* versão completa */}
+                            <span className="hidden md:block">{day}</span>
                         </div>
                     ))}
                 </div>
+
             </div>
             <div className="w-full px-5 pt-4 sm:px-8 sm:pt-6">
                 {generateCalendar}
