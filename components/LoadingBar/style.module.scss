@@ -1,0 +1,15 @@
+.container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4px;
+    width: 100%;
+    background-color: transparent;
+    z-index: 9999;
+}
+
+.bar {
+    height: 100%;
+    background-color: #0070f3; // cor azul Next.js
+    transition: width 0.3s ease;
+}

@@ -1,0 +1,129 @@
+// pages/index.module.scss
+.main {
+
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #001ECB;
+    background: linear-gradient(0deg, #fff 0%, #D0D7FF 50%, #D0D7FF 75%, #D0D7FF 100%);
+
+}
+
+.hero {
+    text-align: center;
+    margin-bottom: 4rem;
+    padding-top: 100px;
+
+    h1 {
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: #001ECB;
+        user-select: none;
+
+        p {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #778CFE;
+            user-select: none;
+        }
+    }
+}
+
+.slogan {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #778CFE;
+    user-select: none;
+    gap: 10px;
+
+
+}
+
+.opinionsSection {
+    margin-bottom: 5rem;
+
+    h2 {
+        text-align: center;
+        font-weight: 700;
+        font-size: 2rem;
+        margin-bottom: 2rem;
+        color: #001ECB;
+    }
+}
+
+.opinions {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.featuresSection {
+    margin-bottom: 5rem;
+
+    h2 {
+        text-align: center;
+        font-weight: 700;
+        font-size: 2rem;
+        margin-bottom: 2rem;
+        color: #001ECB;
+    }
+}
+
+
+.features {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+}
+
+.cursinhosExample {
+    margin-bottom: 5rem;
+
+    h2 {
+        text-align: center;
+        font-weight: 700;
+        font-size: 2rem;
+        margin-bottom: 2rem;
+        color: #001ECB;
+    }
+}
+
+.cursinhos {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+}
+
+.calendarioSection {
+    margin-bottom: 5rem;
+
+    h2 {
+        text-align: center;
+        font-weight: 700;
+        font-size: 2rem;
+        margin-bottom: 2rem;
+        color: #001ECB;
+    }
+}
+
+@media (max-width: 1024px) {
+    .main {
+        background: linear-gradient(0deg, #fff 0%, #D0D7FF 50%, #D0D7FF 75%, #D0D7FF 100%);
+    }
+}
+
+@media (max-width: 768px) {
+    .main {
+        background: linear-gradient(0deg, #fff 0%, #D0D7FF 15%, #D0D7FF 20%, #D0D7FF 35%);
+
+    }
+}
+
+@media (max-width: 480px) {
+    .main {
+        background: linear-gradient(0deg, #fff 0%, #D0D7FF 50%, #D0D7FF 75%, #D0D7FF 100%);
+    }
+}

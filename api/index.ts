@@ -301,6 +301,10 @@ class _Api {
   public async removeAuthToken() {
     return await this._instance.delete('/user/auth');
   }
+
+  public async getBestCourses() {
+    return await this._instance.get("/course/bests")
+  }
 }
 
 const Api = new _Api(process.env.NEXT_PUBLIC_API_URL ?? "");

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import styles from "@/styles/header.module.scss";
+import styles from '@/styles/header.module.scss';
 import PopupRegistro from '../PopupRegistro';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { useRouter } from 'next/router';
@@ -23,7 +23,6 @@ export default function Header() {
         } else {
             document.removeEventListener('mousedown', handleClickOutside);
         }
-
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
@@ -40,61 +39,61 @@ export default function Header() {
                 />
             )}
 
-            <div className={styles.header__logo}>
-                <img
-                    onClick={() => router.push('/')}
-                    style={{ cursor: "pointer" }}
-                    src="/assets/img/logo.png"
-                    alt="Logo"
-                    className={styles.header__image}
-                />
+            <div className={styles.header__logo} onClick={() => router.push('/')} role="button" tabIndex={0} aria-label="Ir para página inicial">
+                <img src="/assets/img/logo.png" alt="Logo" className={styles.header__image} />
             </div>
 
-            <div className={styles.header__nav}>
-                <div
-                    ref={dropdownRef}
-                    style={{ position: 'relative', height: '100%', display: 'flex', alignItems: 'center' }}
+            <nav className={styles.header__nav}>
+                <button
+                    onClick={() => {
+                        setIsOpen(true);
+                        setSelectedOption('Entrar');
+                    }}
+                    className={styles.header__button__entrar}
+                    type="button"
                 >
+                    Entrar
+                </button>
+
+                <div ref={dropdownRef} className={styles.registerWrapper}>
                     <button
-                        onClick={() => setShowDropdown(prev => !prev)}
+                        onClick={() => setShowDropdown((prev) => !prev)}
                         className={styles.header__button__cadastrar}
+                        type="button"
+                        aria-haspopup="true"
+                        aria-expanded={showDropdown}
                     >
                         Cadastre-se Agora <IoMdArrowDropdown style={{ marginLeft: 5 }} />
                     </button>
                     {showDropdown && (
-                        <div className={styles.dropdown}>
+                        <div className={styles.dropdown} role="menu">
                             <div
+                                role="menuitem"
+                                tabIndex={0}
                                 onClick={() => {
-                                    router.push('/cursinho/cadastro')
+                                    router.push('/cursinho/cadastro');
+                                    setShowDropdown(false);
                                 }}
+                                onKeyDown={(e) => { if (e.key === 'Enter') { router.push('/cursinho/cadastro'); setShowDropdown(false); } }}
                             >
                                 Sou um Cursinho
                             </div>
                             <div
+                                role="menuitem"
+                                tabIndex={0}
                                 onClick={() => {
-                                    setSelectedOption("Cadastro");
+                                    setSelectedOption('Cadastro');
                                     setIsOpen(true);
                                     setShowDropdown(false);
                                 }}
+                                onKeyDown={(e) => { if (e.key === 'Enter') { setSelectedOption('Cadastro'); setIsOpen(true); setShowDropdown(false); } }}
                             >
                                 Sou Estudante
                             </div>
                         </div>
                     )}
                 </div>
-
-                <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
-                    <button
-                        onClick={() => {
-                            setIsOpen(true);
-                            setSelectedOption('Entrar');
-                        }}
-                        className={styles.header__button__entrar}
-                    >
-                        Entrar
-                    </button>
-                </div>
-            </div>
+            </nav>
         </header>
     );
 }
