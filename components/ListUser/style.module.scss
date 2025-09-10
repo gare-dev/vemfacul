@@ -1,0 +1,121 @@
+$user-primary: #001ECB;
+$user-secondary: #778CFE;
+
+.userList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: 'Inter', sans-serif;
+}
+
+.userCard {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease;
+    cursor: default;
+
+    &:hover {
+        box-shadow: 0 4px 12px rgba($user-primary, 0.2);
+    }
+}
+
+.photo {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 1rem;
+    border: 2px solid $user-primary;
+}
+
+.info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.nameUsername {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: $user-primary;
+    margin: 0;
+}
+
+.username {
+    font-size: 0.9rem;
+    color: $user-secondary;
+    font-weight: 500;
+}
+
+.email {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 0;
+}
+
+.createdAt {
+    font-size: 0.8rem;
+    color: #999;
+    margin: 0;
+}
+
+/* Switch styles */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+
+    input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        border-radius: 24px;
+        transition: background-color 0.3s;
+
+        &::before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+    }
+
+    input:checked+.slider {
+        background-color: $user-primary;
+    }
+
+    input:checked+.slider::before {
+        transform: translateX(20px);
+    }
+
+}

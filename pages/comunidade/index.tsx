@@ -99,7 +99,7 @@ export default function Comunidade({ postsProp, authData }: Props) {
     return (
         <>
 
-            <Sidebar isLoading={loading} setIsLoading={setLoading} authData={authData} />
+            <Sidebar authData={authData} />
             <CreatePostagem
                 onPostTweet={handlePostTweet}
                 isOpen={isPopupOpen}

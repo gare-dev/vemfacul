@@ -17,7 +17,7 @@ const Alert: React.FC<Props> = ({ type = "success", message, onClose }) => {
     const timer = setTimeout(() => {
       setExit(true);
       setTimeout(onClose, 500); // espera a animação terminar
-    }, 3000);
+    }, 300);
 
     return () => clearTimeout(timer);
   }, [onClose]);

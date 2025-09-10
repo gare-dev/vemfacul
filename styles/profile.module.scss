@@ -295,6 +295,61 @@ $shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     font-weight: 800;
     margin: 0;
     color: $text-color;
+    display: flex;
+    align-items: center;
+
+    .verifiedWrapper {
+      position: relative;
+      display: inline-block;
+
+      .tooltipBox {
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 0.2s ease-in-out;
+        position: absolute;
+        bottom: 150%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 220px;
+        font-weight: 500;
+        background-color: #ffffff;
+        color: $primary-color;
+        font-size: 12px;
+        line-height: 1.4;
+        padding: 8px 10px;
+        border-radius: 8px;
+        text-align: center;
+        z-index: 15;
+        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
+
+        &::after {
+          content: "";
+          position: absolute;
+          top: 100%;
+          /* seta abaixo da caixinha */
+          left: 50%;
+          transform: translateX(-50%);
+          border-width: 6px;
+          border-style: solid;
+          border-color: #fff transparent transparent transparent;
+        }
+      }
+
+      &:hover .tooltipBox {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+
+
+    .icone {
+      padding-top: 8px;
+      font-weight: 800;
+      color: $text-color;
+
+
+    }
+
   }
 
   .username {

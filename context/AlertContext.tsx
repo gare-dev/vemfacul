@@ -33,7 +33,7 @@ const AlertProvider: React.FC<PropsWithChildren<Props>> = ({ children }) => {
 
     return (
         <alertContext.Provider value={{ showAlert, hideAlert }}>
-            <div style={{ position: "fixed", top: 0, width: "100%", zIndex: 9999 }}>
+            <div style={{ position: "fixed", top: 0, width: "100%", zIndex: 9999999 }}>
                 {alerts.map((alert) => (
                     <Alert
                         key={alert.id}

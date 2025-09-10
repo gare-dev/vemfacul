@@ -74,7 +74,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
 
 export default function Eventos({ eventsProp, authData }: Props) {
     const [events, setEvents] = useState<PopupType[]>(eventsProp || [])
-    const [isLoading, setIsLoading] = useState<boolean>(false)
     const [originalEvents,] = useState<PopupType[]>(eventsProp || [])
     const [isVisible, setIsVisible] = useState<boolean>(false)
     const [popupVisible, setPopupVisible] = useState<boolean>(false)
@@ -148,7 +147,7 @@ export default function Eventos({ eventsProp, authData }: Props) {
                 canRemove={false}
                 canEdit={false}
             />
-            <Sidebar isLoading={isLoading} setIsLoading={setIsLoading} authData={authData} />
+            <Sidebar authData={authData} />
 
             <div>
                 <DemoWrapper
