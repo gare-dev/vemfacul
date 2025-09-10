@@ -2,8 +2,9 @@ import styles from "@/styles/sidebar.module.scss"
 import AuthDataType from "@/types/authDataType"
 import getAuth from "@/utils/getAuth"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
-import { FaCalendar, FaCalendarAlt, FaRegUserCircle } from "react-icons/fa"
+import { JSX, useEffect, useState } from "react"
+import { FaCalendar, FaCalendarAlt, FaRegUserCircle, FaUsers } from "react-icons/fa"
+import { FaListCheck } from "react-icons/fa6"
 import { IoMdPeople, IoMdSettings } from "react-icons/io"
 import { LuFilePenLine } from "react-icons/lu"
 import { MdAssignment, MdExitToApp, MdQuiz } from "react-icons/md"
@@ -12,69 +13,24 @@ import { RiPagesLine } from "react-icons/ri"
 interface props {
     setInfo?: React.Dispatch<React.SetStateAction<string[]>>
     userInfo?: string[]
-    isLoading: boolean
-    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
     authData: AuthDataType | null | undefined
+
 }
 
-
-// export const getServerSideProps: GetServerSideProps<PropsAuthData> = async (ctx) => {
-//     const cookie = ctx.req.headers.cookie
-//     Api.setCookie(cookie || "")
-
-//     console.log('aqui')
-
-
-//     try {
-//         const response = await Api.getProfileInfo()
-//         if (response.data.code === "PROFILE_INFO") {
-
-//             return {
-//                 props: {
-//                     authData: {
-//                         name: response.data.data.nome,
-//                         image: response.data.data.foto,
-//                         username: response.data.data.username,
-//                     }
-//                 }
-//             }
-//         }
-//         return {
-//             props: {
-//                 authData: null
-//             }
-//         }
-//     } catch (error) {
-//         if (error instanceof AxiosError) {
-//             if (error.response?.data.code === "INVALID_TOKEN") {
-
-//                 return {
-//                     props: {
-//                         authData: null
-//                     }
-//                 }
-//             }
-//             return {
-//                 props: {
-//                     authData: null
-//                 }
-//             }
-//         }
-//         return {
-//             props: {
-//                 authData: null
-//             }
-//         }
-//     }
-
-// }
+type NavItemsType = {
+    icon: JSX.Element
+    name: string
+    path?: string
+    label?: string
+    renderFn?: () => JSX.Element
+}
 
 export default function Sidebar(props: props) {
     const router = useRouter()
     const [authData,] = useState<AuthDataType | null | undefined>(props.authData)
     const [profileOptionsVisible, setProfileOptionsVisible] = useState<boolean>(false)
 
-    const navItems = [
+    const baseNavItems: NavItemsType[] = [
         { icon: <RiPagesLine />, name: "Feed", path: "/feed" },
         { icon: <IoMdPeople />, name: "Comunidade", path: "/comunidade" },
         { icon: <FaCalendar />, name: "Calendário Geral", path: "/eventos" },
@@ -85,7 +41,11 @@ export default function Sidebar(props: props) {
         { icon: <FaRegUserCircle />, name: "Perfil", path: `/${authData?.username}` },
     ]
 
-    const activeIndex = navItems.findIndex(item => item.path === router.pathname) == -1 ? 7 : navItems.findIndex(item => item.path === router.pathname)
+    const navItems = authData?.role === "admin"
+        ? [...baseNavItems, { icon: <FaListCheck />, name: "Aprovar Cursinhos", path: "/cursinho/aprovar" }, { icon: <FaUsers />, name: "Usuários", path: "/usuarios" }]
+        : baseNavItems;
+
+    const activeIndex = navItems.findIndex(item => item.path === router.pathname);
 
     async function handleSignout() {
         if (await getAuth()) {
@@ -94,16 +54,14 @@ export default function Sidebar(props: props) {
     }
 
     useEffect(() => {
-        console.log(props.authData)
         if (props.authData !== undefined && props.authData !== null) {
-            return props.setInfo?.([props.authData.nome, props.authData.foto, props.authData.username])
+            console.log(authData)
+            return props.setInfo?.([props.authData.nome, props.authData.foto, props.authData.username, props.authData.role])
         }
         alert("Você precisa estar logado para acessar essa página.")
         router.push("/")
 
     }, [props.authData])
-
-
 
     return (
         <section className={styles.page}>
@@ -121,7 +79,7 @@ export default function Sidebar(props: props) {
                         {navItems.map((item, index) => (
                             <button
                                 key={index}
-                                onClick={() => router.push(item.path)}
+                                onClick={() => item.path ? router.push(item.path) : null}
                                 type="button"
                                 className={router.pathname === item.path ? 'active' : ''}
                             >

@@ -3,19 +3,41 @@ import { CourseApprovalCard } from '@/components/Common/Admin/HorizontalCard';
 import { Course } from '@/types/coursetype';
 import { useEffect, useState } from 'react';
 import styles from "@/styles/courseapprovarllist.module.scss"
-import LoadingComponent from '@/components/LoadingComponent';
 import useAlert from '@/hooks/useAlert';
+import LoadingBar from '@/components/LoadingBar';
 
-export default function CoursesApprovalList() {
-    const [courses, setCourses] = useState<Course[]>([]);
-    const [loading, setLoading] = useState<boolean>(true)
+interface Props {
+    Course: Course[] | null
+}
+
+export default function CoursesApprovalList({ Course }: Props) {
+    const [courses, setCourses] = useState<Course[]>(Course || []);
     const { showAlert } = useAlert()
+    const [progress, setProgress] = useState(0);
+    const [loading, setLoading] = useState(false);
+    let intervalId: NodeJS.Timeout;
 
+    const startLoading = () => {
+        setLoading(true);
+        setProgress(10);
+
+        intervalId = setInterval(() => {
+            setProgress((prev) => (prev < 90 ? prev + 5 : prev));
+        }, 200);
+    };
+
+    const stopLoading = () => {
+        clearInterval(intervalId);
+        setProgress(100);
+        setTimeout(() => {
+            setLoading(false);
+            setProgress(0);
+        }, 400);
+    };
     const handleApprove = async (id: string) => {
-        console.log(id)
         if (!id) return
-
         try {
+            startLoading()
             const response = await Api.approveCursinho(id)
 
             if (response.status === 204) {
@@ -26,17 +48,16 @@ export default function CoursesApprovalList() {
         } catch (error) {
             showAlert("Erro ao aprovar cursinho: " + error)
         } finally {
+            stopLoading()
         }
     };
 
     const handleReject = (id: string) => {
         console.log(id)
-
     };
 
     const handleDetails = (id: string) => {
         console.log(id)
-
     };
 
     const handleGetApprovalList = async () => {
@@ -49,7 +70,7 @@ export default function CoursesApprovalList() {
             console.error("Error fetching approval list:", error);
 
         } finally {
-            setLoading(false)
+
         }
     };
 
@@ -59,8 +80,9 @@ export default function CoursesApprovalList() {
 
     return (
         <div className={styles.container}>
-            {loading && <LoadingComponent isLoading={loading} />}
-            {!loading && courses.map((course, index) => (
+            {loading && <LoadingBar progress={progress} />}
+
+            {courses.map((course, index) => (
                 <CourseApprovalCard
                     key={index}
                     course={course}

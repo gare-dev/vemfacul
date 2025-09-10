@@ -11,7 +11,6 @@ import { FiltrosType } from "@/types/filtrosType"
 import PopupType from "@/types/data"   // ✅ Usa o tipo centralizado
 import { useEffect, useState } from "react"
 import { FiAlertTriangle, FiCalendar, FiCheckCircle, FiEdit3, FiStar } from "react-icons/fi"
-import LoadingComponent from "@/components/LoadingComponent"
 import { GetServerSideProps } from "next"
 import AuthDataType from "@/types/authDataType"
 import LoadingBar from "@/components/LoadingBar"
@@ -62,7 +61,6 @@ export default function Calendario({ eventsProp, authData }: Props) {
     const [isClose, setIsClose] = useState(false)
     const [hasOpened, setHasOpened] = useState(false)
     const { calendarData } = useCalendarData()
-    const [isLoading, setIsLoading] = useState(false)
     const { showAlert } = useAlert()
     const [popupVisible, setPopupVisible] = useState(false)
     const [events, setEvents] = useState<PopupType[]>(eventsProp || [])
@@ -252,7 +250,6 @@ export default function Calendario({ eventsProp, authData }: Props) {
 
     return (
         <>
-            <LoadingComponent isLoading={isLoading} />
             {loading && <LoadingBar progress={progress} />}
             <PopupPersonalEvents onClose={() => setIsClose(!isClose)} isVisible={isClose} />
             <Popup
@@ -269,7 +266,7 @@ export default function Calendario({ eventsProp, authData }: Props) {
                 isVisible={popupVisible}
                 callFilter={() => getFilter()}
             />
-            <Sidebar setInfo={setUserInfo} userInfo={userInfo} isLoading={isLoading} setIsLoading={setIsLoading} authData={authData} />
+            <Sidebar setInfo={setUserInfo} userInfo={userInfo} authData={authData} />
 
             <header className={styles.headerBlock}>
                 <div className={styles.headerContent}>

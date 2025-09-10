@@ -45,20 +45,6 @@ export default function Feed({ cursinho, authData }: Props) {
     const [cursinhos,] = useState<Course[]>(cursinho || []);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-
-    // useEffect(() => {
-    //     (async () => {
-    //         setIsLoading(true)
-    //         const response = await Api.getCursinho()
-
-    //         if (response.status === 200) {
-    //             setCursinhos(response.data.data);
-    //             setIsLoading(false);
-    //         }
-    //     })()
-    // }, [])
-
-
     // function handleFilterChange(filters: { location: string; state: string; city: string; query: string }) {
     //     // const filteredCursinhos = products.filter(cursinho => {
     //     //     return (
@@ -76,7 +62,7 @@ export default function Feed({ cursinho, authData }: Props) {
     return (
         <div>
             {isLoading && <LoadingComponent isLoading={isLoading} />}
-            <Sidebar isLoading={isLoading} setIsLoading={setIsLoading} authData={authData} />
+            <Sidebar authData={authData} />
             <div className={styles.feedPageContainer}>
 
                 <FilterBar onSearch={() => console.log("teste")} />

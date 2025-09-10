@@ -313,6 +313,17 @@ class _Api {
   public async setPersonalEventDone(id_pevent: string) {
     return await this._instance.patch(`/user/event/done/${id_pevent}`)
   }
+
+  public async getAdminUsers() {
+    return await this._instance.get("/admin/users")
+  }
+
+  public async setAdminUserVerify(value: boolean, id_user: string) {
+    return await this._instance.patch("/admin/users/verify", {
+      value,
+      id_user
+    })
+  }
 }
 
 const Api = new _Api(process.env.NEXT_PUBLIC_API_URL ?? "");

@@ -204,7 +204,7 @@ export default function CursinhoPage({ id_course, authData, cursinhoProp }: Prop
 
         <>
             {loading && <LoadingComponent isLoading={loading} />}
-            <Sidebar isLoading={loading} setIsLoading={setLoading} setInfo={setInfo} userInfo={info} authData={authData} />
+            <Sidebar setInfo={setInfo} userInfo={info} authData={authData} />
             <div className={styles.pageContainer}>
                 <div className={styles.header}>
                     <img

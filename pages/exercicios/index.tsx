@@ -34,12 +34,11 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 
 export default function Main({ authData }: Props) {
     const [userInfo, setUserInfo] = useState<string[]>([])
-    const [isLoading, setIsLoading] = useState(false)
 
 
     return (
         <>
-            <Sidebar isLoading={isLoading} setIsLoading={setIsLoading} setInfo={setUserInfo} userInfo={userInfo} authData={authData} />
+            <Sidebar setInfo={setUserInfo} userInfo={userInfo} authData={authData} />
             <QuickTest></QuickTest>
         </>
     )
