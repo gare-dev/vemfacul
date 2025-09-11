@@ -42,7 +42,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
     }
 }
 export default function Usuarios({ authData, users }: Props) {
-    console.log(users)
 
     return (
         <>

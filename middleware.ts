@@ -14,7 +14,8 @@ export const RESERVED_ROUTES = [
     'correcaoRedacao',
     'exercicioDiario',
     'cursinho',
-    'config'
+    'config',
+    'admin/*'
 
 ];
 
