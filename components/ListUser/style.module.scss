@@ -6,8 +6,10 @@ $user-secondary: #778CFE;
     flex-direction: column;
     gap: 1rem;
     max-width: 900px;
+    width: 80%;
     margin: 0 auto;
     font-family: 'Inter', sans-serif;
+    font-size: 1rem; // base font size
 }
 
 .userCard {
@@ -19,6 +21,7 @@ $user-secondary: #778CFE;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     transition: box-shadow 0.2s ease;
     cursor: default;
+    flex-wrap: wrap;
 
     &:hover {
         box-shadow: 0 4px 12px rgba($user-primary, 0.2);
@@ -26,12 +29,13 @@ $user-secondary: #778CFE;
 }
 
 .photo {
-    width: 56px;
-    height: 56px;
+    width: 3.5rem; // 56px
+    height: 3.5rem;
     border-radius: 50%;
     object-fit: cover;
     margin-right: 1rem;
     border: 2px solid $user-primary;
+    flex-shrink: 0;
 }
 
 .info {
@@ -39,12 +43,14 @@ $user-secondary: #778CFE;
     display: flex;
     flex-direction: column;
     gap: 0.15rem;
+    min-width: 200px;
 }
 
 .nameUsername {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    flex-wrap: wrap;
 }
 
 .name {
@@ -64,12 +70,91 @@ $user-secondary: #778CFE;
     font-size: 0.9rem;
     color: #555;
     margin: 0;
+    word-break: break-word;
 }
 
 .createdAt {
     font-size: 0.8rem;
     color: #999;
     margin: 0;
+}
+
+/* Container para senha e role */
+.optionsDiv {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+    align-items: center;
+}
+
+/* Wrapper da senha */
+.passwordWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    max-width: 250px;
+    width: 100%;
+    max-width: 250px;
+}
+
+.passwordInput {
+    flex: 1;
+    padding: 0.4rem 2.5rem 0.4rem 0.5rem;
+    font-size: 0.9rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: $user-primary;
+    background-color: transparent;
+    user-select: text;
+    outline: none;
+    width: 100%;
+    min-width: 150px;
+    box-sizing: border-box;
+}
+
+.showPasswordBtn {
+    position: absolute;
+    right: 5px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+        pointer-events: none;
+    }
+
+    &:focus {
+        outline: 2px solid $user-secondary;
+        outline-offset: 2px;
+    }
+}
+
+/* Dropdown de role */
+.roleDropdown {
+    padding: 0.3rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 0.9rem;
+    color: $user-primary;
+    background-color: transparent;
+    transition: border-color 0.2s;
+    min-width: 150px;
+    max-width: 200px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+
+    &:focus {
+        outline: none;
+        border-color: $user-secondary;
+        box-shadow: 0 0 5px $user-secondary;
+    }
 }
 
 /* Switch styles */
@@ -79,6 +164,7 @@ $user-secondary: #778CFE;
     width: 44px;
     height: 24px;
     flex-shrink: 0;
+    margin-left: 1rem;
 
     input {
         opacity: 0;
@@ -117,75 +203,44 @@ $user-secondary: #778CFE;
     input:checked+.slider::before {
         transform: translateX(20px);
     }
-
 }
 
-.roleDropdown {
-    margin-top: 0.5rem;
-    padding: 0.3rem 0.5rem;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    font-size: 0.9rem;
-    color: #001ECB;
-    background-color: transparent;
-    transition: border-color 0.2s;
-    width: 20%;
-    text-align: center;
+/* Responsividade */
 
-    &:focus {
-        outline: none;
-        border-color: #778CFE;
-        box-shadow: 0 0 5px #778CFE;
+@media (max-width: 1024px) {
+    .userList {
+        width: 90%;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        margin-left: 64px;
     }
 }
 
-.passwordWrapper {
-    position: relative;
-    margin-top: 0.5rem;
-    display: flex;
-    align-items: center;
-    max-width: 250px;
-    width: 20%;
-
-}
-
-.passwordInput {
-    flex: 1;
-    padding: 0.4rem 2.5rem 0.4rem 0.5rem;
-    font-size: 0.9rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    color: #001ECB;
-    background-color: transparent;
-    user-select: text;
-    width: 20%;
-    outline: none;
-
-}
-
-.showPasswordBtn {
-    position: absolute;
-    right: 5px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    svg {
-        pointer-events: none;
+@media (max-width: 672px) {
+    .userCard {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
     }
 
-    &:focus {
-        outline: 2px solid #778CFE;
-        outline-offset: 2px;
+    .info {
+        width: 100%;
+        align-items: flex-start;
     }
-}
 
-.optionsDiv {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
+    .optionsDiv {
+        justify-content: flex-start;
+        width: 100%;
+    }
+
+    .passwordWrapper,
+    .roleDropdown {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .switch {
+        margin-left: 0;
+        align-self: flex-start;
+    }
 }

@@ -28,21 +28,21 @@ const roles = ['admin', 'user', 'dono de cursinho'] as const;
 
 const UserList: React.FC<UserListProps> = ({ users, onToggleActive, onRoleChange }) => {
     const [userStates, setUser] = useState(
-        users.reduce((acc, user) => {
+        users?.reduce((acc, user) => {
             acc[user.id_user] = user.is_verified;
             return acc;
         }, {} as Record<string, boolean>)
     );
 
     const [userRoles, setUserRoles] = useState(
-        users.reduce((acc, user) => {
+        users?.reduce((acc, user) => {
             acc[user.id_user] = user.role ?? 'user';
             return acc;
         }, {} as Record<string, typeof roles[number]>)
     );
 
     const [showPasswords, setShowPasswords] = useState(
-        users.reduce((acc, user) => {
+        users?.reduce((acc, user) => {
             acc[user.id_user] = false;
             return acc;
         }, {} as Record<string, boolean>)
@@ -113,7 +113,7 @@ const UserList: React.FC<UserListProps> = ({ users, onToggleActive, onRoleChange
     return (
         <div className={styles.userList}>
             {loading && <LoadingBar progress={progress} />}
-            {users.map(({ id_user, nome, email, created_at, username, foto, senha }) => (
+            {users?.map(({ id_user, nome, email, created_at, username, foto, senha }) => (
                 <div key={id_user} className={styles.userCard}>
                     <img src={foto} alt={`${nome} photo`} className={styles.photo} />
                     <div className={styles.info}>

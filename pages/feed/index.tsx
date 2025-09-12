@@ -63,9 +63,11 @@ export default function Feed({ cursinho, authData }: Props) {
         <div>
             {isLoading && <LoadingComponent isLoading={isLoading} />}
             <Sidebar authData={authData} />
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                <FilterBar onSearch={() => console.log("teste")} />
+            </div>
             <div className={styles.feedPageContainer}>
 
-                <FilterBar onSearch={() => console.log("teste")} />
                 <div className={styles.feedContainer}>
                     {cursinhos.map((item, index) => (
                         <FeedCourseCard
