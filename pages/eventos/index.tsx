@@ -9,6 +9,7 @@ import { FiltrosType } from "@/types/filtrosType";
 import { AxiosError } from "axios";
 import { GetServerSideProps } from "next";
 import { useState } from "react";
+import styles from "@/styles/eventos.module.scss"
 
 
 type Props = {
@@ -149,7 +150,7 @@ export default function Eventos({ eventsProp, authData }: Props) {
             />
             <Sidebar authData={authData} />
 
-            <div>
+            <div className={styles.calendario}>
                 <DemoWrapper
                     isEditable={false}
                     eventos={events}

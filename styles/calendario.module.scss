@@ -70,6 +70,11 @@
     margin: 0 auto;
     width: 74%;
     max-width: 1170px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 
     h1 {
         margin: 0 0 1.5rem 0;
@@ -88,8 +93,11 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    min-width: 180px;
     background-color: #D0D7FF;
     padding: 0.75rem 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
     border-radius: 8px;
     color: #001ECB;
     font-weight: 600;
@@ -107,6 +115,7 @@
     display: flex;
     gap: 1rem;
     margin-bottom: 2rem;
+
 }
 
 .viewButton {
@@ -121,7 +130,8 @@
 
     &.active {
         background-color: #001ECB;
-        color: white;
+        color: #001ECB;
+        font-weight: 500;
     }
 
     &:hover {
@@ -214,4 +224,50 @@
     text-align: center;
     padding: 2rem;
     font-size: 1.1rem;
+}
+
+
+@media (max-width: 1024px) {
+    .headerBlock {
+        margin-left: 64px;
+    }
+
+    .mainContent {
+        margin-left: 64px;
+
+    }
+
+    .calendario {
+        margin-left: 70px;
+        width: 100%;
+    }
+
+    .headerContent {
+        width: 100%;
+    }
+
+    .headerBlock {
+        width: 100%;
+    }
+
+    .statsRow {
+        justify-content: center;
+    }
+
+    .mainContent {
+        width: 100%;
+
+
+
+        .viewControls {
+            justify-content: center;
+            gap: 1px;
+            margin-left: 10px;
+        }
+
+    }
+
+    .eventsList {
+        margin-left: 10px;
+    }
 }

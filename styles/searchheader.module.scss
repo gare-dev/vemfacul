@@ -11,7 +11,11 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     font-family: 'Inter', sans-serif;
     margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
 }
+
 
 .filterItem {
     display: flex;
@@ -79,6 +83,85 @@
     .filterBar {
         flex-direction: column;
         align-items: stretch;
+        gap: 12px;
+        padding: 12px 16px;
+        width: 100%;
+        /* ocupa toda a largura */
+    }
+
+    .filterItem {
+        flex: 1 1 auto;
+        min-width: auto;
+        font-size: 13px;
+    }
+
+    .filterSelect,
+    .filterInput {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+
+    .searchButton {
+        width: 100%;
+        justify-content: center;
+        font-size: 14px;
+        padding: 10px 16px;
+    }
+
+    .searchIcon {
+        font-size: 18px;
+        margin-right: 6px;
+    }
+}
+
+@media (max-width: 400px) {
+    .filterBar {
+        gap: 10px;
+        padding: 8px 12px;
+    }
+
+    .filterItem {
+        font-size: 12px;
+    }
+
+    .filterSelect,
+    .filterInput {
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+
+    .searchButton {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+
+    .searchIcon {
+        font-size: 16px;
+        margin-right: 4px;
+    }
+}
+
+/* Ajuste para telas maiores ou iguais a 1024px */
+@media (min-width: 1024px) {
+    .filterBar {
+        width: calc(100% - 64px);
+        /* largura total menos sidebar */
+        margin-left: 64px;
+        /* desloca para direita para não ficar atrás da sidebar */
+        max-width: none;
+        /* remove max-width para usar todo o espaço */
+    }
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 1023px) {
+    .filterBar {
+        width: 100%;
+        margin-left: 0;
+        max-width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        width: 50%;
         gap: 12px;
         padding: 12px 16px;
     }

@@ -330,21 +330,25 @@ export default function Calendario({ eventsProp, authData }: Props) {
                 </div>
             </main>
 
-            <DemoWrapper
-                isEditable
-                eventos={events}
-                popUpClick={() => setIsVisible(true)}
-                popupFilterClick={() => setPopupVisible(true)}
-                onDateClick={(day, month, year) => {
-                    setIsClose(true)
-                    setPersonalEventsData(prev => ({
-                        ...prev,
-                        day: String(day),
-                        month: String(month),
-                        year: String(year),
-                    }))
-                }}
-            />
+
+            <div className={styles.calendario}>
+                <DemoWrapper
+                    isEditable
+                    eventos={events}
+                    popUpClick={() => setIsVisible(true)}
+                    popupFilterClick={() => setPopupVisible(true)}
+                    onDateClick={(day, month, year) => {
+                        setIsClose(true)
+                        setPersonalEventsData(prev => ({
+                            ...prev,
+                            day: String(day),
+                            month: String(month),
+                            year: String(year),
+                        }))
+                    }}
+                />
+            </div>
+
         </>
     )
 }

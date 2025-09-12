@@ -326,6 +326,13 @@ class _Api {
       id_user
     })
   }
+
+  public async setAdminUserRole(id_user: string, role: string) {
+    return await this._instance.patch("/admin/users/role", {
+      id_user,
+      role,
+    })
+  }
 }
 
 const Api = new _Api(process.env.NEXT_PUBLIC_API_URL ?? "");

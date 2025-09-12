@@ -1,4 +1,3 @@
-
 import Api from "@/api";
 import MiniProfile from "@/components/MiniProfile";
 import RegisterAccountLoadingComponent from "@/components/RegisterAccountLoadingComponent";
@@ -13,6 +12,7 @@ import { useEffect, useState } from "react";
 
 export default function CadastrarUsuario() {
     const [step, setStep] = useState(0)
+    const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
     const [nivel, setNivel] = useState("")
     const [isFinish, setIsfinish] = useState(true)
     const { showAlert } = useAlert()
@@ -208,6 +208,13 @@ export default function CadastrarUsuario() {
     const checkMandatoryFields = () => {
         const currentInput = inputs[step];
 
+        console.log("PASSOU AQUI")
+
+        if (!hasTriedSubmit) {
+            setHasTriedSubmit(true);
+            return true;
+        }
+
         if (currentInput?.type === "textName" && user.nome?.trim() === "") {
             showAlert("Nome é obrigatório", "warning");
             return false;
@@ -271,15 +278,6 @@ export default function CadastrarUsuario() {
             return handleSubmit("professor")
         }
     }, [step]);
-
-
-
-    useEffect(() => {
-        if (step !== 0) {
-            checkMandatoryFields();
-        }
-    }, [step]);
-
 
 
     function renderInputAlunoEM() {
@@ -411,6 +409,7 @@ export default function CadastrarUsuario() {
                             const selecionado = user.vestibulares?.includes(opcao);
 
 
+
                             return (
                                 <div
                                     key={index}
@@ -433,9 +432,9 @@ export default function CadastrarUsuario() {
                     ) :
                         <div className={s.divAlunoEMFinalizar}>
                             <div>
-                                <p>Conta Registrada! Aperte no botão <p style={{ color: "#777CFE", fontWeight: 600 }}>FINALIZAR</p><p> para ser redirecionado ao nosso feed.</p></p>
+                                <p>Conta registrada! Aguarde alguns segundos e você será redirecionado ao nosso feed.</p>
                             </div>
-                        </div>
+                        </div >
                 )
         }
     }
@@ -477,13 +476,11 @@ export default function CadastrarUsuario() {
                         <div className={s.divAlunoEMFinalizar}>
 
                             <div>
-                                <p>Conta Registrada! Aperte no botão <p style={{ color: "#777CFE", fontWeight: 600 }}>FINALIZAR</p><p> para ser redirecionado ao nosso feed.</p></p>
+                                <p>Conta registrada! Aguarde alguns segundos e você será redirecionado ao nosso feed.</p>
                             </div>
                         </div>
                 )
-
         }
-
     }
 
     useEffect(() => {
@@ -526,11 +523,22 @@ export default function CadastrarUsuario() {
                                     Selecionar imagem
                                 </label>
                                 <input
-                                    onChange={(e) =>
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (!file) return;
+
+                                        const validTypes = ["image/jpeg", "image/png"];
+                                        if (!validTypes.includes(file.type)) {
+                                            showAlert("Formato inválido! Envie apenas PNG ou JPG.", "warning");
+                                            e.target.value = "";
+                                            return;
+                                        }
                                         updateState("foto", e.target.files?.[0] ?? null)
+                                    }
                                     }
                                     type="file"
                                     id="file-upload"
+                                    accept=".png, .jpg, .jpeg, .gif"
                                     style={{ display: "none" }}
                                 />
                             </div>
@@ -589,7 +597,12 @@ export default function CadastrarUsuario() {
                                 <p className={s.subtitleText}>{inputs[step]?.subtitle}</p>
                             </div>
                             <div className={s.inputDiv}>
-                                <input maxLength={20} value={user.username?.trim()} onChange={(e) => updateState("username", e.target.value)} placeholder={inputs[step].placeholder} className={s.input} type="text" />
+                                <input
+
+                                    maxLength={20} value={user.username?.trim()} onChange={(e) => {
+                                        const cleanValue = e.target.value.replace(/[^A-Za-z0-9_]/g, "");
+                                        updateState("username", cleanValue)
+                                    }} placeholder={inputs[step].placeholder} className={s.input} type="text" />
                             </div>
                         </>
                     ) :
