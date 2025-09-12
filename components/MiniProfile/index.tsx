@@ -31,7 +31,7 @@ export default function MiniProfile(props: props) {
     return (
         <div className={s.mainDiv}>
             <div className={s.imageDiv}>
-                {props.step >= 1 && <img src={typeof props.photo === "string" ? props.photo : URL.createObjectURL(props.photo)} alt="" />}
+                {(props.step >= 1 || props.photo) && <img src={typeof props.photo === "string" ? props.photo : URL.createObjectURL(props.photo)} alt="" />}
             </div>
             <div className={s.nameDiv}>
                 <p>{props.name}{getEmoji(props.level)}</p>
