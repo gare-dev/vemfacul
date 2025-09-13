@@ -7,7 +7,7 @@ import { FaCalendar, FaCalendarAlt, FaRegUserCircle, FaUsers } from "react-icons
 import { FaListCheck } from "react-icons/fa6"
 import { IoMdPeople, IoMdSettings } from "react-icons/io"
 import { LuFilePenLine } from "react-icons/lu"
-import { MdAssignment, MdExitToApp, MdQuiz } from "react-icons/md"
+import { MdAssignment, MdExitToApp, MdOutlineListAlt, MdQuiz } from "react-icons/md"
 import { RiPagesLine } from "react-icons/ri"
 import PopupMissLogin from "../MissLogin"
 
@@ -15,6 +15,7 @@ interface props {
     setInfo?: React.Dispatch<React.SetStateAction<string[]>>
     userInfo?: string[]
     authData: AuthDataType | null | undefined
+    traceID?: string
 
 }
 
@@ -44,7 +45,9 @@ export default function Sidebar(props: props) {
     ]
 
     const navItems = authData?.role === "admin"
-        ? [...baseNavItems, { icon: <FaListCheck />, name: "Aprovar Cursinhos", path: "/admin/aprovar_cursinho" }, { icon: <FaUsers />, name: "Usuários", path: "/admin/usuarios" }]
+        ? [...baseNavItems, { icon: <FaListCheck />, name: "Aprovar Cursinhos", path: "/admin/aprovar_cursinho" },
+        { icon: <FaUsers />, name: "Usuários", path: "/admin/usuarios" },
+        { icon: <MdOutlineListAlt />, name: "Log da API", path: "/admin/api_log" }]
         : baseNavItems;
 
     const activeIndex = navItems.findIndex(item => item.path === router.pathname);
@@ -68,7 +71,8 @@ export default function Sidebar(props: props) {
     return (
 
         <>
-            {isMissingLoginShown && <PopupMissLogin redirectTo="/" />}
+            {isMissingLoginShown && <PopupMissLogin redirectTo="/" traceID={props.traceID} />}
+            {/* {<TracePopup message="Erro ao carregar a página, se esse problema persistir, contate o suporte." traceId={props.traceID ?? ""}></TracePopup>} */}
             <section className={styles.page}>
                 <aside className={styles.sidebar}>
                     <div className={styles.inner}>
