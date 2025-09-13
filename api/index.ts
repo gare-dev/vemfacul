@@ -25,9 +25,6 @@ class _Api {
       return { ...response, data: handleDates(response.data) };
     });
 
-
-
-
     // this._instance.interceptors.request.use((config) => {
     //   // if (getAuth()) {
     //   //   if (config.headers) {
@@ -330,6 +327,10 @@ class _Api {
       id_user,
       role,
     })
+  }
+
+  public async getAdminLogs() {
+    return await this._instance.get("/admin/api/log")
   }
 }
 

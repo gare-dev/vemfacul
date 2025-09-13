@@ -15,6 +15,7 @@ interface props {
     setInfo?: React.Dispatch<React.SetStateAction<string[]>>
     userInfo?: string[]
     authData: AuthDataType | null | undefined
+    traceID?: string
 
 }
 
@@ -68,7 +69,8 @@ export default function Sidebar(props: props) {
     return (
 
         <>
-            {isMissingLoginShown && <PopupMissLogin redirectTo="/" />}
+            {isMissingLoginShown && <PopupMissLogin redirectTo="/" traceID={props.traceID} />}
+            {/* {<TracePopup message="Erro ao carregar a página, se esse problema persistir, contate o suporte." traceId={props.traceID ?? ""}></TracePopup>} */}
             <section className={styles.page}>
                 <aside className={styles.sidebar}>
                     <div className={styles.inner}>

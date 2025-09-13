@@ -3,9 +3,10 @@ import { useRouter } from 'next/router';
 
 interface PopupProps {
     redirectTo: string;
+    traceID?: string
 }
 
-const PopupMissLogin: React.FC<PopupProps> = ({ redirectTo }) => {
+const PopupMissLogin: React.FC<PopupProps> = ({ redirectTo, traceID }) => {
     const router = useRouter();
 
     const handleGoBack = () => {
@@ -67,6 +68,7 @@ const PopupMissLogin: React.FC<PopupProps> = ({ redirectTo }) => {
                 >
                     Voltar
                 </button>
+                <p style={{ fontSize: "0.85rem", opacity: 0.8, paddingTop: "5px" }}>Trace ID: {traceID} </p>
             </div>
         </div>
     );
