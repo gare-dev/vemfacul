@@ -274,11 +274,15 @@ class _Api {
   }
 
 
-  public async questoes(year: number) {
-    return await this._instance.get(`https://api.enem.dev/v1/exams/${year}/questions?limit=10`, {
+  public async questoes(year: number, offset: number) {
+    return await this._instance.get(`https://api.enem.dev/v1/exams/${year}/questions?limit=10&offset=${offset}`, {
       withCredentials: false
     })
   }
+
+  // public async correcao() {
+  //   return await this._instance.post('https://api.edenai.run/v2/text/prompt_optimization')
+  // }
 
   public async getCursinho() {
     return await this._instance.get('/courses')
