@@ -64,17 +64,28 @@ const Tweet: React.FC<TweetProps> = ({
     setCurrenComments((prev) => prev + 1)
     console.log('Tweet posted:', tweet);
   };
+  const handleSharePost = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: "Veja esta postagem!",
+        url: `${window.location.origin}/postagem/${id}`
+      });
+    } else {
+      navigator.clipboard.writeText(`${window.location.origin}/postagem/${id}`)
+      alert('link copiado');
+    }
+  }
 
   const handleLike = async () => {
     if (isLiked) {
       const promise = await Api.unLinkePostagem(id);
-      if (promise.data.code === 'UNLIKE_SUCESS') {
+      if (promise.status === 201) {
         setCurrentLikes((prev) => prev - 1);
         setIsLiked(false);
       }
     } else {
       const promise = await Api.likePostagem(id);
-      if (promise.data.code === "LIKE_SUCESS") {
+      if (promise.status === 201) {
         setCurrentLikes((prev) => prev + 1);
         setIsLiked(true);
       }
@@ -174,7 +185,7 @@ const Tweet: React.FC<TweetProps> = ({
             </button>
 
             {/* Share Button */}
-            <button className={styles.actionButton} onClick={(e) => e.stopPropagation()}>
+            <button className={styles.actionButton} style={{ 'cursor': 'pointer' }} onClick={(e) => { e.stopPropagation(); handleSharePost() }}>
               <svg
                 className={styles.actionIcon}
                 viewBox="0 0 24 24"

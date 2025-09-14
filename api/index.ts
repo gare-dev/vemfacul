@@ -25,22 +25,26 @@ class _Api {
       return { ...response, data: handleDates(response.data) };
     });
 
-    this._instance.interceptors.request.use((config) => {
-      if (getAuth()) {
-        if (config.headers) {
-          config.headers['Authorization'] = `Bearer ${getAuth()}`;
-        }
-      }
-      if (getAdminToken()) {
-        if (config.headers) {
-          config.headers['Admin-Token'] = getAdminToken();
-        }
-      }
-      return config;
-    });
 
+
+
+    // this._instance.interceptors.request.use((config) => {
+    //   // if (getAuth()) {
+    //   //   if (config.headers) {
+    //   //     config.headers['Authorization'] = `Bearer ${getAuth()}`;
+    //   //   }
+    //   // }
+    //   // if (getAdminToken()) {
+    //   //   if (config.headers) {
+    //   //     config.headers['Admin-Token'] = getAdminToken();
+    //   //   }
+    //   // }
+    //   return config;
+    // });
   }
-
+  public setCookie(cookie: string) {
+    this._instance.defaults.headers.common['Cookie'] = cookie;
+  }
 
   public async registerAccount(email: string, password: string) {
 
@@ -48,7 +52,6 @@ class _Api {
       email,
       password,
     });
-
   }
 
   public async confirmAccount(token: string) {
@@ -68,7 +71,6 @@ class _Api {
       email,
       password,
     });
-
   }
 
   public async createAccount(formData: any) {
@@ -233,7 +235,7 @@ class _Api {
   }
 
   public async unLinkePostagem(id_postagem: number | string) {
-    return await this._instance.post('/user/post/unlike', { id_postagem });
+    return await this._instance.patch('/user/post/unlike', { id_postagem });
   }
 
   public async getLikesCount(id_postagem: number | string) {
@@ -270,9 +272,49 @@ class _Api {
   public async approveCursinho(id: string) {
     return await this._instance.patch(`/admin/course/${id}/approve`)
   }
+
+
+  public async questoes(year: number, offset: number) {
+    return await this._instance.get(`https://api.enem.dev/v1/exams/${year}/questions?limit=10&offset=${offset}`, {
+      withCredentials: false
+    })
+  }
+
+  // public async correcao() {
+  //   return await this._instance.post('https://api.edenai.run/v2/text/prompt_optimization')
+  // }
+
+  public async getCursinho() {
+    return await this._instance.get('/courses')
+  }
+
+  public async getCursinhoById(id_course: string) {
+    return await this._instance.get(`/course/${id_course}`);
+  }
+
+  public async insertReview(id_cursinho: string, stars: number, content: string) {
+    return await this._instance.post("/course/review", {
+      id_cursinho,
+      stars,
+      content
+    });
+  }
+
+  public async tokenTeste() {
+    return await this._instance.get('/token/teste');
+  }
+
+  public async removeAuthToken() {
+    return await this._instance.delete('/user/auth');
+  }
+
+  public async getBestCourses() {
+    return await this._instance.get("/course/bests")
+  }
 }
 
-const Api = new _Api(process.env.NEXT_PUBLIC_API_URL ?? ""); // https://invest-api-rose.vercel.app/
+const Api = new _Api(process.env.NEXT_PUBLIC_API_URL ?? "");
+
 
 
 export default Api;

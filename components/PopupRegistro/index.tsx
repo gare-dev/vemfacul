@@ -22,9 +22,7 @@ export default function PopupRegistro(props: props) {
 
     const handleClose = () => {
         setIsClosing(true);
-        setTimeout(() => {
-            props.setClose();
-        }, 300);
+        props.setClose();
     };
 
     const handleSubmitRegister = async () => {
@@ -73,15 +71,13 @@ export default function PopupRegistro(props: props) {
             if (response.data.code === "LOGIN_SUCCESS") {
                 setError('')
                 props.setClose()
-                localStorage.setItem('auth', response.data.auth)
                 router.push('/feed')
                 return
             }
         } catch (error) {
             if (error instanceof AxiosError) {
                 if (error.response?.data.code === "INVALID_EMAIL_OR_PASSWORD") {
-                    setError(error.response?.data.message)
-                    console.log("AQUI")
+                    setError(error.response?.data.error)
                     return
                 }
             }
@@ -150,8 +146,8 @@ export default function PopupRegistro(props: props) {
                             <span className={styles.noAccountText}>Não tem uma conta? </span>
                             <span onClick={() => props.changeOption("Cadastro")} className={styles.createAccountText}>Cadastre-se</span>
                         </div>
-                        <div className={styles.closeDiv}>
-                            <span onClick={() => props.setClose()} className={styles.closetext}>X</span>
+                        <div onClick={handleClose} className={styles.closeDiv}>
+                            <span className={styles.closetext}>X</span>
                         </div>
 
                     </div>
@@ -199,8 +195,8 @@ export default function PopupRegistro(props: props) {
                                     <span onClick={() => props.changeOption("Entrar")} className={styles.createAccountText}>Entrar</span>
                                 </div>
 
-                                <div className={styles.closeDiv}>
-                                    <span onClick={handleClose} className={styles.closetext}>X</span>
+                                <div onClick={handleClose} className={styles.closeDiv}>
+                                    <span className={styles.closetext}>X</span>
                                 </div>
 
                             </div>
@@ -218,121 +214,125 @@ export default function PopupRegistro(props: props) {
                             <div style={{ paddingTop: 20 }} className={styles.checkEmailDescription}>
                                 <p className={styles.checkEmailDescriptionText}>Não conseguiu achar o email? {<span className={styles.reenviarText}>Reenviar email.</span>}</p>
                             </div>
-                            <div className={styles.closeDiv}>
-                                <span onClick={handleClose} className={styles.closetext}>X</span>
+                            <div onClick={handleClose} className={styles.closeDiv}>
+                                <span className={styles.closetext}>X</span>
                             </div>
                         </div>)
                     }
                 </div>
-            )}
+            )
+            }
 
-            {props.selectedOption === "EsqueciSenha" && (
-                <div className={styles.popupBox}>
-                    <div className={styles.welcomeDiv}>
-                        <div>
-                            <span className={styles.welcomeToText}>Recuperação de senha</span>
+            {
+                props.selectedOption === "EsqueciSenha" && (
+                    <div className={styles.popupBox}>
+                        <div className={styles.welcomeDiv}>
+                            <div>
+                                <span className={styles.welcomeToText}>Recuperação de senha</span>
+                            </div>
                         </div>
-                    </div>
-                    {error && (
-                        <div className={styles.errorDiv}>
-                            <span className={styles.errorText}>{error}</span>
-                        </div>
-                    )}
+                        {error && (
+                            <div className={styles.errorDiv}>
+                                <span className={styles.errorText}>{error}</span>
+                            </div>
+                        )}
 
-                    <div className={styles.mainFormDiv}>
-                        <div className={styles.emailDiv}>
-                            <label className={styles.emailLabel}>E-MAIL</label>
-                            <input
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className={styles.emailInput}
-                                type="email"
-                            />
-                        </div>
+                        <div className={styles.mainFormDiv}>
+                            <div className={styles.emailDiv}>
+                                <label className={styles.emailLabel}>E-MAIL</label>
+                                <input
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className={styles.emailInput}
+                                    type="email"
+                                />
+                            </div>
 
-                        <div className={styles.buttonDiv}>
-                            <button
-                                onClick={async () => {
-                                    if (!email) {
-                                        setError("Preencha o campo email");
-                                        return;
-                                    }
-                                    setStep("loading");
-                                    setError("");
-                                    try {
-                                        await Api.forgotPassword(email);
-                                        props.changeOption('EmaileEnviado');
-                                        setStep("checkemail");
-                                    } catch (err: unknown) {
-                                        if (err instanceof AxiosError) {
-                                            setError(err.response?.data.message || "Erro ao enviar email");
+                            <div className={styles.buttonDiv}>
+                                <button
+                                    onClick={async () => {
+                                        if (!email) {
+                                            setError("Preencha o campo email");
+                                            return;
                                         }
-                                    } finally {
-                                        setStep("unshown");
-                                    }
-                                }}
-                                className={styles.buttonEntrar}
-                                disabled={step === "loading"}
-                            >
-                                {step === "loading" ? <ButtonLoadingComponent /> : "RECUPERAR SENHA"}
-                            </button>
-                        </div>
-
-                        <div className={styles.noAccountDiv}>
-                            <span
-                                onClick={() => props.changeOption("Cadastro")}
-                                className={styles.createAccountText}
-                            >
-                                Voltar ao Cadastro
-                            </span>
-                        </div>
-
-                        <div className={styles.closeDiv}>
-                            <span
-                                onClick={() => props.setClose()}
-                                className={styles.closetext}
-                            >
-                                X
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            )}
-            {props.selectedOption == 'EmaileEnviado' && (
-                <div className={styles.popupBox}>
-                    <div className={styles.welcomeDiv}>
-                        <div>
-                            <span className={styles.welcomeToText}>Verifique seu e-mail</span>
-                        </div>
-                    </div>
-                    <div className={styles.checkEmailDiv}>
-                        <div className={styles.checkEmail}>
-                            <p className={styles.checkEmailText}>Enviamos um link de recuperação para o seu e-mail.</p>
-                        </div>
-                        <div className={styles.checkEmailDescription} style={{
-                            flexDirection: "column"
-                        }}>
-                            <p className={styles.checkEmailDescriptionText}>
-                                Por favor, acesse sua caixa de entrada e siga as instruções para redefinir sua senha.
-                            </p>
-                            <br />
-                            <p className={styles.checkEmailDescriptionText}>
-                                Errou o e-mail?{" "}
-                                <span
-                                    className={styles.createAccountText}
-                                    style={{ cursor: "pointer", textDecoration: "underline", color: "#001ECB" }}
-                                    onClick={() => props.changeOption("EsqueciSenha")}
+                                        setStep("loading");
+                                        setError("");
+                                        try {
+                                            await Api.forgotPassword(email);
+                                            props.changeOption('EmaileEnviado');
+                                            setStep("checkemail");
+                                        } catch (err: unknown) {
+                                            if (err instanceof AxiosError) {
+                                                setError(err.response?.data.message || "Erro ao enviar email");
+                                            }
+                                        } finally {
+                                            setStep("unshown");
+                                        }
+                                    }}
+                                    className={styles.buttonEntrar}
+                                    disabled={step === "loading"}
                                 >
-                                    Tentar novamente
+                                    {step === "loading" ? <ButtonLoadingComponent /> : "RECUPERAR SENHA"}
+                                </button>
+                            </div>
+
+                            <div className={styles.noAccountDiv}>
+                                <span
+                                    onClick={() => props.changeOption("Cadastro")}
+                                    className={styles.createAccountText}
+                                >
+                                    Voltar ao Cadastro
                                 </span>
-                            </p>
-                        </div>
-                        <div className={styles.closeDiv}>
-                            <span onClick={handleClose} className={styles.closetext}>X</span>
+                            </div>
+
+                            <div onClick={handleClose} className={styles.closeDiv}>
+                                <span
+                                    className={styles.closetext}
+                                >
+                                    X
+                                </span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )
+            }
+            {
+                props.selectedOption == 'EmaileEnviado' && (
+                    <div className={styles.popupBox}>
+                        <div className={styles.welcomeDiv}>
+                            <div>
+                                <span className={styles.welcomeToText}>Verifique seu e-mail</span>
+                            </div>
+                        </div>
+                        <div className={styles.checkEmailDiv}>
+                            <div className={styles.checkEmail}>
+                                <p className={styles.checkEmailText}>Enviamos um link de recuperação para o seu e-mail.</p>
+                            </div>
+                            <div className={styles.checkEmailDescription} style={{
+                                flexDirection: "column"
+                            }}>
+                                <p className={styles.checkEmailDescriptionText}>
+                                    Por favor, acesse sua caixa de entrada e siga as instruções para redefinir sua senha.
+                                </p>
+                                <br />
+                                <p className={styles.checkEmailDescriptionText}>
+                                    Errou o e-mail?{" "}
+                                    <span
+                                        className={styles.createAccountText}
+                                        style={{ cursor: "pointer", textDecoration: "underline", color: "#001ECB" }}
+                                        onClick={() => props.changeOption("EsqueciSenha")}
+                                    >
+                                        Tentar novamente
+                                    </span>
+                                </p>
+                            </div>
+                            <div className={styles.closeDiv}>
+                                <span onClick={handleClose} className={styles.closetext}>X</span>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
         </div >
     );
 

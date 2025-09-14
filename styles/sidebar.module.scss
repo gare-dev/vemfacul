@@ -251,3 +251,13 @@
         }
     }
 }
+
+
+@media (max-width: 1024px) {
+    .sidebar {
+        left: 0;
+        top: 0;
+        border-radius: 0;
+        height: 100%;
+    }
+}

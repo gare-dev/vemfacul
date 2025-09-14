@@ -1,0 +1,89 @@
+.main {
+    position: absolute;
+    width: 90%;
+    height: 100vh;
+    left: 10%;
+
+    form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        height: 100vh;
+    }
+}
+
+
+.container_resultado {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+
+    .content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        height: 70%;
+        width: 50%;
+        height: 70%;
+        width: 50%;
+        background: white;
+        box-shadow: 1.5rem 1.5rem 1.5rem rgb(167, 167, 167);
+
+        h1 {
+            font-size: 2rem;
+
+        }
+    }
+
+    .ul_resultados {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        margin: 1rem;
+
+    }
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: white;
+
+    h1 {
+        text-align: center;
+    }
+}
+
+.container_actions {
+    padding: .5rem 0 0 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    .options {
+        ul {
+            display: flex;
+            gap: 1rem;
+        }
+    }
+}
+
+.btn {
+    background-color: blue;
+    color: white;
+    padding: .1rem;
+
+    &#voltar {
+        background-color: red;
+    }
+}

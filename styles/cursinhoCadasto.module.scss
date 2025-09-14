@@ -158,3 +158,98 @@
         }
     }
 }
+
+// components/PhraseGenerator/PhraseGenerator.module.scss
+.containerInput {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+.phrasesContainer {
+    display: flex;
+    flex-wrap: wrap;
+
+    min-height: 40px;
+    flex-direction: column;
+
+    ul {
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    ul {
+        padding-left: 20px;
+        list-style-type: none;
+
+        li {
+            position: relative;
+            padding-left: 25px;
+
+            &::before {
+                content: '→';
+                position: absolute;
+                left: 0;
+                color: #001ECB;
+                font-weight: bold;
+            }
+        }
+    }
+}
+
+.phraseBox {
+    color: black;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.inputContainer {
+    display: flex;
+    gap: 8px;
+}
+
+.input {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #D0D7FF;
+    border-radius: 6px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s ease;
+
+    &:focus {
+        border-color: #001ECB;
+    }
+
+    &::placeholder {
+        color: #9CA3AF;
+    }
+}
+
+.button {
+    background-color: #001ECB;
+    color: white;
+    border: none;
+    padding: 0 20px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+        background-color: darken(#001ECB, 10%);
+    }
+
+    &:disabled {
+        background-color: #D0D7FF;
+        cursor: not-allowed;
+    }
+}
