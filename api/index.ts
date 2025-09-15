@@ -25,9 +25,6 @@ class _Api {
       return { ...response, data: handleDates(response.data) };
     });
 
-
-
-
     // this._instance.interceptors.request.use((config) => {
     //   // if (getAuth()) {
     //   //   if (config.headers) {
@@ -310,6 +307,36 @@ class _Api {
 
   public async getBestCourses() {
     return await this._instance.get("/course/bests")
+  }
+
+  public async setPersonalEventImportant(id_pevent: string) {
+    return await this._instance.patch(`/user/event/important/${id_pevent}`)
+  }
+
+  public async setPersonalEventDone(id_pevent: string) {
+    return await this._instance.patch(`/user/event/done/${id_pevent}`)
+  }
+
+  public async getAdminUsers() {
+    return await this._instance.get("/admin/users")
+  }
+
+  public async setAdminUserVerify(value: boolean, id_user: string) {
+    return await this._instance.patch("/admin/users/verify", {
+      value,
+      id_user
+    })
+  }
+
+  public async setAdminUserRole(id_user: string, role: string) {
+    return await this._instance.patch("/admin/users/role", {
+      id_user,
+      role,
+    })
+  }
+
+  public async getAdminLogs() {
+    return await this._instance.get("/admin/api/log")
   }
 }
 

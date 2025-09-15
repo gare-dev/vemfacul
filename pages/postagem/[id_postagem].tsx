@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import styles from "@/styles/singlePostpage.module.scss"
 import Sidebar from "@/components/Sidebar";
-import LoadingComponent from "@/components/LoadingComponent";
 import { useRouter } from 'next/router'
 import Api from '@/api'
 import Tweet from '@/components/UserPost'
@@ -126,8 +125,7 @@ export default function SinlgePostagem({ authData }: Props) {
 
     return (
         <>
-            {loading && <LoadingComponent isLoading={loading} />}
-            {!loading && <Sidebar setInfo={setUserInfo} userInfo={userInfo} isLoading={loading} setIsLoading={setLoading} authData={authData} />}
+            {!loading && <Sidebar setInfo={setUserInfo} userInfo={userInfo} authData={authData} />}
             <div className={styles.btnBack}>
                 <div className={styles.btt}>
                     <button onClick={() => router.back()}>
