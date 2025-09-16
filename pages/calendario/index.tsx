@@ -119,6 +119,7 @@ export default function Calendario({ eventsProp, authData }: Props) {
             const response = await Api.deletePersonalEvent(calendarData.id_pevent)
             if (response.status === 200) {
                 setIsVisible(false)
+                showAlert("Evento removido com sucesso!", "success")
                 handleGetPersonalEvents()
             }
         } catch (error) {
@@ -248,13 +249,14 @@ export default function Calendario({ eventsProp, authData }: Props) {
     return (
         <>
             {loading && <LoadingBar progress={progress} />}
-            <PopupPersonalEvents onClose={() => setIsClose(!isClose)} isVisible={isClose} />
+            <PopupPersonalEvents reloadFunction={handleGetPersonalEvents} onClose={() => setIsClose(!isClose)} isVisible={isClose} />
             <Popup
                 isVisible={isVisible}
                 setIsVisible={() => setIsVisible(false)}
                 canAdd={false}
                 canRemove
                 canEdit
+                reloadFunction={handleGetPersonalEvents}
                 removeFunction={handleRemovePersonalEvents}
             />
             <PopupFilter

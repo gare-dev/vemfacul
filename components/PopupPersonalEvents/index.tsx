@@ -12,11 +12,11 @@ import LoadingBar from "../LoadingBar";
 type FormModalProps = {
     onClose: () => void;
     isVisible?: boolean;
+    reloadFunction?: () => void;
 };
 
-export default function FormModal({ onClose, isVisible }: FormModalProps) {
+export default function FormModal({ onClose, isVisible, reloadFunction }: FormModalProps) {
     const { setPersonalEventsData, personalEventsData } = usePersonalEvents()
-    const router = useRouter()
     const { showAlert } = useAlert()
     const [progress, setProgress] = useState(0);
     const [loading, setLoading] = useState(false);
@@ -62,7 +62,10 @@ export default function FormModal({ onClose, isVisible }: FormModalProps) {
                     hora: "14:30",
                 }))
                 onClose();
-                router.reload()
+                if (reloadFunction) {
+                    reloadFunction()
+
+                }
             }
         } catch (error) {
             console.log(error);

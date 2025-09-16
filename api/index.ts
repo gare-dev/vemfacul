@@ -356,6 +356,15 @@ class _Api {
   public async deleteCursinhoEvent(id_event: string) {
     return await this._instance.delete(`/user/event/${id_event}`)
   }
+
+  public async editPersonalEvent(id_pevent: string, title: string, descricao: string, hora: string) {
+    return await this._instance.patch(`/user/event/${id_pevent}`, {
+      title,
+      descricao,
+      hora
+    }
+    )
+  }
 }
 
 const Api = new _Api(process.env.NEXT_PUBLIC_API_URL ?? "");

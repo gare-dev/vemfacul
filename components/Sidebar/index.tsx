@@ -10,6 +10,7 @@ import { LuFilePenLine } from "react-icons/lu"
 import { MdAssignment, MdExitToApp, MdOutlineListAlt, MdQuiz } from "react-icons/md"
 import { RiPagesLine } from "react-icons/ri"
 import PopupMissLogin from "../MissLogin"
+import Image from "next/image"
 
 interface props {
     setInfo?: React.Dispatch<React.SetStateAction<string[]>>
@@ -198,8 +199,8 @@ export default function Sidebar(props: props) {
                 )}
                 <aside style={{ width: sidebarWidth }} className={styles.sidebar}>
                     <div className={styles.inner}>
-                        <div style={{ width: "260px" }} className={styles.header}>
-                            <img className={styles.logo} src="/assets/img/logo.png" alt="Logo" />
+                        <div style={{ width: sidebarWidth }} className={styles.header}>
+                            <Image height={80} width={80} className={styles.logo} src="/assets/img/logo.png" alt="Logo" />
                             <h1 style={{ opacity: headerOpacity }}>VemFacul</h1>
                         </div>
 
@@ -221,7 +222,7 @@ export default function Sidebar(props: props) {
                             ))}
                             <div style={{ marginTop: "auto" }}>
                                 {!isMissingLoginShown && <button style={isMobile ? { width: sidebarWidth } : undefined} onClick={() => setProfileOptionsVisible(true)} type="button">
-                                    <img style={{ borderRadius: "50%", height: "40px", width: "40px", objectFit: "cover" }} src={authData?.foto} alt="Logo" />
+                                    <Image width={40} height={40} style={{ borderRadius: "50%", height: "40px", width: "40px", objectFit: "cover" }} src={authData?.foto ?? ""} alt="Logo" />
                                     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "2px" }}>
                                         <p style={isMobile ? { opacity: headerOpacity } : undefined} className={styles.text}>{authData?.nome}</p>
                                         <p style={isMobile ? { opacity: headerOpacity } : undefined} className={styles.textUser}>@{authData?.username}</p>
