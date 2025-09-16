@@ -145,7 +145,6 @@ export default function InstitutionRegistration() {
         }
     }, [endereco.cep]);
 
-
     const handleInstitutionDataChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setInstitutionData({

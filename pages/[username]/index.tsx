@@ -4,7 +4,6 @@ import { useRouter } from "next/router"
 import styles from "@/styles/profile.module.scss"
 import Api from "@/api";
 import { useEffect, useState } from "react";
-import LoadingComponent from "@/components/LoadingComponent";
 import { UserProfileType } from "@/types/userProfileType";
 import EditProfilePopup from "@/components/EditProfilePopup";
 import CreatePostagem from "@/components/CreatePostagem";
@@ -15,6 +14,7 @@ import monthsMap from "@/utils/getMonth";
 import { GetServerSideProps } from "next";
 import { RESERVED_ROUTES } from "@/middleware";
 import AuthDataType from "@/types/authDataType";
+import { MdVerified } from "react-icons/md";
 
 type Postagem = {
     id_postagem: string | number;
@@ -75,7 +75,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
 export default function UserProfile({ userProfileProp, postagensProp, authData }: Props) {
     const router = useRouter()
     const { username } = router.query;
-    const [loading, setLoading] = useState(true);
     const [isVisible, setIsVisible] = useState(false);
     const [user, setUser] = useState<string | null>(null);
     const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
@@ -197,8 +196,7 @@ export default function UserProfile({ userProfileProp, postagensProp, authData }
 
     return (
         <>
-            {!loading && <LoadingComponent isLoading={loading} />}
-            {<Sidebar isLoading={loading} setIsLoading={setLoading} authData={authData} />}
+            {<Sidebar authData={authData} />}
             {isVisible && user === username &&
                 <EditProfilePopup
                     closePopup={() => setIsVisible(false)}
@@ -248,7 +246,17 @@ export default function UserProfile({ userProfileProp, postagensProp, authData }
                         </div>
 
                         <div className={styles.nameSection}>
-                            <h1 className={styles.name}>{userProfile.nome}</h1>
+                            <h1 className={styles.name}>
+                                {userProfile.nome}{" "}
+                                {authData?.role === "admin" && (
+                                    <span className={styles.verifiedWrapper}>
+                                        <MdVerified className={styles.icone} size={"1.2em"} />
+                                        <div className={styles.tooltipBox}>
+                                            Usuário verificado por ser um desenvolvedor do VemFacul.
+                                        </div>
+                                    </span>
+                                )}
+                            </h1>
                             <p className={styles.username}>@{userProfile.username}</p>
                         </div>
 
@@ -281,7 +289,7 @@ export default function UserProfile({ userProfileProp, postagensProp, authData }
                         </div>
                     </div>
                 </div>
-                <div className={styles.containerProfilePost}>
+                <div className={styles.containerProfilePost} style={{ borderRadius: 2 }}>
                     {postagensProp.length > 0 && postagensProp.map((post, idx) => (
                         <UserPost
                             key={0 || idx}

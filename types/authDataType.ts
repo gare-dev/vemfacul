@@ -3,6 +3,7 @@ type AuthDataType = {
     nome: string
     email?: string
     username: string
+    role: string
 }
 
 type AdminAuthType = {
