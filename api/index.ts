@@ -338,6 +338,20 @@ class _Api {
   public async getAdminLogs() {
     return await this._instance.get("/admin/api/log")
   }
+
+  public async insertAdminCourseEvent(title: string, descricao: string, link: string, type: string, main_title: string, hora: string, day: string, month: string, year: string) {
+    return await this._instance.post("/course/admin/event", {
+      day,
+      month,
+      year,
+      title,
+      descricao,
+      link,
+      type,
+      main_title,
+      hora
+    })
+  }
 }
 
 const Api = new _Api(process.env.NEXT_PUBLIC_API_URL ?? "");

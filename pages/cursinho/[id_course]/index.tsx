@@ -54,6 +54,11 @@ interface Props {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const { id_course } = ctx.params as { id_course: string };
+    if (id_course === "null") {
+        return {
+            notFound: true
+        }
+    }
 
     try {
         const cookie = ctx.req.headers.cookie
