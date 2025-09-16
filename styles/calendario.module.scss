@@ -80,6 +80,8 @@
         margin: 0 0 1.5rem 0;
         font-size: 2rem;
         font-weight: 600;
+        font-family: "Kantumruy Pro", sans-serif;
+
     }
 }
 
@@ -128,10 +130,13 @@
     font-size: 1rem;
     transition: all 0.2s ease;
 
+
     &.active {
         background-color: #001ECB;
-        color: #001ECB;
-        font-weight: 500;
+        color: #fff;
+        font-weight: 600;
+        font-family: "Kantumruy Pro", sans-serif;
+
     }
 
     &:hover {
@@ -143,6 +148,14 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+
+    .noEvents {
+        padding: 20px;
+        text-align: center;
+        font-size: 1.2rem;
+        color: #666;
+        font-style: italic;
+    }
 }
 
 .eventCard {
@@ -229,16 +242,16 @@
 
 @media (max-width: 1024px) {
     .headerBlock {
-        margin-left: 64px;
-    }
+        display: flex;
+        justify-content: center;
 
-    .mainContent {
-        margin-left: 64px;
 
     }
+
+    .mainContent {}
 
     .calendario {
-        margin-left: 70px;
+
         width: 100%;
     }
 
@@ -246,9 +259,7 @@
         width: 100%;
     }
 
-    .headerBlock {
-        width: 100%;
-    }
+
 
     .statsRow {
         justify-content: center;
@@ -256,8 +267,6 @@
 
     .mainContent {
         width: 100%;
-
-
 
         .viewControls {
             justify-content: center;
@@ -268,6 +277,7 @@
     }
 
     .eventsList {
-        margin-left: 10px;
+        width: 100%;
+        padding: 0 20px;
     }
 }

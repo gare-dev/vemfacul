@@ -352,6 +352,10 @@ class _Api {
       hora
     })
   }
+
+  public async deleteCursinhoEvent(id_event: string) {
+    return await this._instance.delete(`/user/event/${id_event}`)
+  }
 }
 
 const Api = new _Api(process.env.NEXT_PUBLIC_API_URL ?? "");

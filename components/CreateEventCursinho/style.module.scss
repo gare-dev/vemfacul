@@ -140,6 +140,92 @@ $transition: 0.3s ease;
     }
 }
 
+// style.module.scss
+
+// ... seu CSS existente
+
+.dropdownLabel {
+    display: flex;
+    flex-direction: column;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #444;
+    margin-top: 1rem;
+}
+
+.dropdown {
+    position: relative;
+    width: 100%;
+    margin-top: 0.3rem;
+    user-select: none;
+}
+
+.toggleBtn {
+    width: 100%;
+    background: #fff;
+    border: 1.5px solid #ccc;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+        outline: none;
+        border-color: #4f46e5;
+        box-shadow: 0 0 5px rgba(79, 70, 229, 0.5);
+    }
+}
+
+.arrow {
+    border: solid #666;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 4px;
+    transform: rotate(45deg);
+    margin-left: 8px;
+    transition: transform 0.3s ease;
+}
+
+.menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border: 1.5px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 100;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.option {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover,
+    &:focus {
+        background-color: lighten($primary-color, 10%);
+        outline: none;
+    }
+}
+
+.selected {
+    background-color: $primary-color;
+    color: white;
+}
+
+
 @media (max-width: 480px) {
     .popup {
         padding: 1.5rem 1.5rem;

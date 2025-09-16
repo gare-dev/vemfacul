@@ -1,7 +1,6 @@
 import Api from "@/api";
 import { FeedCourseCard } from "@/components/FeedCourseCard";
 import LoadingComponent from "@/components/LoadingComponent";
-import FilterBar from "@/components/SearchHeader";
 import Sidebar from "@/components/Sidebar";
 import styles from "@/styles/feed.module.scss";
 import AuthDataType from "@/types/authDataType";
@@ -77,7 +76,7 @@ export default function Feed({ cursinho, authData, xTraceError }: Props) {
             {isLoading && <LoadingComponent isLoading={isLoading} />}
             <Sidebar authData={authData} traceID={xTraceError ?? ""} />
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                <FilterBar onSearch={() => console.log("teste")} />
+                {/* <FilterBar onSearch={() => console.log("teste")} /> */}
             </div>
             <div className={styles.feedPageContainer}>
 
