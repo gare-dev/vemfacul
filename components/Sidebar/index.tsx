@@ -33,7 +33,7 @@ export default function Sidebar(props: props) {
     const [profileOptionsVisible, setProfileOptionsVisible] = useState<boolean>(false)
     const [isMissingLoginShown, setIsMissingLoginShown] = useState<boolean>(false)
 
-    const baseNavItems: NavItemsType[] = [
+    const userItems: NavItemsType[] = [
         { icon: <RiPagesLine />, name: "Feed", path: "/feed" },
         { icon: <IoMdPeople />, name: "Comunidade", path: "/comunidade" },
         { icon: <FaCalendar />, name: "Calendário Geral", path: "/eventos" },
@@ -44,11 +44,32 @@ export default function Sidebar(props: props) {
         { icon: <FaRegUserCircle />, name: "Perfil", path: `/${authData?.username}` },
     ]
 
-    const navItems = authData?.role === "admin"
-        ? [...baseNavItems, { icon: <FaListCheck />, name: "Aprovar Cursinhos", path: "/admin/aprovar_cursinho" },
+    const adminItems: NavItemsType[] = [
+        { icon: <RiPagesLine />, name: "Feed", path: "/feed" },
+        { icon: <IoMdPeople />, name: "Comunidade", path: "/comunidade" },
+        { icon: <FaCalendar />, name: "Calendário Geral", path: "/eventos" },
+        { icon: <LuFilePenLine />, name: "Correção de Redação", path: "/correcaoRedacao" },
+        { icon: <MdQuiz />, name: "Exercícios", path: "/exercicios" },
+        { icon: <MdAssignment />, name: "Exercício Diário", path: "/exercicioDiario" },
+        { icon: <FaCalendarAlt />, name: "Calendário Pessoal", path: "/calendario" },
+        { icon: <FaRegUserCircle />, name: "Perfil", path: `/${authData?.username}` },
+        { icon: <FaListCheck />, name: "Aprovar Cursinhos", path: "/admin/aprovar_cursinho" },
         { icon: <FaUsers />, name: "Usuários", path: "/admin/usuarios" },
-        { icon: <MdOutlineListAlt />, name: "Log da API", path: "/admin/api_log" }]
-        : baseNavItems;
+        { icon: <MdOutlineListAlt />, name: "Log da API", path: "/admin/api_log" }
+    ]
+
+    const cursinhoItems: NavItemsType[] = [
+        { icon: <RiPagesLine />, name: "Feed", path: "/feed" },
+        { icon: <IoMdPeople />, name: "Comunidade", path: "/comunidade" },
+        { icon: <FaCalendar />, name: "Calendário Geral", path: "/eventos" },
+        { icon: <FaRegUserCircle />, name: "Perfil", path: `/${authData?.username}` },
+        { icon: <FaListCheck />, name: "Criar Evento", path: "/cursinho/eventos" },
+
+    ]
+
+    const role = authData?.role
+
+    const navItems = role === "admin" ? adminItems : role === "dono de cursinho" ? cursinhoItems : userItems
 
     const activeIndex = navItems.findIndex(item => item.path === router.pathname);
 
@@ -56,6 +77,7 @@ export default function Sidebar(props: props) {
         if (await getAuth()) {
             router.push("/")
         }
+        router.push("/")
     }
 
     useEffect(() => {
