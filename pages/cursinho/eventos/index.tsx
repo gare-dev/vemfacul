@@ -1,7 +1,9 @@
 import Api from "@/api"
 import CreateEventCursinhoPopup from "@/components/CreateEventCursinho"
+import Popup from "@/components/Popup"
 import Sidebar from "@/components/Sidebar"
 import DemoWrapper from "@/hooks/DemoWrapper"
+import useCalendarData from "@/hooks/useCalendarData"
 import AuthDataType from "@/types/authDataType"
 import { GetServerSideProps } from "next"
 import { useState } from "react"
@@ -28,7 +30,7 @@ interface Caralho {
 
 interface Props {
     authData: AuthDataType | null
-    events: Caralho[]
+    eventsProps: Caralho[]
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async ctx => {
@@ -43,7 +45,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ctx => {
         return {
             props: {
                 authData: authData.data.code === "PROFILE_INFO" ? authData.data.data : null,
-                events: events.status === 200 ? events.data.data.map((events: Caralho) => ({
+                eventsProps: events.status === 200 ? events.data.data.map((events: Caralho) => ({
                     ...events,
                     created_at: new Date(events.created_at!).toLocaleDateString('pt-BR', {
                         year: 'numeric',
@@ -58,32 +60,54 @@ export const getServerSideProps: GetServerSideProps<Props> = async ctx => {
         return {
             props: {
                 authData: null,
-                events: []
+                eventsProps: []
             }
         }
     }
 }
 
-export default function EventosCursinho({ authData, events }: Props) {
+export default function EventosCursinho({ authData, eventsProps }: Props) {
     const [isVisible, setIsVisible] = useState<boolean>(false)
+    const [events,] = useState<Caralho[]>(eventsProps || [])
     const [date, setDate] = useState<number[]>([])
+    const { calendarData } = useCalendarData()
+    const [popupFormVisible, setPopupFormVisible] = useState<boolean>(false)
+
+    const handleRemoveEvent = async (id: string) => {
+        try {
+            await Api.deleteCursinhoEvent(id)
+            // setEvents(events.filter(event => event.id_pevent !== id))
+        } catch (error) {
+            console.error("Error removing event:", error);
+        }
+
+    }
 
 
     return (
         <>
+            <Popup
+                isVisible={isVisible}
+                setIsVisible={() => setIsVisible(false)}
+                canAdd={false}
+                canRemove
+                canEdit
+                removeFunction={() => handleRemoveEvent(calendarData.id_event ?? "")}
+            />
             <Sidebar authData={authData} />
             <CreateEventCursinhoPopup
                 date={date}
-                isOpen={isVisible}
-                onClose={() => setIsVisible(false)}
+                isOpen={popupFormVisible}
+                onClose={() => setPopupFormVisible(false)}
             />
 
             <DemoWrapper
                 eventos={events}
                 onDateClick={(date, month, year) => {
                     setDate([date, month, year]);
-                    setIsVisible(true);
+                    setPopupFormVisible(true);
                 }}
+                popUpClick={() => setIsVisible(true)}
                 isEditable
             />
         </>

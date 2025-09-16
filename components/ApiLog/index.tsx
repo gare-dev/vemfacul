@@ -36,11 +36,11 @@ const methodColors: Record<string, string> = {
 };
 
 const getStatusColor = (status: number) => {
-    if (status >= 200 && status < 300) return "#2E8B57"; // verde escuro
-    if (status >= 300 && status < 400) return "#FFA500"; // laranja
-    if (status >= 400 && status < 500) return "#B22222"; // vermelho escuro
-    if (status >= 500) return "#8B0000"; // vermelho mais escuro
-    return "#001ECB"; // azul escuro padrão
+    if (status >= 200 && status < 300) return "#2E8B57";
+    if (status >= 300 && status < 400) return "#FFA500";
+    if (status >= 400 && status < 500) return "#B22222";
+    if (status >= 500) return "#8B0000";
+    return "#001ECB";
 };
 
 const LogEntry = ({ logs_props }: Props) => {
@@ -129,7 +129,7 @@ const LogEntry = ({ logs_props }: Props) => {
         @media (max-width: 480px) {
           .log-container {
             padding: 12px;
-            margin: 0px 0px 20px 64px;
+            margin: 0px 20px 50px 20px;
             max-width: 100%;
             border: 0;
             border-radius: 0;

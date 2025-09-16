@@ -3,7 +3,7 @@ import AuthDataType from "@/types/authDataType"
 import getAuth from "@/utils/getAuth"
 import { useRouter } from "next/router"
 import { JSX, useEffect, useState } from "react"
-import { FaCalendar, FaCalendarAlt, FaRegUserCircle, FaUsers } from "react-icons/fa"
+import { FaBars, FaCalendar, FaCalendarAlt, FaRegUserCircle, FaUsers } from "react-icons/fa"
 import { FaListCheck } from "react-icons/fa6"
 import { IoMdPeople, IoMdSettings } from "react-icons/io"
 import { LuFilePenLine } from "react-icons/lu"
@@ -29,9 +29,34 @@ type NavItemsType = {
 
 export default function Sidebar(props: props) {
     const router = useRouter()
+    const isMobile = useIsMobile();
+
     const [authData,] = useState<AuthDataType | null | undefined>(props.authData)
     const [profileOptionsVisible, setProfileOptionsVisible] = useState<boolean>(false)
     const [isMissingLoginShown, setIsMissingLoginShown] = useState<boolean>(false)
+    const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false)
+
+    const sidebarWidth = isMobile ? (isSidebarOpen ? "260px" : "0px") : undefined;
+    const headerOpacity = isMobile ? (isSidebarOpen ? 1 : 0) : undefined;
+
+    const [, setShowHeader] = useState(true);
+    let lastScrollY = 0;
+
+    function useIsMobile() {
+        const [isMobile, setIsMobile] = useState(false);
+
+        useEffect(() => {
+            function handleResize() {
+                setIsMobile(window.innerWidth < 1024);
+            }
+
+            handleResize();
+            window.addEventListener("resize", handleResize);
+            return () => window.removeEventListener("resize", handleResize);
+        }, []);
+
+        return isMobile;
+    }
 
     const userItems: NavItemsType[] = [
         { icon: <RiPagesLine />, name: "Feed", path: "/feed" },
@@ -73,6 +98,10 @@ export default function Sidebar(props: props) {
 
     const activeIndex = navItems.findIndex(item => item.path === router.pathname);
 
+    useEffect(() => {
+        console.log(activeIndex)
+    }, [activeIndex])
+
     async function handleSignout() {
         if (await getAuth()) {
             router.push("/")
@@ -88,42 +117,114 @@ export default function Sidebar(props: props) {
 
     }, [props.authData])
 
+    useEffect(() => {
+        if (isMobile) {
+            if (isSidebarOpen) {
+                document.body.style.overflow = "hidden";
+            } else {
+                document.body.style.overflow = "auto";
+            }
+        }
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, [isSidebarOpen, isMobile]);
+
+    useEffect(() => {
+        function handleScroll() {
+            const currentScrollY = window.scrollY;
+
+            if (currentScrollY < lastScrollY) {
+                setShowHeader(true);
+            } else {
+                setShowHeader(false);
+            }
+
+            lastScrollY = currentScrollY;
+        }
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
 
     return (
 
         <>
+
+            {isMobile && (
+                <div
+                    // style={{
+                    //     position: "fixed",
+                    //     top: 0,
+                    //     width: "100%",
+                    //     transform: showHeader ? "translateY(0)" : "translateY(-100%)",
+                    //     transition: "transform 0.3s ease",
+                    // }} 
+                    onClick={() => setIsSidebarOpen(!isSidebarOpen)} className={styles.mobileHeader}>
+
+                    {/* <div className={styles.headerMobile}> */}
+                    {/* 
+                        <img
+                            src={props.authData?.foto}
+                            alt="Logo"
+                            className={styles.mobileLogo}
+                        /> */}
+                    {/* <p>Feed</p> */}
+                    {!isSidebarOpen && <FaBars size={"1.5em"} color="#001ECB" />}
+
+                    {/* </div> */}
+
+                </div>
+            )}
             {isMissingLoginShown && <PopupMissLogin redirectTo="/" traceID={props.traceID} />}
             {/* {<TracePopup message="Erro ao carregar a página, se esse problema persistir, contate o suporte." traceId={props.traceID ?? ""}></TracePopup>} */}
+
+
             <section className={styles.page}>
-                <aside className={styles.sidebar}>
+                {isMobile && isSidebarOpen && (
+                    <div
+                        style={{
+                            position: "fixed",
+                            top: 0,
+                            left: 0,
+                            width: "100%",
+                            height: "100%",
+                            background: "rgba(0,0,0,0.3)",
+                            zIndex: 9999,
+                        }}
+                        onClick={() => setIsSidebarOpen(false)}
+                    />
+                )}
+                <aside style={{ width: sidebarWidth }} className={styles.sidebar}>
                     <div className={styles.inner}>
-                        <div className={styles.header}>
+                        <div style={{ width: "260px" }} className={styles.header}>
                             <img className={styles.logo} src="/assets/img/logo.png" alt="Logo" />
-                            <h1>VemFacul</h1>
+                            <h1 style={{ opacity: headerOpacity }}>VemFacul</h1>
                         </div>
 
                         <nav
+                            style={{ '--top': `${activeIndex >= 0 ? activeIndex * 56 : 392}px` } as React.CSSProperties}
                             className={styles.menu}
-                            style={{ '--top': `${activeIndex >= 0 ? activeIndex * 56 : 0}px` } as React.CSSProperties}
                         >
                             {navItems.map((item, index) => (
                                 <button
+                                    style={isMobile ? { width: sidebarWidth } : undefined}
                                     key={index}
                                     onClick={() => item.path ? router.push(item.path) : null}
                                     type="button"
                                     className={router.pathname === item.path ? 'active' : ''}
                                 >
                                     <span>{item.icon}</span>
-                                    <p className={styles.text}>{item.name}</p>
+                                    <p style={isMobile ? { opacity: headerOpacity } : undefined} className={styles.text}>{item.name}</p>
                                 </button>
                             ))}
                             <div style={{ marginTop: "auto" }}>
-                                {!isMissingLoginShown && <button onClick={() => setProfileOptionsVisible(true)} type="button">
-                                    <img className={styles.imageProfile} style={{ borderRadius: "50%", height: "40px", width: "40px", objectFit: "cover" }} src={authData?.foto} alt="Logo" />
+                                {!isMissingLoginShown && <button style={isMobile ? { width: sidebarWidth } : undefined} onClick={() => setProfileOptionsVisible(true)} type="button">
+                                    <img style={{ borderRadius: "50%", height: "40px", width: "40px", objectFit: "cover" }} src={authData?.foto} alt="Logo" />
                                     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "2px" }}>
-                                        <p className={styles.text}>{authData?.nome}</p>
-                                        <p className={styles.textUser}>@{authData?.username}</p>
+                                        <p style={isMobile ? { opacity: headerOpacity } : undefined} className={styles.text}>{authData?.nome}</p>
+                                        <p style={isMobile ? { opacity: headerOpacity } : undefined} className={styles.textUser}>@{authData?.username}</p>
                                     </div>
 
                                 </button>}
