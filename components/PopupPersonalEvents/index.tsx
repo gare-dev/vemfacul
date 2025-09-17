@@ -3,7 +3,6 @@ import useAlert from "@/hooks/useAlert";
 import usePersonalEvents from "@/hooks/usePersonalEvents";
 import styles from "@/styles/popuuppersonalevents.module.scss"
 import padZero from "@/utils/padZero";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import LoadingBar from "../LoadingBar";
 

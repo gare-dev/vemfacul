@@ -36,9 +36,11 @@ export default function Sidebar(props: props) {
     const [profileOptionsVisible, setProfileOptionsVisible] = useState<boolean>(false)
     const [isMissingLoginShown, setIsMissingLoginShown] = useState<boolean>(false)
     const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false)
+    const [innerHeight, setInnerHeight] = useState<number>(typeof window !== 'undefined' ? window.innerHeight : 0);
 
     const sidebarWidth = isMobile ? (isSidebarOpen ? "260px" : "0px") : undefined;
     const headerOpacity = isMobile ? (isSidebarOpen ? 1 : 0) : undefined;
+
 
     const [, setShowHeader] = useState(true);
     let lastScrollY = 0;
@@ -99,10 +101,6 @@ export default function Sidebar(props: props) {
 
     const activeIndex = navItems.findIndex(item => item.path === router.pathname);
 
-    useEffect(() => {
-        console.log(activeIndex)
-    }, [activeIndex])
-
     async function handleSignout() {
         if (await getAuth()) {
             router.push("/")
@@ -146,6 +144,17 @@ export default function Sidebar(props: props) {
 
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+
+    useEffect(() => {
+        function handleResize() {
+            setInnerHeight(window.innerHeight);
+        }
+
+        window.addEventListener("resize", handleResize);
+
+        return () => window.removeEventListener("resize", handleResize);
     }, []);
 
 
@@ -205,16 +214,17 @@ export default function Sidebar(props: props) {
                         </div>
 
                         <nav
-                            style={{ '--top': `${activeIndex >= 0 ? activeIndex * 56 : 392}px` } as React.CSSProperties}
+                            style={{ '--top': `${activeIndex >= 0 ? activeIndex * (innerHeight < 751 ? 45 : 56) : (innerHeight < 751 ? 315 : 392)}px`, '--after-height': `${innerHeight < 751 ? 45 : 56}px` } as React.CSSProperties}
                             className={styles.menu}
+
                         >
                             {navItems.map((item, index) => (
                                 <button
-                                    style={isMobile ? { width: sidebarWidth } : undefined}
+                                    style={isMobile ? { width: sidebarWidth, height: innerHeight < 751 ? "45px" : "56px" } : undefined}
                                     key={index}
                                     onClick={() => item.path ? router.push(item.path) : null}
                                     type="button"
-                                    className={router.pathname === item.path ? 'active' : ''}
+                                    className={`${router.pathname === item.path ? 'active' : ''} ${styles.menuItem}`}
                                 >
                                     <span>{item.icon}</span>
                                     <p style={isMobile ? { opacity: headerOpacity } : undefined} className={styles.text}>{item.name}</p>

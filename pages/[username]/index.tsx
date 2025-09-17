@@ -208,14 +208,14 @@ export default function UserProfile({ userProfileProp, postagensProp, authData }
                     refreshPage={() => router.reload()}
                 />
             }
-            {isVisibleSubmitPost &&
-                <CreatePostagem
-                    onPostTweet={handlePostTweet}
-                    isOpen={isPopupOpen}
-                    onClose={handleClosePopup}
-                    onReload={() => router.reload()}
-                />
-            }
+            {/* {isVisibleSubmitPost && */}
+            <CreatePostagem
+                onPostTweet={handlePostTweet}
+                isOpen={isPopupOpen}
+                onClose={handleClosePopup}
+                onReload={() => router.reload()}
+            />
+            {/* } */}
             <div className={styles.main}>
                 <Head>
                     <title>{`${userProfile.nome} | Perfil`}</title>

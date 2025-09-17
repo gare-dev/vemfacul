@@ -91,7 +91,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            height: 56px;
+            height: var(--after-height, 56px);
             width: 6px;
             background: #001ECB;
             translate: 0 var(--top);
@@ -260,9 +260,9 @@
         height: 100%;
 
     }
-
-
 }
+
+
 
 /* Logo no topo para mobile */
 .mobileHeader {

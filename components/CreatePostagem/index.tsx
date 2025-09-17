@@ -1,9 +1,10 @@
+import React, { useState } from 'react';
 import Api from '@/api';
 import styles from '@/styles/createPostagem.module.scss';
-import post_styles from '@/styles/userPost.module.scss';
-import React, { useState } from 'react';
+import postStyles from '@/styles/userPost.module.scss';
 import { AxiosError } from 'axios';
-
+import containsWord from '@/utils/wordFilter';
+import badWordsList from '@/utils/badWordsList';
 
 interface TweetPopupProps {
     isOpen: boolean;
@@ -12,7 +13,7 @@ interface TweetPopupProps {
     postagemInfo_pai?: Postagem;
     onClose: () => void;
     onReload: () => void;
-    onPostTweet: (tweet: string) => void
+    onPostTweet: (tweet: string) => void;
 }
 
 interface Postagem {
@@ -25,122 +26,133 @@ interface Postagem {
     profileImage: string;
 }
 
-const TweetPopup: React.FC<TweetPopupProps> = ({ isOpen, coment, postagemID_pai, postagemInfo_pai, onClose, onPostTweet, onReload }) => {
+const TweetPopup: React.FC<TweetPopupProps> = ({
+    isOpen,
+    coment,
+    postagemID_pai,
+    postagemInfo_pai,
+    onClose,
+    onPostTweet,
+    onReload,
+}) => {
     const [tweetText, setTweetText] = useState('');
     const [error, setError] = useState('');
 
+    if (!isOpen) return null;
+
+    const validateTweet = (text: string) => {
+        if (text.trim().length === 0) {
+            setError('Você não pode postar um post vazio.');
+            return false;
+        }
+        if (text.length > 280) {
+            setError('O tweet não pode exceder 280 caracteres.');
+            return false;
+        }
+
+        if (containsWord(text, badWordsList)) {
+            setError('Seu post contém palavras inadequadas. Por favor, revise-o.');
+            return false;
+        }
+        setError('');
+        return true;
+    };
+
+
     const handlePostTweet = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!validateTweet(tweetText)) return;
 
-        if (tweetText.trim()) {
-            e.preventDefault();
-            if (tweetText.length === 0) {
-                return setError("Você não pode postar um post vazio.");
+        try {
+            const response = await Api.createPostagem(tweetText);
+            if (response.status === 201) {
+                setTweetText('');
+                onClose();
+                onReload();
             }
-            if (tweetText.length > 280) {
-                return setError("O tweet não pode exceder 280 caracteres.");
-            }
-            try {
-                setError('');
-                const response = await Api.createPostagem(tweetText);
-
-                if (response.status === 201) {
-                    setTweetText('');
-                    onClose();
-                    onReload();
-                    return
-                }
-
-            } catch (error) {
-                if (error instanceof AxiosError) {
-                    if (error.status === 400) {
-                        setError("Ocorreu um erro ao postar o tweet. Tente novamente mais tarde.");
-                    }
+        } catch (err) {
+            if (err instanceof AxiosError) {
+                if (err.response?.status === 400) {
+                    setError('Ocorreu um erro ao postar o tweet. Tente novamente mais tarde.');
                 }
             }
         }
     };
 
     const handlePostComentario = async (e: React.FormEvent) => {
-        if (!postagemID_pai || (typeof postagemID_pai !== "string")) {
-            return <>carregando</>;
-        }
-        if (!postagemID_pai) {
-            return setError("Erro: comentário sem referência à postagem pai.");
-        }
-        if (tweetText.trim()) {
-            e.preventDefault();
-            if (tweetText.length === 0) {
-                return setError("Você não pode postar um post vazio.");
-            }
-            if (tweetText.length > 280) {
-                return setError("O tweet não pode exceder 280 caracteres.");
-            }
-            try {
-                setError('');
-                const response = await Api.createComentario(postagemID_pai, tweetText);
-                console.log('api')
-                if (response.status === 201) {
-                    onPostTweet(tweetText);
-                    setTweetText('');
-                    onClose();
-                    onReload();
-                    return
-                }
+        e.preventDefault();
 
-            } catch (error) {
-                if (error instanceof AxiosError) {
-                    if (error.response?.data.code === "COMENT_ERROR") {
-                        setError("Ocorreu um erro ao postar o tweet. Tente novamente mais tarde.");
-                    }
+        if (!postagemID_pai || typeof postagemID_pai !== 'string') {
+            setError('Erro: comentário sem referência à postagem pai.');
+            return;
+        }
+
+        if (!validateTweet(tweetText)) return;
+
+        try {
+            const response = await Api.createComentario(postagemID_pai, tweetText);
+            if (response.status === 201) {
+                onPostTweet(tweetText);
+                setTweetText('');
+                onClose();
+                onReload();
+            }
+        } catch (err) {
+            if (err instanceof AxiosError) {
+                if (err.response?.data.code === 'COMENT_ERROR') {
+                    setError('Ocorreu um erro ao postar o tweet. Tente novamente mais tarde.');
                 }
             }
         }
     };
 
-
-    if (!isOpen) return null;
-
     return (
         <div className={styles.popup}>
             <div className={styles.popupContent}>
-                <span className={styles.close} onClick={onClose}>&times;</span>
+                <button className={styles.close} onClick={onClose} aria-label="Fechar popup">
+                    &times;
+                </button>
+
                 {coment && postagemInfo_pai && (
-                    <>
-                        <div className={post_styles.tweetContainer} >
-                            <div className={post_styles.tweetContent}>
-                                {/* Profile Image */}
-                                <div className={post_styles.profileImageContainer}>
-                                    <img
-                                        src={postagemInfo_pai.profileImage}
-                                        className={post_styles.profileImage}
-                                    />
-                                </div>
-
-                                {/* Tweet Body */}
-                                <div className={post_styles.tweetBody} >
-                                    {/* Tweet Header (name, username, timestamp) */}
-                                    <div className={post_styles.tweetHeader}>
-                                        <span className={post_styles.name}>{postagemInfo_pai.name}</span>
-                                        <span className={post_styles.username}>@{postagemInfo_pai.username}</span>
-                                    </div>
-
-                                    {/* Tweet Text */}
-                                    <p className={post_styles.tweetText}> {postagemInfo_pai.content}</p>
-                                </div>
+                    <div className={postStyles.tweetContainer}>
+                        <div className={postStyles.tweetContent}>
+                            <div className={postStyles.profileImageContainer}>
+                                <img
+                                    src={postagemInfo_pai.profileImage}
+                                    alt={`${postagemInfo_pai.name} avatar`}
+                                    className={postStyles.profileImage}
+                                />
                             </div>
-                        </div >
-                    </>
-                )
-                }
-                <h2>{coment ? 'O que você achou disso?' : 'O que você anda estudando?'}</h2>
-                {error && <h1>{error}</h1>}
+                            <div className={postStyles.tweetBody}>
+                                <div className={postStyles.tweetHeader}>
+                                    <span className={postStyles.name}>{postagemInfo_pai.name}</span>
+                                    <span className={postStyles.username}>@{postagemInfo_pai.username}</span>
+                                </div>
+                                <p className={postStyles.tweetText}>{postagemInfo_pai.content}</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                <h2 className={styles.h2}>{coment ? 'O que você achou disso?' : 'O que você anda estudando?'}</h2>
+
+                {error && <p className={styles.error}>{error}</p>}
+
                 <textarea
                     className={styles.textarea}
                     value={tweetText}
                     onChange={(e) => setTweetText(e.target.value)}
                     maxLength={280}
+                    placeholder="Escreva seu post aqui..."
+                    aria-label="Campo para escrever o post"
                 />
-                <button className={styles.postButton} onClick={coment ? handlePostComentario : handlePostTweet}>
+
+                <button
+                    className={styles.postButton}
+                    onClick={coment ? handlePostComentario : handlePostTweet}
+                    disabled={tweetText.trim().length === 0}
+                    aria-disabled={tweetText.trim().length === 0}
+                >
                     Postar
                 </button>
             </div>
