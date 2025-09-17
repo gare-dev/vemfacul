@@ -14,6 +14,7 @@ $border-color: #e1e8ed;
   border-bottom: 1px solid $border-color;
   transition: background-color 0.2s ease;
 
+
   &:hover {
     background-color: rgba($primary-color, 0.02);
   }

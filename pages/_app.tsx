@@ -20,15 +20,14 @@ export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
     const handleStart = () => {
       setLoading(true);
-      setProgress(10); // começa com 10%
+      setProgress(10);
 
-      // intervalo para simular avanço
       const id = setInterval(() => {
         setProgress((prev) => {
           if (prev < 90) {
-            return prev + 5; // avança de 5 em 5
+            return prev + 5;
           }
-          return prev; // trava no 90%
+          return prev;
         });
       }, 200);
 
@@ -36,16 +35,14 @@ export default function App({ Component, pageProps }: AppProps) {
     };
 
     const handleComplete = () => {
-      // termina carregamento
       setProgress(100);
 
-      // limpa o intervalo
       if (intervalId) clearInterval(intervalId);
 
       setTimeout(() => {
         setLoading(false);
         setProgress(0);
-      }, 400); // esconde suavemente
+      }, 400);
     };
 
     router.events.on("routeChangeStart", handleStart);

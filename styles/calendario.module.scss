@@ -70,11 +70,18 @@
     margin: 0 auto;
     width: 74%;
     max-width: 1170px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 
     h1 {
         margin: 0 0 1.5rem 0;
         font-size: 2rem;
         font-weight: 600;
+        font-family: "Kantumruy Pro", sans-serif;
+
     }
 }
 
@@ -88,8 +95,11 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    min-width: 180px;
     background-color: #D0D7FF;
     padding: 0.75rem 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
     border-radius: 8px;
     color: #001ECB;
     font-weight: 600;
@@ -107,6 +117,7 @@
     display: flex;
     gap: 1rem;
     margin-bottom: 2rem;
+
 }
 
 .viewButton {
@@ -119,9 +130,13 @@
     font-size: 1rem;
     transition: all 0.2s ease;
 
+
     &.active {
         background-color: #001ECB;
-        color: white;
+        color: #fff;
+        font-weight: 600;
+        font-family: "Kantumruy Pro", sans-serif;
+
     }
 
     &:hover {
@@ -133,6 +148,14 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+
+    .noEvents {
+        padding: 20px;
+        text-align: center;
+        font-size: 1.2rem;
+        color: #666;
+        font-style: italic;
+    }
 }
 
 .eventCard {
@@ -214,4 +237,47 @@
     text-align: center;
     padding: 2rem;
     font-size: 1.1rem;
+}
+
+
+@media (max-width: 1024px) {
+    .headerBlock {
+        display: flex;
+        justify-content: center;
+
+
+    }
+
+    .mainContent {}
+
+    .calendario {
+
+        width: 100%;
+    }
+
+    .headerContent {
+        width: 100%;
+    }
+
+
+
+    .statsRow {
+        justify-content: center;
+    }
+
+    .mainContent {
+        width: 100%;
+
+        .viewControls {
+            justify-content: center;
+            gap: 1px;
+            margin-left: 10px;
+        }
+
+    }
+
+    .eventsList {
+        width: 100%;
+        padding: 0 20px;
+    }
 }

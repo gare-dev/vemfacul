@@ -10,6 +10,7 @@ interface props {
     escola: string | undefined
     ano: string | undefined
     step: number
+    username: string
 }
 
 
@@ -31,13 +32,16 @@ export default function MiniProfile(props: props) {
     return (
         <div className={s.mainDiv}>
             <div className={s.imageDiv}>
-                {props.step >= 1 && <img src={typeof props.photo === "string" ? props.photo : URL.createObjectURL(props.photo)} alt="" />}
+                {(props.step >= 1 || props.photo) && <img src={typeof props.photo === "string" ? props.photo : URL.createObjectURL(props.photo)} alt="" />}
             </div>
             <div className={s.nameDiv}>
                 <p>{props.name}{getEmoji(props.level)}</p>
             </div>
             <div className={s.schoolDiv}>
                 <p>{props.ano} {props.escola}</p>
+            </div>
+            <div className={s.usernameDiv}>
+                <p>@{props.username}</p>
             </div>
             <div className={s.locationDiv}>
                 {(props.estado && props.step >= 2) && <p><MdOutlineLocationOn className={s.icon} />{props.estado}</p>}

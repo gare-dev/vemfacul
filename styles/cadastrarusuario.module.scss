@@ -10,6 +10,10 @@
         height: 100%;
         position: relative;
 
+        @media (max-width: 823px) {
+            width: 100%;
+        }
+
         .image {
             width: auto;
             height: 20%;
@@ -38,13 +42,16 @@
             gap: 30px;
 
             div {
-                border: #777CFE solid 2px;
-                height: 50px;
-                width: 235px;
-                border-radius: 10px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                cursor: pointer;
+                // flex: 0 0 calc(50% - 8px);
+                width: 100px;
+                height: 50px;
+                background-color: transparent;
+                border: #777CFE solid 2px;
+                border-radius: 10px;
 
                 p {
                     color: #fff;
@@ -101,13 +108,16 @@
             gap: 30px;
 
             div {
-                border: #777CFE solid 2px;
-                height: 50px;
-                width: 200px;
-                border-radius: 10px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                cursor: pointer;
+                // flex: 0 0 calc(50% - 8px);
+                width: 100px;
+                height: 50px;
+                background-color: transparent;
+                border: #777CFE solid 2px;
+                border-radius: 10px;
             }
 
             p {
@@ -392,7 +402,7 @@
 
 
             .button {
-                width: 243px;
+                width: 50%;
                 height: 50px;
                 border-radius: 10px;
                 background-color: #778CFE;
@@ -401,11 +411,14 @@
                 font-weight: 500;
                 font-size: 16px;
                 color: #fff;
+                margin-left: 25px;
+
             }
 
             .buttonBack {
-                width: 243px;
+                width: 50%;
                 height: 50px;
+                margin-right: 25px;
                 border-radius: 10px;
                 background-color: transparent;
                 border: #777CFE solid 2px;
@@ -425,11 +438,14 @@
 
         .barDiv {
             position: absolute;
+            display: flex;
+            justify-content: center;
             bottom: 0;
             left: 0;
             padding-bottom: 30px;
-            width: 95%;
+            width: 100%;
             padding-left: 25px;
+            padding-right: 25px;
 
             .barDiv2 {
                 width: 100%;
@@ -461,5 +477,10 @@
         display: flex;
         justify-content: center;
         align-items: center;
+
+        @media (max-width: 823px) {
+            height: 0;
+            width: 0;
+        }
     }
 }

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styles from '@/styles/searchheader.module.scss';
-import { MdSearch } from 'react-icons/md';
 
 interface FilterBarProps {
     onSearch?: (filters: { location: string; state: string; city: string; query: string }) => void;
@@ -86,7 +85,7 @@ const FilterBar: React.FC<FilterBarProps> = ({ onSearch }) => {
                         }}
                         aria-label="Search query input"
                     />
-                    <button
+                    {/* <button
                         type="button"
                         className={styles.searchButton}
                         onClick={() => onSearch?.({ location, state, city, query })}
@@ -94,7 +93,7 @@ const FilterBar: React.FC<FilterBarProps> = ({ onSearch }) => {
                     >
                         <MdSearch className={styles.searchIcon} aria-hidden="true" />
                         Procurar
-                    </button>
+                    </button> */}
                 </div>
             </div>
         </div>

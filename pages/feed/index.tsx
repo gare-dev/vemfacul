@@ -1,17 +1,18 @@
 import Api from "@/api";
 import { FeedCourseCard } from "@/components/FeedCourseCard";
 import LoadingComponent from "@/components/LoadingComponent";
-import FilterBar from "@/components/SearchHeader";
 import Sidebar from "@/components/Sidebar";
 import styles from "@/styles/feed.module.scss";
 import AuthDataType from "@/types/authDataType";
 import { Course } from "@/types/coursetype";
+import { AxiosError } from "axios";
 import { GetServerSideProps } from "next";
 import { useState } from "react";
 
 type Props = {
     cursinho: Course[] | null;
     authData?: AuthDataType | null;
+    xTraceError?: string | null;
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
@@ -26,37 +27,34 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
         return {
             props: {
                 cursinho: cursinho.status === 200 ? cursinho.data.data : null,
-                authData: authData.data.code === "PROFILE_INFO" ? authData.data.data : null
+                authData: authData.data.code === "PROFILE_INFO" ? authData.data.data : null,
+                xTraceError: null
             }
         }
     } catch (error) {
         console.error("Error fetching cursinho:", error);
+        if (error instanceof AxiosError) {
+            return {
+                props: {
+                    cursinho: null,
+                    authData: null,
+                    xTraceError: error.response?.headers["x-trace-id"]
+                }
+            }
+        }
         return {
             props: {
                 cursinho: null,
                 authData: null
             }
-
         }
     }
 }
 
-export default function Feed({ cursinho, authData }: Props) {
+export default function Feed({ cursinho, authData, xTraceError }: Props) {
     const [cursinhos,] = useState<Course[]>(cursinho || []);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-
-    // useEffect(() => {
-    //     (async () => {
-    //         setIsLoading(true)
-    //         const response = await Api.getCursinho()
-
-    //         if (response.status === 200) {
-    //             setCursinhos(response.data.data);
-    //             setIsLoading(false);
-    //         }
-    //     })()
-    // }, [])
 
 
     // function handleFilterChange(filters: { location: string; state: string; city: string; query: string }) {
@@ -76,10 +74,12 @@ export default function Feed({ cursinho, authData }: Props) {
     return (
         <div>
             {isLoading && <LoadingComponent isLoading={isLoading} />}
-            <Sidebar isLoading={isLoading} setIsLoading={setIsLoading} authData={authData} />
+            <Sidebar authData={authData} traceID={xTraceError} />
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                {/* <FilterBar onSearch={() => console.log("teste")} /> */}
+            </div>
             <div className={styles.feedPageContainer}>
 
-                <FilterBar onSearch={() => console.log("teste")} />
                 <div className={styles.feedContainer}>
                     {cursinhos.map((item, index) => (
                         <FeedCourseCard

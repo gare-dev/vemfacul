@@ -5,6 +5,19 @@
     border-radius: 10px;
     position: relative;
 
+    .usernameDiv {
+        position: absolute;
+        top: 28px;
+        padding-left: 150px;
+
+        p {
+            font-size: 0.8rem;
+            font-weight: 500;
+            font-family: "Kantumruy Pro", sans-serif;
+            color: #525252;
+        }
+    }
+
     .imageDiv {
         display: flex;
         justify-content: center;
@@ -85,4 +98,11 @@
         }
     }
 
+}
+
+
+@media (max-width: 823px) {
+    .mainDiv {
+        display: none;
+    }
 }

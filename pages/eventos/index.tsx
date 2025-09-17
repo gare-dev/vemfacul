@@ -9,6 +9,7 @@ import { FiltrosType } from "@/types/filtrosType";
 import { AxiosError } from "axios";
 import { GetServerSideProps } from "next";
 import { useState } from "react";
+import styles from "@/styles/eventos.module.scss"
 
 
 type Props = {
@@ -74,7 +75,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
 
 export default function Eventos({ eventsProp, authData }: Props) {
     const [events, setEvents] = useState<PopupType[]>(eventsProp || [])
-    const [isLoading, setIsLoading] = useState<boolean>(false)
     const [originalEvents,] = useState<PopupType[]>(eventsProp || [])
     const [isVisible, setIsVisible] = useState<boolean>(false)
     const [popupVisible, setPopupVisible] = useState<boolean>(false)
@@ -148,13 +148,15 @@ export default function Eventos({ eventsProp, authData }: Props) {
                 canRemove={false}
                 canEdit={false}
             />
-            <Sidebar isLoading={isLoading} setIsLoading={setIsLoading} authData={authData} />
+            <Sidebar authData={authData} />
 
-            <div>
+            <div className={styles.calendario}>
                 <DemoWrapper
                     isEditable={false}
                     eventos={events}
-                    popUpClick={() => setIsVisible(true)}
+                    popUpClick={() => {
+                        setIsVisible(true)
+                    }}
                     popupFilterClick={() => setPopupVisible(true)} />
             </div>
         </>

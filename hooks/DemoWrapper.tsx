@@ -9,7 +9,7 @@ const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'Jul
 
 interface props {
   eventos: PopupType[]
-  popUpClick?: () => void
+  popUpClick?: (e?: React.MouseEvent<HTMLDivElement>) => void
   popupFilterClick?: () => void
   isEditable: boolean
   onDateClick?: (day: number, month: number, year: number) => void

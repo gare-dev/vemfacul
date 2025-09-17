@@ -54,6 +54,11 @@ interface Props {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const { id_course } = ctx.params as { id_course: string };
+    if (id_course === "null") {
+        return {
+            notFound: true
+        }
+    }
 
     try {
         const cookie = ctx.req.headers.cookie
@@ -204,7 +209,7 @@ export default function CursinhoPage({ id_course, authData, cursinhoProp }: Prop
 
         <>
             {loading && <LoadingComponent isLoading={loading} />}
-            <Sidebar isLoading={loading} setIsLoading={setLoading} setInfo={setInfo} userInfo={info} authData={authData} />
+            <Sidebar setInfo={setInfo} userInfo={info} authData={authData} />
             <div className={styles.pageContainer}>
                 <div className={styles.header}>
                     <img
