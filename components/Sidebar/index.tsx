@@ -16,8 +16,7 @@ interface props {
     setInfo?: React.Dispatch<React.SetStateAction<string[]>>
     userInfo?: string[]
     authData: AuthDataType | null | undefined
-    traceID?: string
-
+    traceID?: string | null
 }
 
 type NavItemsType = {

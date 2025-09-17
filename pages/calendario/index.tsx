@@ -40,8 +40,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
         return {
             props: {
                 eventsProp: response.status === 200 ? eventos : [],
-                authData: authData.data.code === "PROFILE_INFO" ? authData.data.data : null
-
+                authData: authData.data.code === "PROFILE_INFO" ? authData.data.data : null,
             }
         }
 

@@ -148,7 +148,7 @@ const LogEntry = ({ logs_props }: Props) => {
         }
       `}</style>
 
-            {logs_props.map((log: RequestLog, i) => {
+            {logs_props?.map((log: RequestLog, i) => {
                 const methodColor = methodColors[log.method.toUpperCase()] || "#001ECB";
                 const statusColor = getStatusColor(log.status_code);
 

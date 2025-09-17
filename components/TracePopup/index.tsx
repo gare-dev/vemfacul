@@ -2,10 +2,9 @@ import React, { useState } from "react";
 
 interface TracePopupProps {
     message: string;
-    traceId: string;
 }
 
-const TracePopup: React.FC<TracePopupProps> = ({ message, traceId }) => {
+const TracePopup: React.FC<TracePopupProps> = ({ message }) => {
     const [isOpen, setIsOpen] = useState(true);
 
     if (!isOpen) return null;
@@ -26,7 +25,6 @@ const TracePopup: React.FC<TracePopupProps> = ({ message, traceId }) => {
             }}
         >
             <div style={{ marginBottom: "8px", fontWeight: 600 }}>{message}</div>
-            <div style={{ fontSize: "0.85rem", opacity: 0.8 }}>Trace ID: {traceId}</div>
             <button
                 onClick={() => setIsOpen(false)}
                 style={{

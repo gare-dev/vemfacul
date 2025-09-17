@@ -74,7 +74,7 @@ export default function Feed({ cursinho, authData, xTraceError }: Props) {
     return (
         <div>
             {isLoading && <LoadingComponent isLoading={isLoading} />}
-            <Sidebar authData={authData} traceID={xTraceError ?? ""} />
+            <Sidebar authData={authData} traceID={xTraceError} />
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                 {/* <FilterBar onSearch={() => console.log("teste")} /> */}
             </div>
