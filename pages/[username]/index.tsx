@@ -15,6 +15,7 @@ import { GetServerSideProps } from "next";
 import { RESERVED_ROUTES } from "@/middleware";
 import AuthDataType from "@/types/authDataType";
 import { MdVerified } from "react-icons/md";
+import { AxiosError } from "axios";
 
 type Postagem = {
     id_postagem: string | number;
@@ -27,9 +28,10 @@ type Postagem = {
 };
 
 type Props = {
-    userProfileProp: UserProfileType;
+    userProfileProp: UserProfileType | null;
     postagensProp: Postagem[];
     authData?: AuthDataType | null | undefined;
+    xTraceError?: string | null;
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
@@ -57,22 +59,33 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
             props: {
                 userProfileProp: userProfile.data.data[0],
                 postagensProp: post ?? null,
-                authData: authData.data.code === "PROFILE_INFO" ? authData.data.data : null
+                authData: authData.data.code === "PROFILE_INFO" ? authData.data.data : null,
+                xTraceError: null
             }
         }
     } catch (error) {
-        console.error("Error fetching user profile or postagens:", error);
+        if (error instanceof AxiosError) {
+            return {
+                props: {
+                    userProfileProp: null,
+                    postagensProp: [],
+                    authData: null,
+                    xTraceError: error.response?.headers["x-trace-id"]
+                }
+            }
+        }
         return {
             props: {
                 userProfileProp: null,
                 postagensProp: [],
-                authData: null
+                authData: null,
+                xTraceError: null
             }
         }
     }
 }
 
-export default function UserProfile({ userProfileProp, postagensProp, authData }: Props) {
+export default function UserProfile({ userProfileProp, postagensProp, authData, xTraceError }: Props) {
     const router = useRouter()
     const { username } = router.query;
     const [isVisible, setIsVisible] = useState(false);
@@ -197,7 +210,7 @@ export default function UserProfile({ userProfileProp, postagensProp, authData }
 
     return (
         <>
-            {<Sidebar authData={authData} />}
+            {<Sidebar authData={authData} traceID={xTraceError} />}
             {isVisible && user === username &&
                 <EditProfilePopup
                     closePopup={() => setIsVisible(false)}
@@ -208,14 +221,14 @@ export default function UserProfile({ userProfileProp, postagensProp, authData }
                     refreshPage={() => router.reload()}
                 />
             }
-            {isVisibleSubmitPost &&
-                <CreatePostagem
-                    onPostTweet={handlePostTweet}
-                    isOpen={isPopupOpen}
-                    onClose={handleClosePopup}
-                    onReload={() => router.reload()}
-                />
-            }
+            {/* {isVisibleSubmitPost && */}
+            <CreatePostagem
+                onPostTweet={handlePostTweet}
+                isOpen={isPopupOpen}
+                onClose={handleClosePopup}
+                onReload={() => router.reload()}
+            />
+            {/* } */}
             <div className={styles.main}>
                 <Head>
                     <title>{`${userProfile.nome} | Perfil`}</title>
@@ -224,15 +237,12 @@ export default function UserProfile({ userProfileProp, postagensProp, authData }
                 </Head>
 
                 <div className={styles.profileContainer}>
-
                     <div className={styles.headerImageContainer}>
                         <img
                             src={userProfile.header === '' ? undefined : userProfile.header}
-
                             className={styles.headerImage}
                         />
                     </div>
-
                     <div className={styles.profileInfoContainer}>
                         <div className={styles.profilePictureContainer}>
                             <img

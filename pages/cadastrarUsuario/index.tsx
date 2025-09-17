@@ -9,7 +9,6 @@ import inputs, { inputAlunoEM, professorInputs, universitarioInputs, vestibuland
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-
 export default function CadastrarUsuario() {
     const [step, setStep] = useState(0)
     const [hasTriedSubmit, setHasTriedSubmit] = useState(false);

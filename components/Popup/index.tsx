@@ -16,6 +16,7 @@ interface props {
     canEdit: boolean
     removeFunction?: () => void
     editFunction?: () => void
+    reloadFunction?: () => void
 }
 
 export default function Popup(props: props) {
@@ -90,17 +91,21 @@ export default function Popup(props: props) {
         }
         try {
             startLoading()
-            // aqui você pode usar a rota certa de edição (simulei como updatePersonalEvent)
-            // const response = await Api.updatePersonalEvent({
-            //     ...calendarData,
-            //     title: editedTitle,
-            //     descricao: editedDesc
-            // })
 
-            // if (response.status === 200) {
-            //     showAlert("Evento atualizado com sucesso!", "success")
-            //     setEditMode(false)
-            // }
+            const response = await Api.editPersonalEvent(
+                calendarData.id_pevent,
+                editedTitle,
+                editedDesc,
+                calendarData.hora
+            )
+
+            if (response.status === 200) {
+                showAlert("Evento atualizado com sucesso!", "success")
+                setEditMode(false)
+                if (props.reloadFunction) {
+                    props.reloadFunction();
+                }
+            }
             setCalendarData({
                 ...calendarData,
                 title: editedTitle,
@@ -199,7 +204,7 @@ export default function Popup(props: props) {
                         </div>)
                     }
 
-                    {props.canEdit && !editMode &&
+                    {props.canEdit && !editMode && !calendarData.cursinho &&
                         (<div onClick={() => setEditMode(true)} className={s.editDiv}>
                             <p><MdModeEdit /></p>
                         </div>)

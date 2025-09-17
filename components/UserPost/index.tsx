@@ -115,27 +115,24 @@ const Tweet: React.FC<TweetProps> = ({
         {/* Profile Image */}
         <div className={styles.profileImageContainer}>
           <img
+            onClick={(e) => { e.stopPropagation(); router.push(`/${username}`) }}
             src={profileImage}
+            style={{ 'cursor': 'pointer' }}
             alt={`${name}'s profile`}
             className={styles.profileImage}
           />
         </div>
 
-        {/* Tweet Body */}
         <div className={styles.tweetBody} style={{ 'cursor': 'pointer' }} onClick={() => { router.push(`/postagem/${id}`) }}>
-          {/* Tweet Header (name, username, timestamp) */}
           <div className={styles.tweetHeader}>
             <span className={styles.name}>{name}</span>
             <span className={styles.username}>@{username}</span>
             <span className={styles.timestamp}>{timestamp}</span>
           </div>
 
-          {/* Tweet Text */}
           <p className={styles.tweetText}> {content}</p>
 
-          {/* Tweet Actions */}
           <div className={styles.tweetActions}>
-            {/* Comment Button */}
             <button className={styles.actionButton} onClick={(e) => {
               e.stopPropagation()
               setIsVisibleSubmitPost(!isVisibleSubmitPost); handleOpenPopup({
@@ -159,7 +156,6 @@ const Tweet: React.FC<TweetProps> = ({
               <span>{+currentComments}</span>
             </button>
 
-            {/* Like Button */}
             <button
               className={`${styles.actionButton} ${isLiked ? styles.liked : ''}`}
               onClick={(e) => {
@@ -184,7 +180,6 @@ const Tweet: React.FC<TweetProps> = ({
               <span>{currentLikes}</span>
             </button>
 
-            {/* Share Button */}
             <button className={styles.actionButton} style={{ 'cursor': 'pointer' }} onClick={(e) => { e.stopPropagation(); handleSharePost() }}>
               <svg
                 className={styles.actionIcon}

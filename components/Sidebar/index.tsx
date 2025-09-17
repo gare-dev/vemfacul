@@ -10,13 +10,13 @@ import { LuFilePenLine } from "react-icons/lu"
 import { MdAssignment, MdExitToApp, MdOutlineListAlt, MdQuiz } from "react-icons/md"
 import { RiPagesLine } from "react-icons/ri"
 import PopupMissLogin from "../MissLogin"
+import Image from "next/image"
 
 interface props {
     setInfo?: React.Dispatch<React.SetStateAction<string[]>>
     userInfo?: string[]
     authData: AuthDataType | null | undefined
-    traceID?: string
-
+    traceID?: string | null
 }
 
 type NavItemsType = {
@@ -35,9 +35,11 @@ export default function Sidebar(props: props) {
     const [profileOptionsVisible, setProfileOptionsVisible] = useState<boolean>(false)
     const [isMissingLoginShown, setIsMissingLoginShown] = useState<boolean>(false)
     const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false)
+    const [innerHeight, setInnerHeight] = useState<number>(typeof window !== 'undefined' ? window.innerHeight : 0);
 
     const sidebarWidth = isMobile ? (isSidebarOpen ? "260px" : "0px") : undefined;
     const headerOpacity = isMobile ? (isSidebarOpen ? 1 : 0) : undefined;
+
 
     const [, setShowHeader] = useState(true);
     let lastScrollY = 0;
@@ -98,10 +100,6 @@ export default function Sidebar(props: props) {
 
     const activeIndex = navItems.findIndex(item => item.path === router.pathname);
 
-    useEffect(() => {
-        console.log(activeIndex)
-    }, [activeIndex])
-
     async function handleSignout() {
         if (await getAuth()) {
             router.push("/")
@@ -145,6 +143,17 @@ export default function Sidebar(props: props) {
 
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+
+    useEffect(() => {
+        function handleResize() {
+            setInnerHeight(window.innerHeight);
+        }
+
+        window.addEventListener("resize", handleResize);
+
+        return () => window.removeEventListener("resize", handleResize);
     }, []);
 
 
@@ -198,22 +207,23 @@ export default function Sidebar(props: props) {
                 )}
                 <aside style={{ width: sidebarWidth }} className={styles.sidebar}>
                     <div className={styles.inner}>
-                        <div style={{ width: "260px" }} className={styles.header}>
-                            <img className={styles.logo} src="/assets/img/logo.png" alt="Logo" />
+                        <div style={{ width: sidebarWidth }} className={styles.header}>
+                            <Image height={80} width={80} className={styles.logo} src="/assets/img/logo.png" alt="Logo" />
                             <h1 style={{ opacity: headerOpacity }}>VemFacul</h1>
                         </div>
 
                         <nav
-                            style={{ '--top': `${activeIndex >= 0 ? activeIndex * 56 : 392}px` } as React.CSSProperties}
+                            style={{ '--top': `${activeIndex >= 0 ? activeIndex * (innerHeight < 751 ? 45 : 56) : (innerHeight < 751 ? 315 : 392)}px`, '--after-height': `${innerHeight < 751 ? 45 : 56}px` } as React.CSSProperties}
                             className={styles.menu}
+
                         >
                             {navItems.map((item, index) => (
                                 <button
-                                    style={isMobile ? { width: sidebarWidth } : undefined}
+                                    style={isMobile ? { width: sidebarWidth, height: innerHeight < 751 ? "45px" : "56px" } : undefined}
                                     key={index}
                                     onClick={() => item.path ? router.push(item.path) : null}
                                     type="button"
-                                    className={router.pathname === item.path ? 'active' : ''}
+                                    className={`${router.pathname === item.path ? 'active' : ''} ${styles.menuItem}`}
                                 >
                                     <span>{item.icon}</span>
                                     <p style={isMobile ? { opacity: headerOpacity } : undefined} className={styles.text}>{item.name}</p>
@@ -221,7 +231,7 @@ export default function Sidebar(props: props) {
                             ))}
                             <div style={{ marginTop: "auto" }}>
                                 {!isMissingLoginShown && <button style={isMobile ? { width: sidebarWidth } : undefined} onClick={() => setProfileOptionsVisible(true)} type="button">
-                                    <img style={{ borderRadius: "50%", height: "40px", width: "40px", objectFit: "cover" }} src={authData?.foto} alt="Logo" />
+                                    <Image width={40} height={40} style={{ borderRadius: "50%", height: "40px", width: "40px", objectFit: "cover" }} src={authData?.foto ?? ""} alt="Logo" />
                                     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "2px" }}>
                                         <p style={isMobile ? { opacity: headerOpacity } : undefined} className={styles.text}>{authData?.nome}</p>
                                         <p style={isMobile ? { opacity: headerOpacity } : undefined} className={styles.textUser}>@{authData?.username}</p>
