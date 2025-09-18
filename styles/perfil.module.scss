@@ -133,7 +133,7 @@
       }
 
       h3 {
-        margin: 0 0 10px;
+        // margin: 0 0 10px;
         color: #001ECB;
       }
 
@@ -149,6 +149,7 @@
     ul {
       padding-left: 20px;
       list-style-type: none;
+      padding-top: 20px;
 
       li {
         position: relative;
@@ -346,6 +347,11 @@
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
       border-left: 3px solid #D0D7FF;
+      word-wrap: break-word;
+      /* força quebra quando não há espaço natural */
+      overflow-wrap: break-word;
+      /* equivalente moderno */
+      white-space: normal;
 
       .commentHeader {
         display: flex;
@@ -567,6 +573,17 @@
     &.active {
       background-color: #001ECB;
     }
+  }
+}
+
+.calendarSection {
+  h2 {
+    margin: 0 0 30px;
+    color: #001ECB;
+    font-size: 1.8rem;
+    text-align: center;
+    font-weight: 500;
+    font-family: "Kantumruy Pro", sans-serif;
   }
 }
 

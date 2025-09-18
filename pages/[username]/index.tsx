@@ -34,6 +34,31 @@ type Props = {
     xTraceError?: string | null;
 }
 
+function formatRelativeTime(timestamp: string | number | Date): string {
+    const now = new Date();
+    const postDate = new Date(timestamp);
+    const diffMs = now.getTime() - postDate.getTime();
+
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHours = Math.floor(diffMin / 60);
+
+    if (diffSec < 60) {
+        return `há ${diffSec} s`;
+    } else if (diffMin < 60) {
+        return `há ${diffMin} min`;
+    } else if (diffHours < 24) {
+        return `há ${diffHours} h`;
+    } else {
+        return postDate.toLocaleDateString("pt-BR", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        });
+    }
+}
+
+
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
     if (RESERVED_ROUTES.includes(context.params?.username as string) || context.params?.username === "null") {
         return {
@@ -52,7 +77,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
 
         const post = postagens.data.data?.map((post: Postagem) => ({
             ...post,
-            created_at: post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).toLocaleDateString()) : "Data não informada"
+            created_at: post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).getDate() === new Date().getDate() ? formatRelativeTime(post.created_at) : new Date(post.created_at).toLocaleDateString()) : "Data não informada"
         }));
 
         return {
@@ -105,6 +130,7 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
         vestibulares: [],
         materias_lecionadas: [],
         nivel: "",
+        acertosuser: 0
     });
 
     const typeEmojiMap: Record<string, string> = {
@@ -208,6 +234,10 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
     //     if (username?.toString()) handleGetUserProfile()
     // }, [username])
 
+    useEffect(() => {
+        console.log(postagensProp)
+    }, [postagensProp])
+
     return (
         <>
             {<Sidebar authData={authData} traceID={xTraceError} />}
@@ -278,6 +308,7 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
                         </div>
 
                         <p className={styles.description}>{userProfile.descricao}</p>
+                        <h3> Questões corretas: {userProfile.acertosuser}</h3>
 
                         <div className={styles.universityInterests}>
                             <h3 className={styles.interestsTitle}>{userProfile.nivel === "Aluno EM" ? "Vestibulares" : userProfile.nivel === "Cursinho" ? "" : "Matérias Lecionadas"}</h3>

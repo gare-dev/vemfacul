@@ -1,17 +1,16 @@
 import Api from '@/api';
-import { CourseApprovalCard } from '@/components/Common/Admin/HorizontalCard';
-import { Course } from '@/types/coursetype';
+import { ApproveCourse, CourseApprovalCard } from '@/components/Common/Admin/HorizontalCard';
 import { useEffect, useState } from 'react';
 import styles from "@/styles/courseapprovarllist.module.scss"
 import useAlert from '@/hooks/useAlert';
 import LoadingBar from '@/components/LoadingBar';
 
 interface Props {
-    Course: Course[] | null
+    Course: ApproveCourse[] | null
 }
 
 export default function CoursesApprovalList({ Course }: Props) {
-    const [courses, setCourses] = useState<Course[]>(Course || []);
+    const [courses, setCourses] = useState<ApproveCourse[]>(Course || []);
     const { showAlert } = useAlert()
     const [progress, setProgress] = useState(0);
     const [loading, setLoading] = useState(false);

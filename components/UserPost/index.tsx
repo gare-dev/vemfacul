@@ -40,7 +40,7 @@ const Tweet: React.FC<TweetProps> = ({
 }) => {
   const router = useRouter()
   const [isLiked, setIsLiked] = useState(alredyLiked);
-  const [currentLikes, setCurrentLikes] = useState(likes);
+  const [currentLikes, setCurrentLikes] = useState<number>(Number(likes));
   const [currentComments, setCurrenComments] = useState(comments);
   const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -80,13 +80,13 @@ const Tweet: React.FC<TweetProps> = ({
     if (isLiked) {
       const promise = await Api.unLinkePostagem(id);
       if (promise.status === 201) {
-        setCurrentLikes((prev) => prev - 1);
+        setCurrentLikes(currentLikes - 1);
         setIsLiked(false);
       }
     } else {
       const promise = await Api.likePostagem(id);
       if (promise.status === 201) {
-        setCurrentLikes((prev) => prev + 1);
+        setCurrentLikes(currentLikes + 1);
         setIsLiked(true);
       }
     }
@@ -112,7 +112,6 @@ const Tweet: React.FC<TweetProps> = ({
       )
       }
       <div className={styles.tweetContent}>
-        {/* Profile Image */}
         <div className={styles.profileImageContainer}>
           <img
             onClick={(e) => { e.stopPropagation(); router.push(`/${username}`) }}
@@ -177,7 +176,7 @@ const Tweet: React.FC<TweetProps> = ({
                   )}
                 </g>
               </svg>
-              <span>{currentLikes}</span>
+              <span>{Number(currentLikes)}</span>
             </button>
 
             <button className={styles.actionButton} style={{ 'cursor': 'pointer' }} onClick={(e) => { e.stopPropagation(); handleSharePost() }}>
