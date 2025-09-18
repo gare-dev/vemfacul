@@ -154,7 +154,9 @@ export default function Eventos({ eventsProp, authData }: Props) {
                 <DemoWrapper
                     isEditable={false}
                     eventos={events}
-                    popUpClick={() => setIsVisible(true)}
+                    popUpClick={() => {
+                        setIsVisible(true)
+                    }}
                     popupFilterClick={() => setPopupVisible(true)} />
             </div>
         </>

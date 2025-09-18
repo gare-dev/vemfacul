@@ -196,3 +196,38 @@
         }
     }
 }
+
+@media (max-width: 550px) {
+    .editProfilePopup {
+        .boxDiv {
+            width: 90%;
+
+
+            .headerImage {
+                div {
+                    height: 200px;
+                }
+            }
+
+            .profileImage {
+                top: 200px;
+                left: 15px;
+
+                div {
+                    img {
+                        height: 100px;
+                        width: 100px;
+                    }
+                }
+            }
+
+            .profileInputs {
+                margin-top: 60px;
+
+                .input {
+                    width: 95%;
+                }
+            }
+        }
+    }
+}

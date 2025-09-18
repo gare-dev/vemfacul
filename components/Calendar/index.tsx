@@ -138,7 +138,6 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
                         if (+opcao.day === day && +opcao.month === month && +opcao.year === year) {
                             return (
                                 <div
-
                                     key={index}
                                     style={{
                                         display: "flex",
@@ -156,9 +155,9 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
                                         onClick={(e) => { e.stopPropagation(); setCalendarData(opcao); popUpClick?.() }}
                                         style={{
                                             width: "100%",
-                                            color: "#fff",
+                                            color: opcao.color ? "#fff" : "#000",
                                             textAlign: "center",
-                                            backgroundColor: "rgba(0, 0, 0, 0.5)",
+                                            backgroundColor: opcao.cursinho ? "rgba(0, 0, 0, 0.5)" : "transparent",
                                             height: "100%"
 
 

@@ -10,6 +10,7 @@ interface props {
     escola: string | undefined
     ano: string | undefined
     step: number
+    username: string
 }
 
 
@@ -38,6 +39,9 @@ export default function MiniProfile(props: props) {
             </div>
             <div className={s.schoolDiv}>
                 <p>{props.ano} {props.escola}</p>
+            </div>
+            <div className={s.usernameDiv}>
+                <p>@{props.username}</p>
             </div>
             <div className={s.locationDiv}>
                 {(props.estado && props.step >= 2) && <p><MdOutlineLocationOn className={s.icon} />{props.estado}</p>}

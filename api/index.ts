@@ -342,6 +342,37 @@ class _Api {
   public async getAdminLogs() {
     return await this._instance.get("/admin/api/log")
   }
+
+  public async insertAdminCourseEvent(title: string, descricao: string, link: string, type: string, main_title: string, hora: string, day: string, month: string, year: string) {
+    return await this._instance.post("/course/admin/event", {
+      day,
+      month,
+      year,
+      title,
+      descricao,
+      link,
+      type,
+      main_title,
+      hora
+    })
+  }
+
+  public async deleteCursinhoEvent(id_event: string) {
+    return await this._instance.delete(`/user/event/${id_event}`)
+  }
+
+  public async editPersonalEvent(id_pevent: string, title: string, descricao: string, hora: string) {
+    return await this._instance.patch(`/user/event/${id_pevent}`, {
+      title,
+      descricao,
+      hora
+    }
+    )
+  }
+
+  public async getCourseEventById(id_cursinho: string) {
+    return await this._instance.get(`/course/event/${id_cursinho}`)
+  }
 }
 
 const Api = new _Api(process.env.NEXT_PUBLIC_API_URL ?? "");

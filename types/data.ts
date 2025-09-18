@@ -16,6 +16,7 @@ type PopupType = {
     completed: boolean
     created_at?: Date | string | number
     isdone?: boolean
+    id_event?: string
 }
 
 export default PopupType

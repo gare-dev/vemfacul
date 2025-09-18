@@ -9,6 +9,7 @@ import MainTweet from '@/components/MainTweet';
 import { FaArrowLeft } from 'react-icons/fa6';
 import AuthDataType from '@/types/authDataType';
 import { GetServerSideProps } from 'next';
+import { AxiosError } from 'axios';
 
 
 export type Postagem = {
@@ -17,7 +18,7 @@ export type Postagem = {
     username: string;
     content: string;
     content_post?: string;
-    created_at?: string | Date;
+    created_at?: Date;
     foto: string;
     total_comments: number;
     alredyliked: number | boolean;
@@ -26,38 +27,63 @@ export type Postagem = {
 
 interface Props {
     authData?: AuthDataType | null | undefined;
-
+    postData?: Postagem[] | null;
+    comentariosData?: Postagem[] | null;
+    xTraceError?: string | null;
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
     try {
         const cookie = ctx.req.headers.cookie
+        const id_postagem = ctx.params?.id_postagem as string | number
         Api.setCookie(cookie || "")
-
-        const authData = await Api.getProfileInfo()
+        const [authData, postData, comentariosData] = await Promise.all([
+            Api.getProfileInfo(),
+            Api.getSinglePostagem(id_postagem),
+            Api.getComentarios(id_postagem)
+        ])
 
         return {
             props: {
-                authData: authData.data.code === "PROFILE_INFO" ? authData.data.data : null
+                authData: authData.data.code === "PROFILE_INFO" ? authData.data.data : null,
+                postData: postData.status === 200 ? postData.data.data.map((item: Postagem) => ({
+                    ...item, created_at: item.created_at ? (typeof item.created_at === "string" ? item.created_at : new Date(item.created_at).toLocaleDateString()) : "Data não informada"
+                })) : null,
+                comentariosData: comentariosData.status === 200 ? comentariosData.data.data.map((item: Postagem) => ({
+                    ...item, created_at: item.created_at ? (typeof item.created_at === "string" ? item.created_at : new Date(item.created_at).toLocaleDateString()) : "Data não informada"
+                })) : null,
+                xTraceError: null
             }
         }
     } catch (error) {
-        console.log(error)
+        if (error instanceof AxiosError) {
+            return {
+                props: {
+                    authData: null,
+                    postData: null,
+                    comentariosData: null,
+                    xTraceError: error.response?.headers['x-trace-error'] || null
+                }
+            }
+        }
         return {
             props: {
-                authData: null
+                authData: null,
+                postData: null,
+                comentariosData: null,
+                xTraceError: null
             }
         }
     }
 }
-export default function SinlgePostagem({ authData }: Props) {
+export default function SinlgePostagem({ authData, postData, comentariosData }: Props) {
     const router = useRouter()
     const { id_postagem } = router.query
     const [isVisible, setIsVisible] = useState(false)
     const [loading, setLoading] = useState(true)
     const [comentsVisible, setComentsVisible] = useState(false)
-    const [coments, setComents] = useState<Postagem[]>([])
-    const [postagem, setPostagem] = useState<Postagem[]>([])
+    const [coments, setComents] = useState<Postagem[]>(comentariosData || [])
+    const [postagem, setPostagem] = useState<Postagem[]>(postData || [])
     const [userInfo, setUserInfo] = useState<string[]>([])
 
     const handleGetSinglePost = async () => {

@@ -1,12 +1,12 @@
 import Api from "@/api";
 import CoursesApprovalList from "@/components/Common/Admin/CoursesApprovalList";
+import { ApproveCourse } from "@/components/Common/Admin/HorizontalCard";
 import Sidebar from "@/components/Sidebar";
 import AuthDataType from "@/types/authDataType";
-import { Course } from "@/types/coursetype";
 import { GetServerSideProps } from "next";
 
 interface Props {
-    Course: Course[] | null
+    Course: ApproveCourse[] | null
     authData?: AuthDataType | null;
 }
 

@@ -8,7 +8,6 @@ function CalendarWithTasks() {
     const [currentMonth, setCurrentMonth] = useState(today.getMonth()); // 0-indexed
     const [tasks, setTasks] = useState<{ [date: string]: string[] }>({}); // { 'YYYY-MM-DD': ['task1', 'task2'] }
 
-    // Get number of days in month
     function getDaysInMonth(year: number, month: number): number {
         return new Date(year, month + 1, 0).getDate();
     }

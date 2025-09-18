@@ -1,14 +1,14 @@
 import Api from "@/api";
 import { FeedCourseCard } from "@/components/FeedCourseCard";
+import Filter from "@/components/FiltroCursinho";
 import LoadingComponent from "@/components/LoadingComponent";
-import FilterBar from "@/components/SearchHeader";
 import Sidebar from "@/components/Sidebar";
 import styles from "@/styles/feed.module.scss";
 import AuthDataType from "@/types/authDataType";
 import { Course } from "@/types/coursetype";
 import { AxiosError } from "axios";
 import { GetServerSideProps } from "next";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 type Props = {
     cursinho: Course[] | null;
@@ -53,45 +53,35 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
 }
 
 export default function Feed({ cursinho, authData, xTraceError }: Props) {
-    const [cursinhos,] = useState<Course[]>(cursinho || []);
+    const [filteredData, setFilteredData] = useState<Course[]>(cursinho || []);
+
+    const handleFilter = useCallback((filtered: Course[]) => {
+        setFilteredData(filtered);
+    }, []);
+
     const [isLoading, setIsLoading] = useState<boolean>(false);
-
-
-
-    // function handleFilterChange(filters: { location: string; state: string; city: string; query: string }) {
-    //     // const filteredCursinhos = products.filter(cursinho => {
-    //     //     return (
-    //     //         (filters.location ? cursinho.location.toLowerCase() === filters.location.toLowerCase() : true) &&
-    //     //         (filters.state ? cursinho.location.toLowerCase() === filters.state.toLowerCase() : true) &&
-    //     //         (filters.city ? cursinho.location.toLowerCase() === filters.city.toLowerCase() : true) &&
-    //     //         (filters.query ? cursinho.title.toLowerCase().includes(filters.query.toLowerCase()) : true)
-    //     //     );
-    //     // });
-    //     // setCursinhos(filteredCursinhos);
-    //     console.log("FILTRO")
-    // }
 
 
     return (
         <div>
             {isLoading && <LoadingComponent isLoading={isLoading} />}
-            <Sidebar authData={authData} traceID={xTraceError ?? ""} />
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                <FilterBar onSearch={() => console.log("teste")} />
-            </div>
+
+            <Sidebar authData={authData} traceID={xTraceError} />
+
             <div className={styles.feedPageContainer}>
+                <Filter data={cursinho!} onFilter={handleFilter} />
 
                 <div className={styles.feedContainer}>
-                    {cursinhos.map((item, index) => (
+                    {filteredData.map((item, index) => (
                         <FeedCourseCard
-
                             key={index}
                             onFollow={() => console.log(`Seguindo o curso: ${item.nome}`)}
                             course={item}
                             setLoading={(loading) => setIsLoading(loading)}
                         />
                     ))}
-                    {cursinhos.length === 0 && (
+
+                    {filteredData.length === 0 && (
                         <h2 style={{ textAlign: 'center' }}>Nenhum cursinho encontrado para o filtro especificado.</h2>
                     )}
                 </div>
