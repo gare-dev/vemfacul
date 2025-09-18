@@ -276,7 +276,7 @@ class _Api {
       withCredentials: false
     })
   }
-  
+
   public async getCursinho() {
     return await this._instance.get('/courses')
   }
@@ -306,11 +306,14 @@ class _Api {
   }
   public async insertQuestion(index: number, year: number, id_disciplines: number, isCorret: boolean) {
     return await this._instance.post("/exercicios/questoes/usuario", {
-      index, 
+      index,
       year,
-      id_disciplines, 
+      id_disciplines,
       isCorret
     })
+  }
+  public async getRankingUsers() {
+    return await this._instance.get("/exercicios/questoes/ranking")
   }
 
   public async setPersonalEventImportant(id_pevent: string) {
@@ -338,7 +341,6 @@ class _Api {
       role,
     })
   }
-
   public async getAdminLogs() {
     return await this._instance.get("/admin/api/log")
   }
