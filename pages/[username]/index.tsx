@@ -307,6 +307,7 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
                         </div>
 
                         <p className={styles.description}>{userProfile.descricao}</p>
+                        <h3> Questões corretas: {userProfile.acertosuser}</h3>
 
                         <div className={styles.universityInterests}>
                             <h3 className={styles.interestsTitle}>{userProfile.nivel === "Aluno EM" ? "Vestibulares" : userProfile.nivel === "Cursinho" ? "" : "Matérias Lecionadas"}</h3>
