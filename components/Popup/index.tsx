@@ -13,7 +13,7 @@ interface props {
     setIsVisible: () => void
     canAdd: boolean
     canRemove: boolean
-    canEdit: boolean
+    canEdit?: boolean
     removeFunction?: () => void
     editFunction?: () => void
     reloadFunction?: () => void

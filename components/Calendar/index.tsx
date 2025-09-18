@@ -138,7 +138,6 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
                         if (+opcao.day === day && +opcao.month === month && +opcao.year === year) {
                             return (
                                 <div
-
                                     key={index}
                                     style={{
                                         display: "flex",

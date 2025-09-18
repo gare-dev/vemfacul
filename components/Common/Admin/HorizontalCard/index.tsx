@@ -1,9 +1,22 @@
 import { FaCheck, FaTimes, FaInfoCircle } from 'react-icons/fa';
-import { Course } from '@/types/coursetype';
 import styles from "@/components/Common/Admin/HorizontalCard/horizontalcard.module.scss";
 
+export type ApproveCourse = {
+    id_cursinho: string
+    nome: string
+    nome_exibido: string
+    cidade: string
+    uf: string
+    faixa_preco: string
+    logo: string
+    media: string
+    total_avaliacoes: string
+    representante_legal: string
+    email_contato: string
+    telefone: string
+}
 interface CourseApprovalCardProps {
-    course: Course;
+    course: ApproveCourse;
     onApprove: (id: string) => void;
     onReject: (id: string) => void;
     onDetails: (id: string) => void;

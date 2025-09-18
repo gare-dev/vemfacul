@@ -365,6 +365,10 @@ class _Api {
     }
     )
   }
+
+  public async getCourseEventById(id_cursinho: string) {
+    return await this._instance.get(`/course/event/${id_cursinho}`)
+  }
 }
 
 const Api = new _Api(process.env.NEXT_PUBLIC_API_URL ?? "");
