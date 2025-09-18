@@ -570,6 +570,17 @@
   }
 }
 
+.calendarSection {
+  h2 {
+    margin: 0 0 30px;
+    color: #001ECB;
+    font-size: 1.8rem;
+    text-align: center;
+    font-weight: 500;
+    font-family: "Kantumruy Pro", sans-serif;
+  }
+}
+
 @media (max-width: 768px) {
   .spaceSection {
     .slider {

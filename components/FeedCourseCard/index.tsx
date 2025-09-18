@@ -60,8 +60,8 @@ export const FeedCourseCard = ({
 
 
                         <div className={styles.stars}>
-                            <span>{Number(course.media).toFixed(1)} {/* Exibindo a média com uma casa decimal */}</span>
-                            {renderStars(+course.media)} {/* Adicionando as estrelas */}
+                            <span>{Number(course.media).toFixed(1)} </span>
+                            {renderStars(Number(course.media ?? 0))}
                             <span>({Number(course.total_avaliacoes)})</span>
                         </div>
 

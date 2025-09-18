@@ -1,0 +1,142 @@
+// components/Filter.module.scss
+.filter {
+    background-color: rgb(245, 242, 239);
+    padding: 1rem;
+    // border-radius: 8px;
+    font-family: "Kantumruy Pro", sans-serif;
+    color: #001ECB;
+    max-width: 100%;
+    width: 25%;
+    margin-bottom: 30px;
+
+    @media (max-width: 1062px) {
+        padding-top: 55px;
+        width: 95%;
+        overflow: hidden;
+    }
+
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .inputGroup {
+        flex: 1 1 200px;
+        display: flex;
+        flex-direction: column;
+
+        label {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            font-family: "Kantumruy Pro", sans-serif;
+
+        }
+
+        select {
+            text-align: center;
+
+            option {
+                @media (max-width: 1062px) {
+                    padding: 0;
+                }
+            }
+        }
+
+        select,
+        input[type='text'] {
+            padding: 0.5rem 0.75rem;
+            font-family: "Kantumruy Pro", sans-serif;
+            border: 1px solid #001ECB;
+            border-radius: 6px;
+            font-size: 1rem;
+            color: #001ECB;
+            background-color: white;
+            transition: border-color 0.3s ease;
+            background-color: rgb(245, 242, 239);
+
+            &:focus {
+                outline: none;
+                border-color: #000a8c;
+            }
+        }
+    }
+
+    .inputIcon {
+        position: relative;
+        display: flex;
+        align-items: center;
+
+        svg {
+            position: absolute;
+            left: 10px;
+            pointer-events: none;
+            font-size: 1.2rem;
+        }
+
+        input {
+            padding-left: 2rem;
+            width: 100%;
+        }
+    }
+
+    fieldset {
+        border: 1px solid #001ECB;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        margin-bottom: 1rem;
+
+        legend {
+            font-weight: 700;
+            padding: 0 0.5rem;
+            color: #001ECB;
+        }
+    }
+
+    .checkboxGroup {
+        .checkboxList {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+            justify-content: center;
+        }
+    }
+
+    .checkboxLabel {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        font-weight: 600;
+        min-width: 150px;
+        cursor: pointer;
+
+        input[type='checkbox'] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #001ECB;
+        }
+    }
+}
+
+// Responsividade para celular
+@media (max-width: 600px) {
+    // .filter {
+    //     padding: 0.75rem;
+
+    //     .row {
+    //         flex-direction: column;
+    //     }
+
+    //     .inputGroup {
+    //         flex: 1 1 100%;
+    //     }
+
+    //     fieldset {
+    //         padding: 0.5rem 0.75rem;
+    //     }
+    // }
+}
