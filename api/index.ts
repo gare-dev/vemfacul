@@ -276,11 +276,7 @@ class _Api {
       withCredentials: false
     })
   }
-
-  // public async correcao() {
-  //   return await this._instance.post('https://api.edenai.run/v2/text/prompt_optimization')
-  // }
-
+  
   public async getCursinho() {
     return await this._instance.get('/courses')
   }
@@ -307,6 +303,14 @@ class _Api {
 
   public async getBestCourses() {
     return await this._instance.get("/course/bests")
+  }
+  public async insertQuestion(index: number, year: number, id_disciplines: number, isCorret: boolean) {
+    return await this._instance.post("/exercicios/questoes/usuario", {
+      index, 
+      year,
+      id_disciplines, 
+      isCorret
+    })
   }
 
   public async setPersonalEventImportant(id_pevent: string) {

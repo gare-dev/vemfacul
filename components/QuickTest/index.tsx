@@ -2,6 +2,7 @@ import Api from '@/api';
 import { useState, useEffect } from 'react';
 import styles from '@/styles/questoes.module.scss';
 import { useRouter } from 'next/router';
+
 type Disciplina = { titulo: string; idx: number };
 
 export type Alternatives = {
@@ -69,16 +70,36 @@ export default function QuickTest() {
         }
     }
 
+    const handleInsertQuestion = async (index: number, year: number, disciplines: string, isCorrect: boolean) => {
+        try {
+            let id_disciplines: number = 0;
+            switch (disciplines) {
+                case "ciencias-humanas": { id_disciplines = 1; break; }
+                case "ciencias-natureza": { id_disciplines = 2; break; }
+                case "linguagens": { id_disciplines = 3; break; }
+                case "matematica": { id_disciplines = 4; break; }
+                default: { id_disciplines = 0; break; }
+            }
+            console.log("Enviando ao banco: ", index, year, id_disciplines, isCorrect);
+            const promise = await Api.insertQuestion(index, year, id_disciplines, isCorrect)
+            if (promise.status === 200) {
+                setSpan("Simulado concluido!")
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
     const verifyRespostas = () => {
-        console.time("verify_call")
         const resultados: boolean[] = questions.map((question, qIdx) => {
             const resposta = respostas[qIdx];
             const alternativa = question.alternatives.find(a => a.letter === resposta);
+            console.log("FrontEndo: ",+question.index, question.year, question.discipline, alternativa ? alternativa.isCorrect : false)
+            handleInsertQuestion(+question.index, question.year, question.discipline, alternativa ? alternativa.isCorrect : false)
             return alternativa ? alternativa.isCorrect : false;
         });
         setVerify(resultados);
-        console.timeEnd("verify_call")
     }
+
 
     useEffect(() => {
         if (year) { handleGetQuestoes(year, offset); setIsVisible(false) };
