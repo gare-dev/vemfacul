@@ -130,6 +130,7 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
         vestibulares: [],
         materias_lecionadas: [],
         nivel: "",
+        acertosuser: 0
     });
 
     const typeEmojiMap: Record<string, string> = {
