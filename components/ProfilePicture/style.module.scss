@@ -1,0 +1,83 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+.title {
+    margin-bottom: 1rem;
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: #222;
+    user-select: none;
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.popup {
+    background: #D0D7FF;
+    border-radius: 12px;
+    padding: 0.5rem;
+    max-width: 90vw;
+    max-height: 90vh;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    position: relative;
+    animation: scaleIn 0.3s ease forwards;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.closeButton {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #555;
+    transition: color 0.2s ease;
+
+    &:hover {
+        color: #000;
+    }
+}
+
+.image {
+    max-width: 80vw;
+    max-height: 80vh;
+    border-radius: 8px;
+    object-fit: contain;
+    user-select: none;
+}
