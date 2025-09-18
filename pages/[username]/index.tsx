@@ -267,6 +267,7 @@ export default function UserProfile({ userProfileProp, postagensProp, authData }
 
                         {/* Description */}
                         <p className={styles.description}>{userProfile.descricao}</p>
+                        <h3> Questões corretas: {userProfile.acertosuser}</h3>
 
                         {/* University Interests */}
                         <div className={styles.universityInterests}>
