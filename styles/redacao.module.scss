@@ -1,0 +1,304 @@
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1rem;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: #001eeb;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    min-height: 100vh;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #001ecb;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.subtitulo {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #778cfe;
+    margin-bottom: 0.75rem;
+    border-bottom: 2px solid #778cfe;
+    padding-bottom: 0.25rem;
+}
+
+.listaContainer {
+    background: #f5f7ff;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgb(119 140 254 / 0.3);
+    flex: 1;
+    display: flex;
+
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.listaRedacoes {
+    list-style: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin: 0;
+
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.itemRedacao {
+    background: white;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 6px rgb(0 30 203 / 0.1);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    user-select: none;
+
+    &:hover,
+    &:focus {
+        background-color: #778cfe33;
+        outline: none;
+        box-shadow: 0 4px 12px rgb(119 140 254 / 0.5);
+    }
+}
+
+.selecionado {
+    background-color: #778cfe55;
+    box-shadow: 0 0 10px 2px #001ecbaa;
+}
+
+.previewTexto {
+    font-size: 1rem;
+    color: #001ecb;
+    flex: 1;
+    margin: 0;
+    word-break: break-word;
+}
+
+.notaBadge {
+    background-color: #001ecb;
+    color: white;
+    font-weight: 700;
+    padding: 0.25rem 0.6rem;
+    border-radius: 9999px;
+    font-size: 0.9rem;
+    margin-left: 1rem;
+    min-width: 48px;
+    text-align: center;
+    user-select: none;
+}
+
+.botaoNova {
+    background-color: #778cfe;
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    width: 100%;
+    align-self: flex-start;
+    transition: background-color 0.3s ease;
+
+    &:hover,
+    &:focus {
+        background-color: #001ecb;
+        outline: none;
+    }
+}
+
+.editorContainer {
+    background: #f5f7ff;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgb(119 140 254 / 0.3);
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 320px;
+}
+
+.titleInput {
+    border: 2px solid #778cfe;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: "Kantumruy Pro", sans-serif;
+    padding: 0.2rem 1rem;
+    background-color: white;
+
+
+
+    &:focus {
+        border-color: #001ecb;
+        outline: none;
+    }
+
+}
+
+.textarea {
+    width: 100%;
+    font-size: 1rem;
+    font-family: "Kantumruy Pro", sans-serif;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 2px solid #778cfe;
+    resize: vertical;
+    min-height: 450px;
+    color: #001ecb;
+    background-color: white;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+        border-color: #001ecb;
+        outline: none;
+    }
+
+    &:disabled {
+        background-color: #e0e4ff;
+        cursor: not-allowed;
+    }
+}
+
+.botaoEnviar {
+    background-color: #001ecb;
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    align-self: flex-start;
+    transition: background-color 0.3s ease;
+
+    &:hover:not(:disabled),
+    &:focus:not(:disabled) {
+        background-color: #778cfe;
+        outline: none;
+    }
+
+    &:disabled {
+        background-color: #a3a9f7;
+        cursor: not-allowed;
+    }
+}
+
+.botaoCancelar {
+    background-color: transparent;
+    border: 2px solid #001ecb;
+    color: #001ecb;
+    font-weight: 700;
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    align-self: flex-start;
+    margin-left: 1rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+
+    &:hover:not(:disabled),
+    &:focus:not(:disabled) {
+        background-color: #001ecb;
+        color: white;
+        outline: none;
+    }
+
+    &:disabled {
+        border-color: #a3a9f7;
+        color: #a3a9f7;
+        cursor: not-allowed;
+    }
+}
+
+.redacaoExibicao {
+    background-color: white;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgb(0 30 203 / 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.textoRedacao {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    color: #001ecb;
+    white-space: pre-wrap;
+    margin: 0;
+}
+
+.feedbackContainer {
+    background-color: #778cfe22;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    border: 1px solid #778cfe88;
+}
+
+.feedbackContainer h3 {
+    margin: 0 0 0.5rem 0;
+    color: #001ecb;
+}
+
+.feedbackTexto {
+    font-size: 1rem;
+    color: #001ecb;
+    margin: 0 0 0.5rem 0;
+}
+
+.notaTexto {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #001ecb;
+    margin: 0;
+}
+
+.notaValor {
+    background-color: #001ecb;
+    color: white;
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    margin-left: 0.5rem;
+    font-family: monospace;
+}
+
+.instrucao {
+    font-size: 1rem;
+    color: #001ecb99;
+    font-style: italic;
+    text-align: center;
+    margin-top: 3rem;
+}
+
+/* Responsividade */
+
+@media (min-width: 768px) {
+    .container {
+        flex-direction: row;
+        gap: 2rem;
+    }
+
+    .listaContainer {
+        flex: 1;
+        max-width: 320px;
+    }
+
+    .editorContainer {
+        flex: 2;
+        max-width: 600px;
+    }
+}
