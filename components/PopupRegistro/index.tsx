@@ -116,7 +116,7 @@ export default function PopupRegistro(props: props) {
                     </div>
                     {error &&
                         <div className={styles.errorDiv}>
-                            <span className={styles.errorText}>{error}</span>
+                            <span style={{ color: "red" }} className={styles.errorText}>{error}</span>
                         </div>
                     }
 
@@ -157,7 +157,7 @@ export default function PopupRegistro(props: props) {
                 <div className={styles.popupBox}>
                     {error &&
                         <div className={styles.errorDiv}>
-                            <span className={styles.errorText}>{error}</span>
+                            <span style={{ color: "red" }} className={styles.errorText}>{error}</span>
                         </div>
                     }
                     {step !== "checkemail" ? (
@@ -233,7 +233,7 @@ export default function PopupRegistro(props: props) {
                         </div>
                         {error && (
                             <div className={styles.errorDiv}>
-                                <span className={styles.errorText}>{error}</span>
+                                <span style={{ color: "red" }} className={styles.errorText}>{error}</span>
                             </div>
                         )}
 

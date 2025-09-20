@@ -1,0 +1,92 @@
+.trendingSection {
+    display: flex;
+    flex-direction: column;
+    color: #001ECB;
+
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: "Kantumruy Pro", sans-serif;
+    border-bottom: 2px solid #001ECB;
+    padding-bottom: 0.25rem;
+}
+
+.periodButtons {
+    display: flex;
+
+}
+
+.periodButton {
+    flex: 1;
+    padding: 0.5rem 0;
+    background: transparent;
+    border: 1px solid #001ECB;
+    border-top: 0;
+    border-left: 0px solid #001ECB;
+    border-right: 0px solid #001ECB;
+    font-weight: 600;
+    color: #001ECB;
+    cursor: pointer;
+    font-family: "Kantumruy Pro", sans-serif;
+
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: #001ECB;
+        color: #D0D7FF;
+    }
+}
+
+.active {
+    background: #001ECB;
+    color: #D0D7FF;
+    cursor: default;
+}
+
+.userList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    background: white;
+}
+
+.userItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #D0D7FF;
+}
+
+.avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #001ECB;
+    margin-right: 1rem;
+}
+
+.userInfo {
+    flex: 1;
+    overflow: hidden;
+}
+
+.userName {
+    font-weight: 700;
+    font-family: "Kantumruy Pro", sans-serif;
+    font-size: 1.1rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.exercisesCount {
+    font-weight: 600;
+    color: #001ECB;
+    min-width: 90px;
+    text-align: right;
+}
