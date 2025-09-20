@@ -65,7 +65,7 @@ export default function Sidebar(props: props) {
         { icon: <FaSearch />, name: "Explorar", path: "/explorar" },
         { icon: <IoMdPeople />, name: "Comunidade", path: "/comunidade" },
         { icon: <FaCalendar />, name: "Calendário Geral", path: "/eventos" },
-        { icon: <LuFilePenLine />, name: "Correção de Redação", path: "/correcaoRedacao" },
+        { icon: <LuFilePenLine />, name: "Correção de Redação", path: "/redacao" },
         { icon: <MdQuiz />, name: "Exercícios", path: "/exercicios" },
         { icon: <MdAssignment />, name: "Exercício Diário", path: "/exercicioDiario" },
         { icon: <FaCalendarAlt />, name: "Calendário Pessoal", path: "/calendario" },
@@ -77,7 +77,7 @@ export default function Sidebar(props: props) {
         { icon: <FaSearch />, name: "Explorar", path: "/explorar" },
         { icon: <IoMdPeople />, name: "Comunidade", path: "/comunidade" },
         { icon: <FaCalendar />, name: "Calendário Geral", path: "/eventos" },
-        { icon: <LuFilePenLine />, name: "Correção de Redação", path: "/correcaoRedacao" },
+        { icon: <LuFilePenLine />, name: "Correção de Redação", path: "/redacao" },
         { icon: <MdQuiz />, name: "Exercícios", path: "/exercicios" },
         { icon: <MdAssignment />, name: "Exercício Diário", path: "/exercicioDiario" },
         { icon: <FaCalendarAlt />, name: "Calendário Pessoal", path: "/calendario" },
@@ -216,7 +216,7 @@ export default function Sidebar(props: props) {
                         </div>
 
                         <nav
-                            style={{ '--top': `${activeIndex >= 0 ? activeIndex * (innerHeight < 751 ? 45 : 56) : (innerHeight < 751 ? 315 : role === "dono de cursinho" ? 0 : 448)}px`, '--after-height': `${innerHeight < 751 ? 45 : 56}px` } as React.CSSProperties}
+                            style={{ '--top': `${activeIndex >= 0 ? activeIndex * (innerHeight < 751 ? 45 : 56) : (innerHeight < 751 ? 315 : role === "dono de cursinho" ? 0 : 504)}px`, '--after-height': `${innerHeight < 751 ? 45 : 56}px` } as React.CSSProperties}
                             className={styles.menu}
 
                         >
