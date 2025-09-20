@@ -381,6 +381,18 @@ class _Api {
   public async getTop10Users(mode: string) {
     return await this._instance.get(`/exercicios/questoes/ranking/${mode}`)
   }
+
+  public async insertEssay(essay: string, theme: string, title: string) {
+    return await this._instance.post("/user/essay", {
+      essay,
+      theme,
+      title
+    })
+  }
+
+  public async userEssays() {
+    return await this._instance.get("/user/essay")
+  }
 }
 
 const Api = new _Api(process.env.NEXT_PUBLIC_API_URL ?? "");
