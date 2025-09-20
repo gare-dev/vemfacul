@@ -16,6 +16,7 @@ import { RESERVED_ROUTES } from "@/middleware";
 import AuthDataType from "@/types/authDataType";
 import { MdVerified } from "react-icons/md";
 import { AxiosError } from "axios";
+import ProfilePopup, { UserImages } from "@/components/ProfilePicture";
 
 type Postagem = {
     id_postagem: string | number;
@@ -113,7 +114,9 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
 export default function UserProfile({ userProfileProp, postagensProp, authData, xTraceError }: Props) {
     const router = useRouter()
     const { username } = router.query;
+    const [isOpen, setIsOpen] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
+    const [selected, setSelected] = useState<'foto' | 'header'>('foto');
     const [user, setUser] = useState<string | null>(null);
     const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
     const [postagens,] = useState<Postagem[]>(postagensProp || []);
@@ -132,6 +135,12 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
         nivel: "",
         acertosuser: 0
     });
+
+    const userImages: UserImages = {
+        foto: userProfile.foto,
+        header: userProfile.header,
+    };
+
 
     const typeEmojiMap: Record<string, string> = {
         "Professor": '👨‍🏫',
@@ -234,12 +243,17 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
     //     if (username?.toString()) handleGetUserProfile()
     // }, [username])
 
-    useEffect(() => {
-        console.log(postagensProp)
-    }, [postagensProp])
+
 
     return (
         <>
+            {isOpen && (
+                <ProfilePopup
+                    images={userImages}
+                    selected={selected}
+                    onClose={() => setIsOpen(false)}
+                />
+            )}
             {<Sidebar authData={authData} traceID={xTraceError} />}
             {isVisible && user === username &&
                 <EditProfilePopup
@@ -258,7 +272,6 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
                 onClose={handleClosePopup}
                 onReload={() => router.reload()}
             />
-            {/* } */}
             <div className={styles.main}>
                 <Head>
                     <title>{`${userProfile.nome} | Perfil`}</title>
@@ -269,6 +282,10 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
                 <div className={styles.profileContainer}>
                     <div className={styles.headerImageContainer}>
                         <img
+                            onClick={() => {
+                                setSelected('header');
+                                setIsOpen(true);
+                            }}
                             src={userProfile.header === '' ? undefined : userProfile.header}
                             className={styles.headerImage}
                         />
@@ -276,6 +293,10 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
                     <div className={styles.profileInfoContainer}>
                         <div className={styles.profilePictureContainer}>
                             <img
+                                onClick={() => {
+                                    setSelected('foto');
+                                    setIsOpen(true);
+                                }}
                                 src={userProfile.foto === '' ? undefined : userProfile.foto}
                                 alt={`${userProfile.nome}'s profile`}
                                 className={styles.profilePicture}

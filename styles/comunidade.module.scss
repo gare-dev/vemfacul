@@ -9,6 +9,7 @@
     background-color: #fff;
 }
 
+
 .comunidadeContainer {
     display: flex;
     justify-content: center;
@@ -20,7 +21,7 @@
         flex-direction: column;
         width: 60%;
         max-width: 720px;
-        border: 1px solid #778CFE;
+        border: 1px solid #001ECB;
         border-radius: 0 0 5px 5px;
     }
 }
@@ -61,7 +62,7 @@
 @media (max-width: 1024px) {
     .comunidadeContainer {
         .comunidadePosts {
-            width: 90%;
+            width: 100%;
             max-width: 720px;
         }
     }

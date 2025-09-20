@@ -3,7 +3,7 @@ import AuthDataType from "@/types/authDataType"
 import getAuth from "@/utils/getAuth"
 import { useRouter } from "next/router"
 import { JSX, useEffect, useState } from "react"
-import { FaBars, FaCalendar, FaCalendarAlt, FaRegUserCircle, FaUsers } from "react-icons/fa"
+import { FaBars, FaCalendar, FaCalendarAlt, FaRegUserCircle, FaSearch, FaUsers } from "react-icons/fa"
 import { FaListCheck } from "react-icons/fa6"
 import { IoMdPeople, IoMdSettings } from "react-icons/io"
 import { LuFilePenLine } from "react-icons/lu"
@@ -62,6 +62,7 @@ export default function Sidebar(props: props) {
 
     const userItems: NavItemsType[] = [
         { icon: <RiPagesLine />, name: "Feed", path: "/feed" },
+        { icon: <FaSearch />, name: "Explorar", path: "/explorar" },
         { icon: <IoMdPeople />, name: "Comunidade", path: "/comunidade" },
         { icon: <FaCalendar />, name: "Calendário Geral", path: "/eventos" },
         { icon: <LuFilePenLine />, name: "Correção de Redação", path: "/correcaoRedacao" },
@@ -73,6 +74,7 @@ export default function Sidebar(props: props) {
 
     const adminItems: NavItemsType[] = [
         { icon: <RiPagesLine />, name: "Feed", path: "/feed" },
+        { icon: <FaSearch />, name: "Explorar", path: "/explorar" },
         { icon: <IoMdPeople />, name: "Comunidade", path: "/comunidade" },
         { icon: <FaCalendar />, name: "Calendário Geral", path: "/eventos" },
         { icon: <LuFilePenLine />, name: "Correção de Redação", path: "/correcaoRedacao" },
@@ -87,6 +89,7 @@ export default function Sidebar(props: props) {
 
     const cursinhoItems: NavItemsType[] = [
         { icon: <RiPagesLine />, name: "Feed", path: "/feed" },
+        { icon: <FaSearch />, name: "Explorar", path: "/explorar" },
         { icon: <IoMdPeople />, name: "Comunidade", path: "/comunidade" },
         { icon: <FaCalendar />, name: "Calendário Geral", path: "/eventos" },
         { icon: <FaRegUserCircle />, name: "Perfil", path: `/${authData?.username}` },
@@ -213,7 +216,7 @@ export default function Sidebar(props: props) {
                         </div>
 
                         <nav
-                            style={{ '--top': `${activeIndex >= 0 ? activeIndex * (innerHeight < 751 ? 45 : 56) : (innerHeight < 751 ? 315 : role === "dono de cursinho" ? 0 : 392)}px`, '--after-height': `${innerHeight < 751 ? 45 : 56}px` } as React.CSSProperties}
+                            style={{ '--top': `${activeIndex >= 0 ? activeIndex * (innerHeight < 751 ? 45 : 56) : (innerHeight < 751 ? 315 : role === "dono de cursinho" ? 0 : 448)}px`, '--after-height': `${innerHeight < 751 ? 45 : 56}px` } as React.CSSProperties}
                             className={styles.menu}
 
                         >
