@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import PopupType from '@/types/data';
 import useCalendarData from '@/hooks/useCalendarData';
-
+import style from "./style.module.scss"
 import { IoSettingsOutline, IoSettingsSharp } from 'react-icons/io5';
 
 const daysOfWeek = ['DOMINGO', 'SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO'];
@@ -123,16 +123,17 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
 
         function getEventsRender(day: number, month: number) {
             return (
-                <div style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    flexDirection: "column",
-                    height: "100%",
-                    zIndex: "999999999999999999",
-                    width: "100%",
-                    position: "relative"
-                }}>
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        flexDirection: "column",
+                        height: "100%",
+                        zIndex: "99999",
+                        width: "100%",
+                        position: "relative"
+                    }}>
                     {eventos?.map((opcao: PopupType, index: number) => {
 
                         if (+opcao.day === day && +opcao.month === month && +opcao.year === year) {
@@ -140,27 +141,18 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
                                 <div
                                     key={index}
                                     style={{
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        width: "100%",
                                         backgroundColor: opcao.color,
                                         backgroundImage: `url(${opcao.foto})`,
-                                        backgroundRepeat: "no-repeat",
-                                        backgroundSize: "cover",
-                                        backgroundPosition: "center",
-                                        zIndex: 999999999999999,
-                                    }}>
+                                    }}
+                                    onClick={(e) => { e.stopPropagation(); setCalendarData(opcao); popUpClick?.() }}
+                                    className={style.eventos}
+                                >
                                     <p
+                                        className={style.title}
                                         onClick={(e) => { e.stopPropagation(); setCalendarData(opcao); popUpClick?.() }}
                                         style={{
-                                            width: "100%",
                                             color: opcao.color ? "#fff" : "#000",
-                                            textAlign: "center",
                                             backgroundColor: opcao.cursinho ? "rgba(0, 0, 0, 0.5)" : "transparent",
-                                            height: "100%"
-
-
                                         }}
                                     >{opcao.main_title}
                                     </p>

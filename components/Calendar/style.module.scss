@@ -1,0 +1,33 @@
+/* Estilos padrão */
+.eventos {
+    display: flex;
+    /* permite centralizar conteúdo */
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    z-index: 99999999999;
+    /* valor suficiente */
+    flex-wrap: wrap;
+
+}
+
+.title {
+    width: 100%;
+    text-align: center;
+    // height: 100%;
+}
+
+@media (max-width: 640px) {
+    .title {
+        display: none;
+    }
+
+    .eventos {
+        width: 20px;
+        height: 20px;
+        border-radius: 100%;
+    }
+}

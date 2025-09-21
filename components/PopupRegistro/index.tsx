@@ -48,7 +48,7 @@ export default function PopupRegistro(props: props) {
             if (error instanceof AxiosError) {
                 if (error.response?.data.code === "ALREADYUSED_EMAIL") {
                     setStep('shown')
-                    return setError(error.response?.data.message)
+                    return setError(error.response?.data.error)
                 }
                 if (error.code === "ERR_NETWORK") {
                     setError("Erro de rede. Tente novamente mais tarde.");
@@ -116,7 +116,7 @@ export default function PopupRegistro(props: props) {
                     </div>
                     {error &&
                         <div className={styles.errorDiv}>
-                            <span className={styles.errorText}>{error}</span>
+                            <span style={{ color: "red" }} className={styles.errorText}>{error}</span>
                         </div>
                     }
 
@@ -157,7 +157,7 @@ export default function PopupRegistro(props: props) {
                 <div className={styles.popupBox}>
                     {error &&
                         <div className={styles.errorDiv}>
-                            <span className={styles.errorText}>{error}</span>
+                            <span style={{ color: "red" }} className={styles.errorText}>{error}</span>
                         </div>
                     }
                     {step !== "checkemail" ? (
@@ -233,7 +233,7 @@ export default function PopupRegistro(props: props) {
                         </div>
                         {error && (
                             <div className={styles.errorDiv}>
-                                <span className={styles.errorText}>{error}</span>
+                                <span style={{ color: "red" }} className={styles.errorText}>{error}</span>
                             </div>
                         )}
 
