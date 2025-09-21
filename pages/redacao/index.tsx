@@ -5,6 +5,7 @@ import { GetServerSideProps } from "next";
 import AuthDataType from "@/types/authDataType";
 import Sidebar from "@/components/Sidebar";
 import formatarRedacao from "@/utils/formatEssayText"
+import LoadingBar from "@/components/LoadingBar";
 
 type Redacao = {
     id_essay?: number;
@@ -63,10 +64,32 @@ export default function Redacao({ userEssays, authData }: Props) {
         null
     );
     const [enviando, setEnviando] = useState(false);
+    const [progress, setProgress] = useState(0);
+    const [loading, setLoading] = useState(false);
+    let intervalId: NodeJS.Timeout;
+
+    const startLoading = () => {
+        setLoading(true);
+        setProgress(10);
+
+        intervalId = setInterval(() => {
+            setProgress((prev) => (prev < 90 ? prev + 5 : prev));
+        }, 200);
+    };
+
+    const stopLoading = () => {
+        clearInterval(intervalId);
+        setProgress(100);
+        setTimeout(() => {
+            setLoading(false);
+            setProgress(0);
+        }, 400);
+    };
 
     async function enviarRedacao() {
 
         try {
+            startLoading()
             const response = await Api.insertEssay(textoNovaRedacao, themeNovaRedacao, titleNovaRedacao)
             if (response.status === 201) {
                 const nova_redacao = response.data.data[0];
@@ -76,6 +99,8 @@ export default function Redacao({ userEssays, authData }: Props) {
 
         } catch (error) {
             console.log("Erro ao inserir redação. " + error)
+        } finally {
+            stopLoading()
         }
     }
 
@@ -102,12 +127,13 @@ export default function Redacao({ userEssays, authData }: Props) {
 
     return (
         <main className={styles.container}>
+            {loading && <LoadingBar progress={progress} />}
             <Sidebar authData={authData} />
 
             <section className={styles.listaContainer}>
                 <h2 className={styles.subtitulo}>Redações anteriores</h2>
                 <ul className={styles.listaRedacoes}>
-                    {redacoes.map((r) => (
+                    {redacoes?.map((r) => (
                         <li
                             key={r.id_essay}
                             className={`${styles.itemRedacao} ${redacaoSelecionada?.id_essay === r.id_essay ? styles.selecionado : ""
