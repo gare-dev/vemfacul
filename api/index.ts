@@ -276,7 +276,7 @@ class _Api {
       withCredentials: false
     })
   }
-  
+
   public async getCursinho() {
     return await this._instance.get('/courses')
   }
@@ -306,9 +306,9 @@ class _Api {
   }
   public async insertQuestion(index: number, year: number, id_disciplines: number, isCorret: boolean) {
     return await this._instance.post("/exercicios/questoes/usuario", {
-      index, 
+      index,
       year,
-      id_disciplines, 
+      id_disciplines,
       isCorret
     })
   }
@@ -372,6 +372,26 @@ class _Api {
 
   public async getCourseEventById(id_cursinho: string) {
     return await this._instance.get(`/course/event/${id_cursinho}`)
+  }
+
+  public async getUsersSearchBar(nome: string) {
+    return await this._instance.get(`/page/search/${nome}`)
+  }
+
+  public async getTop10Users(mode: string) {
+    return await this._instance.get(`/exercicios/questoes/ranking/${mode}`)
+  }
+
+  public async insertEssay(essay: string, theme: string, title: string) {
+    return await this._instance.post("/user/essay", {
+      essay,
+      theme,
+      title
+    })
+  }
+
+  public async userEssays() {
+    return await this._instance.get("/user/essay")
   }
 }
 

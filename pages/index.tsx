@@ -159,7 +159,7 @@ export default function Home({ CourseCard, Events }: Props) {
         <section className={styles.cursinhosExample}>
           <h2>Principais Cursinhos</h2>
           <div className={styles.cursinhos}>
-            {CourseCard.map((course: CourseCard, i) => (
+            {CourseCard?.map((course: CourseCard, i) => (
               <>
                 <ProductCard imageUrl={course.logo} title={course.nome_exibido} location={course.uf} key={i} rating={+course.media_stars} />
               </>

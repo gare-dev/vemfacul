@@ -12,10 +12,10 @@ import { FaPen } from "react-icons/fa";
 import Head from "next/head";
 import monthsMap from "@/utils/getMonth";
 import { GetServerSideProps } from "next";
-import { RESERVED_ROUTES } from "@/middleware";
 import AuthDataType from "@/types/authDataType";
 import { MdVerified } from "react-icons/md";
 import { AxiosError } from "axios";
+import ProfilePopup, { UserImages } from "@/components/ProfilePicture";
 
 type Postagem = {
     id_postagem: string | number;
@@ -60,11 +60,11 @@ function formatRelativeTime(timestamp: string | number | Date): string {
 
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
-    if (RESERVED_ROUTES.includes(context.params?.username as string) || context.params?.username === "null") {
-        return {
-            notFound: true
-        }
-    }
+    // if (RESERVED_ROUTES.includes(context.params?.username as string) || context.params?.username === "null") {
+    //     return {
+    //         notFound: true
+    //     }
+    // }
 
     try {
         const cookie = context.req.headers.cookie
@@ -95,7 +95,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
                     userProfileProp: null,
                     postagensProp: [],
                     authData: null,
-                    xTraceError: error.response?.headers["x-trace-id"]
+                    xTraceError: error.response?.headers["x-trace-id"] ?? null
                 }
             }
         }
@@ -113,7 +113,9 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
 export default function UserProfile({ userProfileProp, postagensProp, authData, xTraceError }: Props) {
     const router = useRouter()
     const { username } = router.query;
+    const [isOpen, setIsOpen] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
+    const [selected, setSelected] = useState<'foto' | 'header'>('foto');
     const [user, setUser] = useState<string | null>(null);
     const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
     const [postagens,] = useState<Postagem[]>(postagensProp || []);
@@ -130,8 +132,15 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
         vestibulares: [],
         materias_lecionadas: [],
         nivel: "",
-        acertosuser: 0
+        acertosuser: 0,
+        verified_account: false
     });
+
+    const userImages: UserImages = {
+        foto: userProfile.foto,
+        header: userProfile.header,
+    };
+
 
     const typeEmojiMap: Record<string, string> = {
         "Professor": '👨‍🏫',
@@ -234,12 +243,17 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
     //     if (username?.toString()) handleGetUserProfile()
     // }, [username])
 
-    useEffect(() => {
-        console.log(postagensProp)
-    }, [postagensProp])
+
 
     return (
         <>
+            {isOpen && (
+                <ProfilePopup
+                    images={userImages}
+                    selected={selected}
+                    onClose={() => setIsOpen(false)}
+                />
+            )}
             {<Sidebar authData={authData} traceID={xTraceError} />}
             {isVisible && user === username &&
                 <EditProfilePopup
@@ -258,7 +272,6 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
                 onClose={handleClosePopup}
                 onReload={() => router.reload()}
             />
-            {/* } */}
             <div className={styles.main}>
                 <Head>
                     <title>{`${userProfile.nome} | Perfil`}</title>
@@ -269,6 +282,10 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
                 <div className={styles.profileContainer}>
                     <div className={styles.headerImageContainer}>
                         <img
+                            onClick={() => {
+                                setSelected('header');
+                                setIsOpen(true);
+                            }}
                             src={userProfile.header === '' ? undefined : userProfile.header}
                             className={styles.headerImage}
                         />
@@ -276,6 +293,10 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
                     <div className={styles.profileInfoContainer}>
                         <div className={styles.profilePictureContainer}>
                             <img
+                                onClick={() => {
+                                    setSelected('foto');
+                                    setIsOpen(true);
+                                }}
                                 src={userProfile.foto === '' ? undefined : userProfile.foto}
                                 alt={`${userProfile.nome}'s profile`}
                                 className={styles.profilePicture}
@@ -289,11 +310,11 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
                         <div className={styles.nameSection}>
                             <h1 className={styles.name}>
                                 {userProfile.nome}{" "}
-                                {(authData?.role === "admin" || authData?.role === "dono de cursinho") && (
+                                {(userProfile.verified_account === true) && (
                                     <span className={styles.verifiedWrapper}>
                                         <MdVerified className={styles.icone} size={"1.2em"} />
                                         <div className={styles.tooltipBox}>
-                                            Usuário verificado por ser um {authData?.role === "admin" ? "administrador do" : "cursinho aprovado pelo"} VemFacul.
+                                            Usuário verificado por ser um {userProfile?.nivel === "Cursinho" ? "cursinho aprovado pelo" : "administrador do"} VemFacul.
                                         </div>
                                     </span>
 
@@ -308,7 +329,7 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
                         </div>
 
                         <p className={styles.description}>{userProfile.descricao}</p>
-                        <h3> Questões corretas: {userProfile.acertosuser}</h3>
+                        {userProfile.nivel !== "Cursinho" && <h3 className={styles.questoesCorretas}> Questões corretas: {userProfile.acertosuser}</h3>}
 
                         <div className={styles.universityInterests}>
                             <h3 className={styles.interestsTitle}>{userProfile.nivel === "Aluno EM" ? "Vestibulares" : userProfile.nivel === "Cursinho" ? "" : "Matérias Lecionadas"}</h3>
@@ -353,7 +374,7 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
                         />
                     ))}
                     {postagens.length === 0 && (
-                        <div><h1 style={{ textAlign: "center" }}>Nenhuma postagem encontrada</h1></div>
+                        <div style={{ padding: 15 }}><h1 style={{ textAlign: "center" }}>Esse usuário ainda não fez nenhum post.</h1></div>
                     )}
                 </div>
 

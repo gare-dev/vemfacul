@@ -17,6 +17,31 @@ interface Props {
     authData?: AuthDataType | null | undefined;
 }
 
+function formatRelativeTime(timestamp: string | number | Date): string {
+    const now = new Date();
+    const postDate = new Date(timestamp);
+    const diffMs = now.getTime() - postDate.getTime();
+
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHours = Math.floor(diffMin / 60);
+
+    if (diffSec < 60) {
+        return `há ${diffSec} s`;
+    } else if (diffMin < 60) {
+        return `há ${diffMin} min`;
+    } else if (diffHours < 24) {
+        return `há ${diffHours} h`;
+    } else {
+        return postDate.toLocaleDateString("pt-BR", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        });
+    }
+}
+
+
 export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
     const cookie = ctx.req.headers.cookie
     Api.setCookie(cookie || "")
@@ -28,7 +53,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 
         const eventos = posts.status === 200 ? posts.data.data.map((post: PostsType) => ({
             ...post,
-            created_at: post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).toLocaleDateString()) : "Data não informada"
+            created_at: post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).getDate() === new Date().getDate() ? formatRelativeTime(post.created_at) : new Date(post.created_at).toLocaleDateString()) : "Data não informada"
         })) : []
 
         return {
@@ -96,6 +121,9 @@ export default function Comunidade({ postsProp, authData }: Props) {
         <>
 
             <Sidebar authData={authData} />
+            <div className={styles.searchBar}>
+                {/* <SearchBar /> */}
+            </div>
             <CreatePostagem
                 onPostTweet={handlePostTweet}
                 isOpen={isPopupOpen}
