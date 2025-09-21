@@ -12,7 +12,6 @@ import { FaPen } from "react-icons/fa";
 import Head from "next/head";
 import monthsMap from "@/utils/getMonth";
 import { GetServerSideProps } from "next";
-import { RESERVED_ROUTES } from "@/middleware";
 import AuthDataType from "@/types/authDataType";
 import { MdVerified } from "react-icons/md";
 import { AxiosError } from "axios";
@@ -61,11 +60,11 @@ function formatRelativeTime(timestamp: string | number | Date): string {
 
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
-    if (RESERVED_ROUTES.includes(context.params?.username as string) || context.params?.username === "null") {
-        return {
-            notFound: true
-        }
-    }
+    // if (RESERVED_ROUTES.includes(context.params?.username as string) || context.params?.username === "null") {
+    //     return {
+    //         notFound: true
+    //     }
+    // }
 
     try {
         const cookie = context.req.headers.cookie
@@ -96,7 +95,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
                     userProfileProp: null,
                     postagensProp: [],
                     authData: null,
-                    xTraceError: error.response?.headers["x-trace-id"]
+                    xTraceError: error.response?.headers["x-trace-id"] ?? null
                 }
             }
         }
@@ -133,7 +132,8 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
         vestibulares: [],
         materias_lecionadas: [],
         nivel: "",
-        acertosuser: 0
+        acertosuser: 0,
+        verified_account: false
     });
 
     const userImages: UserImages = {
@@ -310,11 +310,11 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
                         <div className={styles.nameSection}>
                             <h1 className={styles.name}>
                                 {userProfile.nome}{" "}
-                                {(authData?.role === "admin" || authData?.role === "dono de cursinho") && (
+                                {(userProfile.verified_account === true) && (
                                     <span className={styles.verifiedWrapper}>
                                         <MdVerified className={styles.icone} size={"1.2em"} />
                                         <div className={styles.tooltipBox}>
-                                            Usuário verificado por ser um {authData?.role === "admin" ? "administrador do" : "cursinho aprovado pelo"} VemFacul.
+                                            Usuário verificado por ser um {userProfile?.nivel === "Cursinho" ? "cursinho aprovado pelo" : "administrador do"} VemFacul.
                                         </div>
                                     </span>
 
@@ -329,7 +329,7 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
                         </div>
 
                         <p className={styles.description}>{userProfile.descricao}</p>
-                        <h3> Questões corretas: {userProfile.acertosuser}</h3>
+                        {userProfile.nivel !== "Cursinho" && <h3 className={styles.questoesCorretas}> Questões corretas: {userProfile.acertosuser}</h3>}
 
                         <div className={styles.universityInterests}>
                             <h3 className={styles.interestsTitle}>{userProfile.nivel === "Aluno EM" ? "Vestibulares" : userProfile.nivel === "Cursinho" ? "" : "Matérias Lecionadas"}</h3>
@@ -374,7 +374,7 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
                         />
                     ))}
                     {postagens.length === 0 && (
-                        <div><h1 style={{ textAlign: "center" }}>Nenhuma postagem encontrada</h1></div>
+                        <div style={{ padding: 15 }}><h1 style={{ textAlign: "center" }}>Esse usuário ainda não fez nenhum post.</h1></div>
                     )}
                 </div>
 

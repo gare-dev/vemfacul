@@ -48,7 +48,7 @@ export default function PopupRegistro(props: props) {
             if (error instanceof AxiosError) {
                 if (error.response?.data.code === "ALREADYUSED_EMAIL") {
                     setStep('shown')
-                    return setError(error.response?.data.message)
+                    return setError(error.response?.data.error)
                 }
                 if (error.code === "ERR_NETWORK") {
                     setError("Erro de rede. Tente novamente mais tarde.");

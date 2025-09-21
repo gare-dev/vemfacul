@@ -11,6 +11,7 @@ export type UserProfileType = {
     materias_lecionadas: string[]
     nivel: string
     acertosuser: number
+    verified_account: boolean
 }
 
 export type ProfileType = {
