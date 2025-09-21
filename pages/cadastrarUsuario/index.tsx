@@ -9,7 +9,6 @@ import inputs, { inputAlunoEM, professorInputs, universitarioInputs, vestibuland
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-
 export default function CadastrarUsuario() {
     const [step, setStep] = useState(0)
     const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
@@ -198,12 +197,6 @@ export default function CadastrarUsuario() {
             };
         });
     }
-
-    useEffect(() => {
-        console.log(step)
-    }, [step])
-
-
 
     const checkMandatoryFields = () => {
         const currentInput = inputs[step];
@@ -678,6 +671,7 @@ export default function CadastrarUsuario() {
             </div>
             <div className={s.profileDiv}>
                 <MiniProfile
+                    username={user.username ?? ""}
                     step={step}
                     ano={nivel === "Aluno EM" ? user.ano + " Ano," : ""}
                     escola={nivel === "Aluno EM" ? user.escola : nivel === "Universitário" ? user.universidade : user.instituicao}

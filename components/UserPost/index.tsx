@@ -40,7 +40,7 @@ const Tweet: React.FC<TweetProps> = ({
 }) => {
   const router = useRouter()
   const [isLiked, setIsLiked] = useState(alredyLiked);
-  const [currentLikes, setCurrentLikes] = useState(likes);
+  const [currentLikes, setCurrentLikes] = useState<number>(Number(likes));
   const [currentComments, setCurrenComments] = useState(comments);
   const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -80,13 +80,13 @@ const Tweet: React.FC<TweetProps> = ({
     if (isLiked) {
       const promise = await Api.unLinkePostagem(id);
       if (promise.status === 201) {
-        setCurrentLikes((prev) => prev - 1);
+        setCurrentLikes(currentLikes - 1);
         setIsLiked(false);
       }
     } else {
       const promise = await Api.likePostagem(id);
       if (promise.status === 201) {
-        setCurrentLikes((prev) => prev + 1);
+        setCurrentLikes(currentLikes + 1);
         setIsLiked(true);
       }
     }
@@ -112,30 +112,26 @@ const Tweet: React.FC<TweetProps> = ({
       )
       }
       <div className={styles.tweetContent}>
-        {/* Profile Image */}
         <div className={styles.profileImageContainer}>
           <img
+            onClick={(e) => { e.stopPropagation(); router.push(`/${username}`) }}
             src={profileImage}
+            style={{ 'cursor': 'pointer' }}
             alt={`${name}'s profile`}
             className={styles.profileImage}
           />
         </div>
 
-        {/* Tweet Body */}
         <div className={styles.tweetBody} style={{ 'cursor': 'pointer' }} onClick={() => { router.push(`/postagem/${id}`) }}>
-          {/* Tweet Header (name, username, timestamp) */}
           <div className={styles.tweetHeader}>
             <span className={styles.name}>{name}</span>
             <span className={styles.username}>@{username}</span>
             <span className={styles.timestamp}>{timestamp}</span>
           </div>
 
-          {/* Tweet Text */}
           <p className={styles.tweetText}> {content}</p>
 
-          {/* Tweet Actions */}
           <div className={styles.tweetActions}>
-            {/* Comment Button */}
             <button className={styles.actionButton} onClick={(e) => {
               e.stopPropagation()
               setIsVisibleSubmitPost(!isVisibleSubmitPost); handleOpenPopup({
@@ -159,7 +155,6 @@ const Tweet: React.FC<TweetProps> = ({
               <span>{+currentComments}</span>
             </button>
 
-            {/* Like Button */}
             <button
               className={`${styles.actionButton} ${isLiked ? styles.liked : ''}`}
               onClick={(e) => {
@@ -181,10 +176,9 @@ const Tweet: React.FC<TweetProps> = ({
                   )}
                 </g>
               </svg>
-              <span>{currentLikes}</span>
+              <span>{Number(currentLikes)}</span>
             </button>
 
-            {/* Share Button */}
             <button className={styles.actionButton} style={{ 'cursor': 'pointer' }} onClick={(e) => { e.stopPropagation(); handleSharePost() }}>
               <svg
                 className={styles.actionIcon}

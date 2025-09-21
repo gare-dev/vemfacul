@@ -10,9 +10,9 @@
 
     .popupBox {
         width: 900px;
-        max-width: 95%; // responsividade
+        max-width: 95%;
         height: 300px;
-        max-height: 90%; // responsividade vertical
+        max-height: 90%;
         background-color: #fff;
         border-radius: 10px;
         position: relative;
@@ -33,6 +33,36 @@
                 flex-direction: column;
                 align-items: center;
                 gap: 10px;
+
+                .noImageDiv {
+                    height: 150px;
+                    width: 150px;
+                    border: 2px solid black;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+
+                    .noImageText {
+                        font-size: 2rem;
+                        font-weight: 600;
+
+                        font-family: "Kantumruy Pro", sans-serif;
+                        color: #fff;
+                    }
+                }
+
+                .inputTimeEdit {
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                    font-family: "Kantumruy Pro", sans-serif;
+                    color: #000;
+                    border: 1px solid #3c59ff;
+                    border-radius: 5px;
+                    width: 100%;
+                    outline: none;
+
+                }
 
                 .imageDiv {
                     height: 150px;
@@ -69,6 +99,17 @@
                     align-items: center;
                     gap: 10px;
 
+                    .inputEdit {
+                        font-size: 1.5rem;
+                        font-weight: 700;
+                        font-family: "Kantumruy Pro", sans-serif;
+                        color: #000;
+                        border: 1px solid #3c59ff;
+                        border-radius: 5px;
+                        width: 100%;
+                        outline: none;
+                    }
+
                     .title {
                         font-size: 2.5rem;
                         font-weight: 700;
@@ -89,6 +130,22 @@
                         font-weight: 500;
                         font-family: "Kantumruy Pro", sans-serif;
                         color: #000;
+                        margin-top: 10px;
+
+                    }
+
+                    .textareaEdit {
+                        font-size: 1.3rem;
+                        font-weight: 500;
+                        font-family: "Kantumruy Pro", sans-serif;
+                        color: #000;
+                        border: 1px solid #3c59ff;
+                        border-radius: 5px;
+                        width: 100%;
+                        height: 150px;
+                        resize: none;
+                        outline: none;
+                        margin-top: 10px;
                     }
                 }
             }
@@ -152,6 +209,14 @@
 
                 &:hover {
                     background-color: #c7d31d;
+                }
+            }
+
+            .saveDiv {
+                background-color: #00b300;
+
+                &:hover {
+                    background-color: #33cc33;
                 }
             }
         }

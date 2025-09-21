@@ -1,10 +1,7 @@
 
 import Api from "@/api";
-import LoadingComponent from "@/components/LoadingComponent";
 import Sidebar from "@/components/Sidebar";
-import useAlert from "@/hooks/useAlert";
-import { AxiosError } from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "@/styles/comunidade.module.scss";
 import { PostsType } from "@/types/postsType";
 import UserPost from "@/components/UserPost";
@@ -52,9 +49,8 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 }
 
 export default function Comunidade({ postsProp, authData }: Props) {
-    const [posts, setPosts] = useState<PostsType[]>(postsProp || [])
-    const [loading, setLoading] = useState(true);
-    const { showAlert } = useAlert()
+    const [posts,] = useState<PostsType[]>(postsProp || [])
+    // const { showAlert } = useAlert()
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
     const router = useRouter();
@@ -70,30 +66,30 @@ export default function Comunidade({ postsProp, authData }: Props) {
         console.log(tweet)
     }
 
-    const handleGetPosts = async () => {
-        try {
-            const response = await Api.selectAllPosts();
+    // const handleGetPosts = async () => {
+    //     try {
+    //         const response = await Api.selectAllPosts();
 
-            if (response.status === 200) {
-                setPosts(response.data.data);
-            }
-        } catch (error) {
-            if (error instanceof AxiosError) {
-                if (error.code === 'ERR_NETWORK') {
-                    showAlert('Não foi possível obter os posts, tente novamente mais tarde.', 'danger');
-                }
-                if (error.response?.data.code === "POSTAGEM_NOT_FOUND") {
-                    showAlert('Nenhum post encontrado.', 'danger');
-                }
-            }
-        } finally {
-            setLoading(false);
-        }
-    }
+    //         if (response.status === 200) {
+    //             setPosts(response.data.data);
+    //         }
+    //     } catch (error) {
+    //         if (error instanceof AxiosError) {
+    //             if (error.code === 'ERR_NETWORK') {
+    //                 showAlert('Não foi possível obter os posts, tente novamente mais tarde.', 'danger');
+    //             }
+    //             if (error.response?.data.code === "POSTAGEM_NOT_FOUND") {
+    //                 showAlert('Nenhum post encontrado.', 'danger');
+    //             }
+    //         }
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // }
 
-    useEffect(() => {
-        handleGetPosts();
-    }, [])
+    // useEffect(() => {
+    //     handleGetPosts();
+    // }, [])
 
 
     return (
@@ -106,12 +102,6 @@ export default function Comunidade({ postsProp, authData }: Props) {
                 onClose={handleClosePopup}
                 onReload={() => router.reload()}
             />
-            {loading && (
-                <div className={styles.loadingContainer}>
-                    <LoadingComponent isLoading={loading} />
-                </div>
-
-            )}
             <div className={styles.comunidadeContainer}>
                 <div className={styles.comunidadePosts}>
                     {posts.map((post, index) => (
@@ -136,7 +126,6 @@ export default function Comunidade({ postsProp, authData }: Props) {
                         />
                     ))}
                 </div>
-
             </div>
             <div className={styles.content_btn_postagem} onClick={() => { setIsVisibleSubmitPost(!isVisibleSubmitPost); handleOpenPopup() }}>
                 <button onClick={() => { setIsVisibleSubmitPost(!isVisibleSubmitPost); handleOpenPopup() }} className={styles.btn}>

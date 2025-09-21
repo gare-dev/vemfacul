@@ -1,10 +1,12 @@
-
 import Api from '@/api';
-import LoadingComponent from '@/components/LoadingComponent';
+import Popup from '@/components/Popup';
 import Sidebar from '@/components/Sidebar';
+import DemoWrapper from '@/hooks/DemoWrapper';
 import useAlert from '@/hooks/useAlert';
+import usePersonalEvents from '@/hooks/usePersonalEvents';
 import styles from '@/styles/perfil.module.scss';
 import AuthDataType from '@/types/authDataType';
+import PopupType from '@/types/data';
 import maskCEP from '@/utils/maskCEP';
 import { GetServerSideProps } from 'next';
 import { useState, useRef, useEffect } from 'react';
@@ -50,35 +52,56 @@ interface Props {
     id_course: string;
     cursinhoProp: Cursinho | null;
     authData: AuthDataType | null | undefined;
+    events: PopupType[] | []
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const { id_course } = ctx.params as { id_course: string };
+    if (id_course === "null") {
+        return {
+            notFound: true
+        }
+    }
 
     try {
         const cookie = ctx.req.headers.cookie
         Api.setCookie(cookie || "")
 
-        const [cursinho, authData] = await Promise.all([
+        const [cursinho, authData, events] = await Promise.all([
             Api.getCursinhoById(id_course as string),
-            Api.getProfileInfo()
+            Api.getProfileInfo(),
+            Api.getCourseEventById(id_course)
         ])
 
 
-        const cursinhoData = cursinho.status === 200 ? cursinho.data.data.avaliacoes.map((cursinho: Cursinho) => ({
-            ...cursinho,
-            created_at: new Date(cursinho.created_at!).toLocaleDateString('pt-BR', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit'
-            })
-        })) : []
+        const cursinhoData = cursinho.status === 200
+            ? {
+                ...cursinho.data.data,
+                avaliacoes: cursinho.data.data.avaliacoes.map((avaliacao: Avaliacao) => ({
+                    ...avaliacao,
+                    created_at: avaliacao.created_at
+                        ? (typeof avaliacao.created_at === "string"
+                            ? avaliacao.created_at
+                            : new Date(avaliacao.created_at).toLocaleDateString("pt-BR"))
+                        : "Data não informada"
+                }))
+            }
+            : null;
+
 
         return {
             props: {
-                cursinho: cursinhoData,
+                cursinhoProp: cursinhoData,
                 id_course: id_course as string,
-                authData: authData.data.code === "PROFILE_INFO" ? authData.data.data : null
+                authData: authData.data.code === "PROFILE_INFO" ? authData.data.data : null,
+                events: events.status === 200 ? events.data.data.map((evento: PopupType) => ({
+                    ...evento,
+                    created_at: new Date(evento.created_at!).toLocaleDateString('pt-BR', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit'
+                    })
+                })) : []
             }
         };
     } catch (error) {
@@ -87,42 +110,47 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
             props: {
                 id_course: id_course as string,
                 cursinho: null,
-                authData: null
+                authData: null,
+                events: []
             }
         };
     }
-
-
-
 }
 
-export default function CursinhoPage({ id_course, authData, cursinhoProp }: Props) {
+export default function CursinhoPage({ id_course, authData, cursinhoProp, events }: Props) {
     const [newComment, setNewComment] = useState('');
     const [userRating, setUserRating] = useState(0);
     const [hoverRating, setHoverRating] = useState(0);
     const [currentSlide, setCurrentSlide] = useState(0);
-    const [loading, setLoading] = useState(true);
     const [cursinho, setCursinho] = useState<Cursinho | null>(cursinhoProp);
     const slideInterval = useRef<NodeJS.Timeout>(null);
     const { showAlert } = useAlert();
     // const [comments, setComments] = useState<Avaliacao[]>(cursinho?.avaliacoes || []);
     const [info, setInfo] = useState<string[]>([]);
+    const { setPersonalEventsData } = usePersonalEvents()
+    const [, setPopupVisible] = useState(false)
+    const [, setIsClose] = useState(false)
+    const [isVisible, setIsVisible] = useState(false)
+
 
     useEffect(() => {
-        startSlider();
+        if (cursinho?.imagens_espaco?.length && cursinho.imagens_espaco.length > 1) {
+            startSlider();
+        }
         return () => {
             if (slideInterval.current) {
                 clearInterval(slideInterval.current);
             }
         };
-    }, []);
+    }, [cursinho?.imagens_espaco]);
+
 
     const startSlider = () => {
+        const length = cursinho?.imagens_espaco?.length ?? 0;
+        if (length <= 1) return; // nada de slider
+
         slideInterval.current = setInterval(() => {
-            setCurrentSlide(prev => {
-                const length = cursinho?.imagens_espaco?.length ?? 0;
-                return length > 0 ? (prev + 1) % length : 0;
-            });
+            setCurrentSlide(prev => (prev + 1) % length);
         }, 5000);
     };
 
@@ -150,22 +178,25 @@ export default function CursinhoPage({ id_course, authData, cursinhoProp }: Prop
 
     const handleSubmitComment = async (e: React.FormEvent) => {
         e.preventDefault();
+        let created_at
         try {
             const response = await Api.insertReview(id_course, userRating, newComment);
 
             if (response.status === 201) {
+                created_at = response.data.created_at
                 showAlert("Avaliação enviada com sucesso!", "success");
             }
         } catch (error) {
             console.error("Error submitting comment:", error);
         }
-        if (newComment.trim() && userRating > 0) {
+        if (newComment.trim()) {
             const newCommentObj: Avaliacao = {
                 id_user: cursinho?.avaliacoes.length as number + 1,
                 name: info[0],
                 content: newComment,
                 stars: userRating,
-                pfp: info[1]
+                pfp: info[1],
+                created_at: created_at.toLocaleDateString("pt-BR")
 
             };
             setCursinho(prev => {
@@ -180,31 +211,17 @@ export default function CursinhoPage({ id_course, authData, cursinhoProp }: Prop
         }
     };
 
-    useEffect(() => {
-        (async () => {
-
-            try {
-                const response = await Api.getCursinhoById(id_course);
-                setCursinho(response.data.data);
-            } catch (error) {
-                console.error("Error fetching cursinho data:", error);
-            }
-        })()
-
-    }, [])
-
-    useEffect(() => {
-        setTimeout(() => {
-            setLoading(false);
-        }, 1000);
-    }, [cursinho])
-
-
     return (
 
         <>
-            {loading && <LoadingComponent isLoading={loading} />}
             <Sidebar setInfo={setInfo} userInfo={info} authData={authData} />
+            <Popup
+                isVisible={isVisible}
+                setIsVisible={() => setIsVisible(false)}
+                canAdd={true}
+                canRemove={false}
+                canEdit
+            />
             <div className={styles.pageContainer}>
                 <div className={styles.header}>
                     <img
@@ -239,7 +256,6 @@ export default function CursinhoPage({ id_course, authData, cursinhoProp }: Prop
                     </div>
                 </div>
 
-                {/* Academic Info Section */}
                 <div className={styles.academicInfo}>
                     <div className={styles.modalidades}>
                         <h2>Modalidades Oferecidas</h2>
@@ -320,18 +336,45 @@ export default function CursinhoPage({ id_course, authData, cursinhoProp }: Prop
                                 </div>
                             ))}
                         </div>
-                        <div className={styles.sliderControls}>
-                            {cursinho?.imagens_espaco.map((_, index) => (
-                                <button
-                                    key={index}
-                                    className={`${styles.sliderDot} ${index === currentSlide ? styles.active : ''}`}
-                                    onClick={() => goToSlide(index)}
-                                    aria-label={`Ir para imagem ${index + 1}`}
-                                />
-                            ))}
-                        </div>
+                        {(Number(cursinho?.imagens_espaco.length)) > 1 && (
+                            <div className={styles.sliderControls}>
+                                {cursinho?.imagens_espaco.map((_, index) => (
+                                    <button
+                                        key={index}
+                                        className={`${styles.sliderDot} ${index === currentSlide ? styles.active : ''}`}
+                                        onClick={() => goToSlide(index)}
+                                        aria-label={`Ir para imagem ${index + 1}`}
+                                    />
+                                ))}
+                            </div>
+                        )}
+
                     </div>
                 </div>
+
+                <div className={styles.calendarSection}>
+                    <h2>Calendário de Eventos do {cursinho?.nome}</h2>
+
+                    <DemoWrapper
+                        isEditable={false}
+                        eventos={events}
+                        popUpClick={() => setIsVisible(true)}
+                        popupFilterClick={() => setPopupVisible(true)}
+                        onDateClick={(day, month, year) => {
+                            setIsClose(true)
+                            setPersonalEventsData(prev => ({
+                                ...prev,
+                                day: String(day),
+                                month: String(month),
+                                year: String(year),
+                            }))
+                        }}
+                    />
+
+                </div>
+
+
+
 
                 {/* Comments Section */}
                 <div className={styles.commentsSection}>
@@ -364,29 +407,26 @@ export default function CursinhoPage({ id_course, authData, cursinhoProp }: Prop
                     </div>
 
                     <div className={styles.commentsList}>
-                        {cursinho?.avaliacoes.map((comment, i) => (
-                            <div key={i} className={styles.commentCard}>
-                                <div className={styles.commentHeader}>
-                                    <img className={styles.avatar} src={comment.pfp} alt="" />
-                                    <span className={styles.author}>{comment.name}</span>
-                                    <div className={styles.rating}>
-                                        {[...Array(comment.stars)].map((_, i) => (
-                                            <span key={i} className={i < comment.stars ? styles.filled : ''}>★</span>
-                                        ))}
+                        {cursinho?.avaliacoes
+                            .filter(comment => comment.id_user !== null)
+                            .map((comment, i) => (
+                                <div key={i} className={styles.commentCard}>
+                                    <div className={styles.commentHeader}>
+                                        <img className={styles.avatar} src={comment.pfp} alt="" />
+                                        <span className={styles.author}>{comment.name}</span>
+                                        <div className={styles.rating}>
+                                            {[...Array(comment.stars)].map((_, j) => (
+                                                <span key={j} className={j < comment.stars ? styles.filled : ''}>★</span>
+                                            ))}
+                                        </div>
+                                        <span className={styles.date}>
+                                            {comment.created_at}
+                                        </span>
                                     </div>
-                                    <span className={styles.date}>{new Date(comment.created_at!).toLocaleDateString('pt-BR')}</span>
+                                    <p className={styles.commentText}>{comment.content}</p>
                                 </div>
-                                <p className={styles.commentText}>{comment.content}</p>
-                                {/* <div className={styles.commentActions}>
-                                    <button
-                                        onClick={() => toggleLike(comment.id)}
-                                        className={`${styles.likeButton} ${comment.isLiked ? styles.liked : ''}`}
-                                    >
-                                        <span className={styles.likeIcon}>♥</span> {comment.likes}
-                                    </button>
-                                </div> */}
-                            </div>
-                        ))}
+                            ))}
+
                     </div>
                 </div>
             </div>

@@ -59,12 +59,11 @@
         h1 {
             margin-left: 12px;
             font-weight: 600;
-            font-size: 16px;
-            letter-spacing: 2px;
+            font-size: 20px;
             opacity: 0;
             transition: 0.3s;
             font-family: "Kantumruy Pro", sans-serif;
-            color: #333333;
+            color: #000;
         }
     }
 
@@ -92,7 +91,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            height: 56px;
+            height: var(--after-height, 56px);
             width: 6px;
             background: #001ECB;
             translate: 0 var(--top);
@@ -259,5 +258,26 @@
         top: 0;
         border-radius: 0;
         height: 100%;
+
     }
+}
+
+
+
+/* Logo no topo para mobile */
+.mobileHeader {
+    position: fixed;
+    top: 10px;
+    left: 5px;
+    z-index: 100000;
+    background-color: #D0D7FF;
+    padding: 8px;
+    border-radius: 50%;
+}
+
+.mobileLogo {
+    width: 70px;
+    height: auto;
+    border-radius: 50%;
+    cursor: pointer;
 }

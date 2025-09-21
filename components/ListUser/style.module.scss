@@ -207,14 +207,7 @@ $user-secondary: #778CFE;
 
 /* Responsividade */
 
-@media (max-width: 1024px) {
-    .userList {
-        width: 90%;
-        padding-left: 1rem;
-        padding-right: 1rem;
-        margin-left: 64px;
-    }
-}
+
 
 @media (max-width: 672px) {
     .userCard {

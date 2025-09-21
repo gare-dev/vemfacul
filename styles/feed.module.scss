@@ -1,9 +1,14 @@
 .feedPageContainer {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row-reverse;
 
-    gap: 30px;
+    @media (max-width: 1062px) {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+
 }
 
 .filterContainer {
@@ -17,11 +22,19 @@
 
 .feedContainer {
     display: grid;
-
     gap: 20px;
-    background-color: #fff;
-    width: 85%;
-    border-radius: 10px;
-    padding: 20px;
+    // background-color: #D0D7FF;
+    width: 68%;
+    // border-radius: 10px;
+    padding: 20px 10px 20px 20px;
+    max-height: 200px;
+    // padding-left: 64px;
 
+    @media (max-width: 1062px) {
+        flex-direction: column;
+        align-items: center;
+        padding: 0;
+
+        width: 90%;
+    }
 }
