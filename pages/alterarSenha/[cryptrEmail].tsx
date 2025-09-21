@@ -3,6 +3,7 @@ import Styles from "@/styles/alterarSenha.module.scss";
 import { AxiosError } from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
+
 const AlterarSenha = () => {
     const [sucess, setSucess] = useState(true)
     const [value, setValue] = useState('')

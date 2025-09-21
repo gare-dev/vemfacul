@@ -4,6 +4,7 @@ import Api from "@/api";
 import { GetServerSideProps } from "next";
 import AuthDataType from "@/types/authDataType";
 import Sidebar from "@/components/Sidebar";
+import formatarRedacao from "@/utils/formatEssayText"
 
 type Redacao = {
     id_essay?: number;
@@ -189,7 +190,7 @@ export default function Redacao({ userEssays, authData }: Props) {
                             <div className={styles.feedbackContainer}>
                                 <h3>Feedback:</h3>
                                 <p className={styles.feedbackTexto}>
-                                    {redacaoSelecionada.notes}
+                                    {formatarRedacao(redacaoSelecionada.notes ?? "")}
                                 </p>
                                 <p className={styles.notaTexto}>
                                     Nota:{" "}
