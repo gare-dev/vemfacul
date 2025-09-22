@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 
 export default function CadastrarUsuario() {
     const [isCheckingUsername, setIsCheckingUsername] = useState(false);
-    const [isUsernameValid, setIsUsernameValid] = useState<boolean | null>(null);
+    const [isUsernameValid, setIsUsernameValid] = useState<boolean | null>(false);
     const [step, setStep] = useState(0)
     const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
     const [nivel, setNivel] = useState("")
