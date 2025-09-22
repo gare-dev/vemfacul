@@ -391,7 +391,13 @@ class _Api {
   }
 
   public async userEssays() {
-    return await this._instance.get("/user/essay")
+    return await this._instance.get("/user/essay", {
+      timeout: 120000
+    })
+  }
+
+  public async getUsernameLists(username: string) {
+    return await this._instance.get(`/user/username/${username}`)
   }
 }
 

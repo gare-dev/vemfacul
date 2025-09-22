@@ -216,7 +216,7 @@ export default function Sidebar(props: props) {
                         </div>
 
                         <nav
-                            style={{ '--top': `${activeIndex >= 0 ? activeIndex * (innerHeight < 751 ? 45 : 56) : (innerHeight < 751 ? 315 : role === "dono de cursinho" ? 0 : 504)}px`, '--after-height': `${innerHeight < 751 ? 45 : 56}px` } as React.CSSProperties}
+                            style={{ '--top': `${activeIndex >= 0 ? activeIndex * (innerHeight < 751 ? 45 : 56) : (innerHeight < 751 ? 315 : role === "dono de cursinho" ? 0 : 448)}px`, '--after-height': `${innerHeight < 751 ? 45 : 56}px` } as React.CSSProperties}
                             className={styles.menu}
 
                         >
