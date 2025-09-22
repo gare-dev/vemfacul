@@ -108,7 +108,7 @@ export default function Redacao({ userEssays, authData }: Props) {
 
     async function handleEnviar() {
         if (!textoNovaRedacao.trim()) return;
-        if (textoNovaRedacao.trim().length > 3100) return showAlert("O número máximo de caracteres é 3100.")
+        if (textoNovaRedacao.trim().length > 3100) return showAlert("O número máximo de caracteres é 3100.", "warning")
 
         setEnviando(true);
         await enviarRedacao();
