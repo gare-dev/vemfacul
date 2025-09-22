@@ -41,7 +41,7 @@ export default function MiniProfile(props: props) {
                 <p>{props.ano} {props.escola}</p>
             </div>
             <div className={s.usernameDiv}>
-                <p>@{props.username}</p>
+                {props.username && <p>@{props.username}</p>}
             </div>
             <div className={s.locationDiv}>
                 {(props.estado && props.step >= 2) && <p><MdOutlineLocationOn className={s.icon} />{props.estado}</p>}
