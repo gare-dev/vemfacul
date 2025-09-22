@@ -395,6 +395,10 @@ class _Api {
       timeout: 120000
     })
   }
+
+  public async getUsernameLists(username: string) {
+    return await this._instance.get(`/user/username/${username}`)
+  }
 }
 
 const Api = new _Api(process.env.NEXT_PUBLIC_API_URL ?? "");

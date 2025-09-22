@@ -242,7 +242,7 @@ export default function QuickTest() {
                             <h2 className={styles.headreSubtitle}>
                                 {questionIdx + 1}. SIMULADO - VEMFACUL
                             </h2>
-                            <p className={styles.headreParagraph}>{questions[questionIdx].context.replace(/!\[.*?\]\(.*?\)/g, "").trim()}</p>
+                            <p className={styles.headreParagraph}>{questions[questionIdx].context?.replace(/!\[.*?\]\(.*?\)/g, "").trim()}</p>
                             <br />
                             {questions[questionIdx].files && questions[questionIdx].files.length > 0 && (
                                 <img
