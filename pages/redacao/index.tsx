@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "@/styles/redacao.module.scss";
 import Api from "@/api";
 import { GetServerSideProps } from "next";
