@@ -1,6 +1,5 @@
 import Api from "@/api";
 import QuickTest from "@/components/QuickTest";
-import Ranking from "@/components/RankingUsers"
 import Sidebar from "@/components/Sidebar"
 import AuthDataType from "@/types/authDataType";
 import { GetServerSideProps } from "next";
