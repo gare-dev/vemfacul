@@ -8,6 +8,7 @@ type PostsType = {
     foto: string
     nome: string
     total_comments: number;
+    alredyliked: boolean;
 }
 
 export type { PostsType }

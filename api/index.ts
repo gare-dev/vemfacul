@@ -383,6 +383,9 @@ class _Api {
   public async getTop10Users(mode: string) {
     return await this._instance.get(`/exercicios/questoes/ranking/${mode}`)
   }
+  public async getNotifications(mode: string) {
+    return await this._instance.get(`/notifications/${mode}`)
+  }
 
   public async insertEssay(essay: string, theme: string, title: string) {
     return await this._instance.post("/user/essay", {

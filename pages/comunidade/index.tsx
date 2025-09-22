@@ -134,7 +134,7 @@ export default function Comunidade({ postsProp, authData }: Props) {
                 <div className={styles.comunidadePosts}>
                     {posts.map((post, index) => (
                         <UserPost
-                            alredyLiked={false}
+                            alredyLiked={post.alredyliked}
                             key={0 || index}
                             id={post.id_postagem}
                             name={post.nome}
