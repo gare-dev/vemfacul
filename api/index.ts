@@ -107,7 +107,7 @@ class _Api {
     }
   }
 
-
+ 
   public async editProfile(formData: any) {
 
     try {
@@ -272,7 +272,7 @@ class _Api {
 
 
   public async questoes(year: number, offset: number) {
-    return await this._instance.get(`https://api.enem.dev/v1/exams/${year}/questions?limit=10&offset=${offset}`, {
+    return await this._instance.get(`https://api.enem.dev/v1/exams/${year}/questions?limit=9&offset=${offset}`, {
       withCredentials: false
     })
   }
@@ -393,7 +393,9 @@ class _Api {
   }
 
   public async userEssays() {
-    return await this._instance.get("/user/essay")
+    return await this._instance.get("/user/essay", {
+      timeout: 120000
+    })
   }
 }
 

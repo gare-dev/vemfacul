@@ -7,6 +7,7 @@ type PostsType = {
     total_likes: string
     foto: string
     nome: string
+    total_comments: number;
 }
 
 export type { PostsType }

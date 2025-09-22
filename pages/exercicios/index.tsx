@@ -41,7 +41,6 @@ export default function Main({ authData }: Props) {
         <>
             <Sidebar setInfo={setUserInfo} userInfo={userInfo} authData={authData} />
             <QuickTest></QuickTest>
-            <Ranking></Ranking>
         </>
     )
 }

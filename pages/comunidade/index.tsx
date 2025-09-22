@@ -37,7 +37,7 @@ function formatRelativeTime(timestamp: string | number | Date): string {
             day: "2-digit",
             month: "2-digit",
             year: "numeric"
-        });
+        }); 
     }
 }
 
@@ -150,7 +150,7 @@ export default function Comunidade({ postsProp, authData }: Props) {
                             profileImage={post.foto}
                             timestamp={post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).getDate().toString() + " de " + monthsMap[new Date(post.created_at).getMonth()]) : ""}
                             likes={+(post.total_likes ?? 0)}
-                            comments={0}
+                            comments={post.total_comments}
                         />
                     ))}
                 </div>
