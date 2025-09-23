@@ -31,8 +31,6 @@ type NavItemsType = {
 export default function Sidebar(props: props) {
     const router = useRouter()
     const isMobile = useIsMobile();
-
-
     const [authData,] = useState<AuthDataType | null | undefined>(props.authData)
     const [profileOptionsVisible, setProfileOptionsVisible] = useState<boolean>(false)
     const [isMissingLoginShown, setIsMissingLoginShown] = useState<boolean>(false)
@@ -169,7 +167,7 @@ export default function Sidebar(props: props) {
     if (activeIndex >= 0) {
         top = activeIndex * itemHeight;
     } else {
-        top = (navItems.length - 1) * itemHeight;
+        top = (navItems.length) * itemHeight;
     }
 
     return (
@@ -194,9 +192,7 @@ export default function Sidebar(props: props) {
                         /> */}
                     {/* <p>Feed</p> */}
                     {!isSidebarOpen && <FaBars size={"1.5em"} color="#001ECB" />}
-
                     {/* </div> */}
-
                 </div>
             )}
             {isMissingLoginShown && <PopupMissLogin redirectTo="/" traceID={props.traceID} />}
@@ -252,7 +248,6 @@ export default function Sidebar(props: props) {
                                         <p style={isMobile ? { opacity: headerOpacity } : undefined} className={styles.text}>{authData?.nome}</p>
                                         <p style={isMobile ? { opacity: headerOpacity } : undefined} className={styles.textUser}>@{authData?.username}</p>
                                     </div>
-
                                 </button>}
                                 {profileOptionsVisible && (
                                     <div className={styles.overlay} onClick={() => setProfileOptionsVisible(false)}>
@@ -264,7 +259,7 @@ export default function Sidebar(props: props) {
                                                             <p><IoMdSettings />Configurações</p>
                                                         </div> */}
                                                         <div onClick={handleSignout}>
-                                                            <p><MdExitToApp color="black" />Sair de {authData?.nome}</p>
+                                                            <p style={{ fontSize: "1em" }}><MdExitToApp color="black" />Sair de {authData?.username}</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -277,8 +272,6 @@ export default function Sidebar(props: props) {
                     </div>
                 </aside>
             </section>
-
         </>
-
     )
 }
