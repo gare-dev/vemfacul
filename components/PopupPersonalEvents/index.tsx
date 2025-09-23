@@ -42,8 +42,7 @@ export default function FormModal({ onClose, isVisible, reloadFunction }: FormMo
 
     async function handleSubmit() {
         if (personalEventsData.title === "" || personalEventsData.main_title === "" || personalEventsData.descricao === "") {
-            alert("Preencha todos os campos obrigatórios");
-            return;
+            return showAlert("Preencha todos os campos obrigatórios", 'warning');
         }
 
         try {

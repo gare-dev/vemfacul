@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "@/styles/redacao.module.scss";
 import Api from "@/api";
 import { GetServerSideProps } from "next";
@@ -6,6 +6,7 @@ import AuthDataType from "@/types/authDataType";
 import Sidebar from "@/components/Sidebar";
 import formatarRedacao from "@/utils/formatEssayText"
 import LoadingBar from "@/components/LoadingBar";
+import useAlert from "@/hooks/useAlert";
 
 type Redacao = {
     id_essay?: number;
@@ -64,6 +65,7 @@ export default function Redacao({ userEssays, authData }: Props) {
         null
     );
     const [enviando, setEnviando] = useState(false);
+    const { showAlert } = useAlert()
     const [progress, setProgress] = useState(0);
     const [loading, setLoading] = useState(false);
     let intervalId: NodeJS.Timeout;
@@ -106,6 +108,7 @@ export default function Redacao({ userEssays, authData }: Props) {
 
     async function handleEnviar() {
         if (!textoNovaRedacao.trim()) return;
+        if (textoNovaRedacao.trim().length > 3100) return showAlert("O número máximo de caracteres é 3100.", "warning")
 
         setEnviando(true);
         await enviarRedacao();
@@ -113,6 +116,8 @@ export default function Redacao({ userEssays, authData }: Props) {
         setTextoNovaRedacao("");
         setModoCriar(false);
         setEnviando(false);
+        setTitleNovaRedacao("")
+        setThemeNovaRedacao("")
     }
 
     function handleSelecionarRedacao(id: number) {
@@ -120,10 +125,6 @@ export default function Redacao({ userEssays, authData }: Props) {
         setRedacaoSelecionada(r);
         setModoCriar(false);
     }
-
-    useEffect(() => {
-        console.log(redacoes)
-    }, [redacoes])
 
     return (
         <main className={styles.container}>
