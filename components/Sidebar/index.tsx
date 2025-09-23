@@ -5,7 +5,8 @@ import { useRouter } from "next/router"
 import { JSX, useEffect, useState } from "react"
 import { FaBars, FaCalendar, FaCalendarAlt, FaRegUserCircle, FaSearch, FaUsers } from "react-icons/fa"
 import { FaListCheck } from "react-icons/fa6"
-import { IoMdPeople, } from "react-icons/io"
+import { FaBell } from "react-icons/fa"
+import { IoMdPeople } from "react-icons/io"
 import { LuFilePenLine } from "react-icons/lu"
 import { MdExitToApp, MdOutlineListAlt, MdQuiz } from "react-icons/md"
 import { RiPagesLine } from "react-icons/ri"
@@ -65,6 +66,7 @@ export default function Sidebar(props: props) {
         { icon: <RiPagesLine />, name: "Feed", path: "/feed" },
         { icon: <FaSearch />, name: "Explorar", path: "/explorar" },
         { icon: <IoMdPeople />, name: "Comunidade", path: "/comunidade" },
+        { icon: <FaBell />, name: "Notificações", path: "/notificacoes" },
         { icon: <FaCalendar />, name: "Calendário Geral", path: "/eventos" },
         { icon: <LuFilePenLine />, name: "Correção de Redação", path: "/redacao" },
         { icon: <MdQuiz />, name: "Exercícios", path: "/exercicios" },
@@ -77,6 +79,7 @@ export default function Sidebar(props: props) {
         { icon: <RiPagesLine />, name: "Feed", path: "/feed" },
         { icon: <FaSearch />, name: "Explorar", path: "/explorar" },
         { icon: <IoMdPeople />, name: "Comunidade", path: "/comunidade" },
+        { icon: <FaBell />, name: "Notificações", path: "/notificacoes" },
         { icon: <FaCalendar />, name: "Calendário Geral", path: "/eventos" },
         { icon: <LuFilePenLine />, name: "Correção de Redação", path: "/redacao" },
         { icon: <MdQuiz />, name: "Exercícios", path: "/exercicios" },
