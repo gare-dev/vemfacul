@@ -83,6 +83,8 @@ export default function QuickTest() {
 
         try {
             startLoading()
+            console.log(idxQuestion)
+            console.log(y)
             const require = await Api.questoes(y, gerarQuestoes(idxQuestion))
             if (require.status === 200) {
                 setQuestions(require.data.questions);
@@ -301,7 +303,7 @@ export default function QuickTest() {
                                                 setQuestionIdx(questionIdx + 1);
                                             } else {
                                                 if (respostas.length !== questions.length) {
-                                                    alert('Responda todas as alternativas');
+                                                    console.log("Aqui deu ruim")
                                                 } else {
                                                     verifyRespostas();
                                                     setVisibleResult(true);
