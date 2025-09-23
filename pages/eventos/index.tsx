@@ -149,6 +149,9 @@ export default function Eventos({ eventsProp, authData }: Props) {
                 canEdit={false}
             />
             <Sidebar authData={authData} />
+            <div className={styles.titleDiv}>
+                <h2 className={styles.title}>Eventos dos Cursinhos</h2>
+            </div>
 
             <div className={styles.calendario}>
                 <DemoWrapper
