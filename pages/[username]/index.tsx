@@ -14,7 +14,6 @@ import monthsMap from "@/utils/getMonth";
 import { GetServerSideProps } from "next";
 import AuthDataType from "@/types/authDataType";
 import { MdVerified } from "react-icons/md";
-import { AxiosError } from "axios";
 import ProfilePopup, { UserImages } from "@/components/ProfilePicture";
 
 type Postagem = {
@@ -60,55 +59,53 @@ function formatRelativeTime(timestamp: string | number | Date): string {
 
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
-    // if (RESERVED_ROUTES.includes(context.params?.username as string) || context.params?.username === "null") {
-    //     return {
-    //         notFound: true
-    //     }
-    // }
+    const cookie = context.req.headers.cookie;
+    Api.setCookie(cookie || "");
 
-    try {
-        const cookie = context.req.headers.cookie
-        Api.setCookie(cookie || "")
-        const [userProfile, postagens, authData] = await Promise.all([
-            Api.getUserProfile(context.params?.username as string),
-            Api.getPostagem(context.params?.username as string),
-            Api.getProfileInfo()
-        ]);
+    const username = context.params?.username as string;
 
-        const post = postagens.data.data?.map((post: Postagem) => ({
-            ...post,
-            created_at: post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).getDate() === new Date().getDate() ? formatRelativeTime(post.created_at) : new Date(post.created_at).toLocaleDateString()) : "Data não informada"
-        }));
+    const [userProfileRes, postagensRes, authDataRes] = await Promise.allSettled([
+        Api.getUserProfile(username),
+        Api.getPostagem(username),
+        Api.getProfileInfo(),
+    ]);
 
-        return {
-            props: {
-                userProfileProp: userProfile.data.data[0],
-                postagensProp: post ?? null,
-                authData: authData.data.code === "PROFILE_INFO" ? authData.data.data : null,
-                xTraceError: null
-            }
-        }
-    } catch (error) {
-        if (error instanceof AxiosError) {
-            return {
-                props: {
-                    userProfileProp: null,
-                    postagensProp: [],
-                    authData: null,
-                    xTraceError: error.response?.headers["x-trace-id"] ?? null
-                }
-            }
-        }
-        return {
-            props: {
-                userProfileProp: null,
-                postagensProp: [],
-                authData: null,
-                xTraceError: null
-            }
-        }
-    }
-}
+    const userProfile =
+        userProfileRes.status === "fulfilled"
+            ? userProfileRes.value
+            : { data: { data: [] } };
+
+    const postagens =
+        postagensRes.status === "fulfilled"
+            ? postagensRes.value
+            : { data: { data: [] } };
+
+    const authData =
+        authDataRes.status === "fulfilled"
+            ? authDataRes.value
+            : { data: { code: "", data: null } };
+
+    const post = postagens.data.data?.map((post: Postagem) => ({
+        ...post,
+        created_at: post.created_at
+            ? typeof post.created_at === "string"
+                ? post.created_at
+                : new Date(post.created_at).getDate() === new Date().getDate()
+                    ? formatRelativeTime(post.created_at)
+                    : new Date(post.created_at).toLocaleDateString()
+            : "Data não informada",
+    }));
+
+    return {
+        props: {
+            userProfileProp: userProfile.data.data[0] ?? null,
+            postagensProp: post ?? null,
+            authData: authData.data.code === "PROFILE_INFO" ? authData.data.data : null,
+            xTraceError: null,
+        },
+    };
+};
+
 
 export default function UserProfile({ userProfileProp, postagensProp, authData, xTraceError }: Props) {
     const router = useRouter()
@@ -281,18 +278,18 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
 
                 <div className={styles.profileContainer}>
                     <div className={styles.headerImageContainer}>
-                        <img
+                        {userProfile.username ? <img
                             onClick={() => {
                                 setSelected('header');
                                 setIsOpen(true);
                             }}
                             src={userProfile.header === '' ? undefined : userProfile.header}
                             className={styles.headerImage}
-                        />
+                        /> : <div className={styles.noHeader}></div>}
                     </div>
                     <div className={styles.profileInfoContainer}>
                         <div className={styles.profilePictureContainer}>
-                            <img
+                            {userProfile.username ? <img
                                 onClick={() => {
                                     setSelected('foto');
                                     setIsOpen(true);
@@ -300,7 +297,7 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
                                 src={userProfile.foto === '' ? undefined : userProfile.foto}
                                 alt={`${userProfile.nome}'s profile`}
                                 className={styles.profilePicture}
-                            />
+                            /> : <div className={styles.noPicture}></div>}
                             {user === username &&
                                 <button onClick={() => setIsVisible(true)} className={styles.editProfileButton}>
                                     Editar Perfil
@@ -312,26 +309,29 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
                                 {userProfile.nome}{" "}
                                 {(userProfile.verified_account === true) && (
                                     <span className={styles.verifiedWrapper}>
-                                        <MdVerified className={styles.icone} size={"1.2em"} />
+                                        <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                            <MdVerified className={styles.icone} size={"1.1em"} />
+                                        </div>
                                         <div className={styles.tooltipBox}>
                                             Usuário verificado por ser um {userProfile?.nivel === "Cursinho" ? "cursinho aprovado pelo" : "administrador do"} VemFacul.
                                         </div>
                                     </span>
-
                                 )}
                             </h1>
-                            <p className={styles.username}>@{userProfile.username}</p>
+                            <p className={styles.username}>@{userProfile.username ? userProfile.username : username}</p>
                         </div>
 
-                        <div className={styles.typeIndicator}>
+                        {userProfile.username && <div className={styles.typeIndicator}>
                             <span className={styles.typeEmoji}>{typeEmojiMap[userProfile.nivel] || '👤'}</span>
                             <span className={styles.typeText}>{userProfile.nivel?.charAt(0).toUpperCase() + userProfile.nivel?.slice(1)}</span>
-                        </div>
+                        </div>}
+
+                        {!userProfile.username && <p className={styles.inexistentAccount}>Essa conta não existe.</p>}
 
                         <p className={styles.description}>{userProfile.descricao}</p>
-                        {userProfile.nivel !== "Cursinho" && <h3 className={styles.questoesCorretas}> Questões corretas: {userProfile.acertosuser}</h3>}
+                        {(userProfile.nivel !== "Cursinho" && userProfile.username) && <h3 className={styles.questoesCorretas}> Questões corretas: {userProfile.acertosuser}</h3>}
 
-                        <div className={styles.universityInterests}>
+                        {userProfile.username && <div className={styles.universityInterests}>
                             <h3 className={styles.interestsTitle}>{userProfile.nivel === "Aluno EM" ? "Vestibulares" : userProfile.nivel === "Cursinho" ? "" : "Matérias Lecionadas"}</h3>
                             <ul className={styles.universityList}>
                                 {userProfile.nivel === "Aluno EM" ? userProfile.vestibulares?.map((university, index) => (
@@ -348,7 +348,7 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
                                     </li>
                                 ))}
                             </ul>
-                        </div>
+                        </div>}
                     </div>
                 </div>
                 <div className={styles.containerProfilePost} style={{ borderRadius: 2 }}>

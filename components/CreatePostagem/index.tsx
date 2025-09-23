@@ -50,10 +50,17 @@ const TweetPopup: React.FC<TweetPopupProps> = ({
             return false;
         }
 
-        if (containsWord(text, badWordsList)) {
+        if (containsWord(text, badWordsList.filter((w): w is string => typeof w === 'string'))) {
             setError('Seu post contém palavras inadequadas. Por favor, revise-o.');
             return false;
         }
+
+        const urlRegex = /(https?:\/\/[^\s]+)|(www\.[^\s]+)|([a-z0-9-]+\.[a-z]{2,})/i;
+        if (urlRegex.test(text)) {
+            setError('Seu post não pode conter links.');
+            return false;
+        }
+
         setError('');
         return true;
     };

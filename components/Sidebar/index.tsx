@@ -5,9 +5,9 @@ import { useRouter } from "next/router"
 import { JSX, useEffect, useState } from "react"
 import { FaBars, FaCalendar, FaCalendarAlt, FaRegUserCircle, FaSearch, FaUsers } from "react-icons/fa"
 import { FaListCheck } from "react-icons/fa6"
-import { IoMdPeople, IoMdSettings } from "react-icons/io"
+import { IoMdPeople, } from "react-icons/io"
 import { LuFilePenLine } from "react-icons/lu"
-import { MdAssignment, MdExitToApp, MdOutlineListAlt, MdQuiz } from "react-icons/md"
+import { MdExitToApp, MdOutlineListAlt, MdQuiz } from "react-icons/md"
 import { RiPagesLine } from "react-icons/ri"
 import PopupMissLogin from "../MissLogin"
 import Image from "next/image"
@@ -30,6 +30,7 @@ type NavItemsType = {
 export default function Sidebar(props: props) {
     const router = useRouter()
     const isMobile = useIsMobile();
+
 
     const [authData,] = useState<AuthDataType | null | undefined>(props.authData)
     const [profileOptionsVisible, setProfileOptionsVisible] = useState<boolean>(false)
@@ -67,7 +68,7 @@ export default function Sidebar(props: props) {
         { icon: <FaCalendar />, name: "Calendário Geral", path: "/eventos" },
         { icon: <LuFilePenLine />, name: "Correção de Redação", path: "/redacao" },
         { icon: <MdQuiz />, name: "Exercícios", path: "/exercicios" },
-        { icon: <MdAssignment />, name: "Exercício Diário", path: "/exercicioDiario" },
+        // { icon: <MdAssignment />, name: "Exercício Diário", path: "/exercicioDiario" },
         { icon: <FaCalendarAlt />, name: "Calendário Pessoal", path: "/calendario" },
         { icon: <FaRegUserCircle />, name: "Perfil", path: `/${authData?.username}` },
     ]
@@ -79,7 +80,7 @@ export default function Sidebar(props: props) {
         { icon: <FaCalendar />, name: "Calendário Geral", path: "/eventos" },
         { icon: <LuFilePenLine />, name: "Correção de Redação", path: "/redacao" },
         { icon: <MdQuiz />, name: "Exercícios", path: "/exercicios" },
-        { icon: <MdAssignment />, name: "Exercício Diário", path: "/exercicioDiario" },
+        // { icon: <MdAssignment />, name: "Exercício Diário", path: "/exercicioDiario" },
         { icon: <FaCalendarAlt />, name: "Calendário Pessoal", path: "/calendario" },
         { icon: <FaRegUserCircle />, name: "Perfil", path: `/${authData?.username}` },
         { icon: <FaListCheck />, name: "Aprovar Cursinhos", path: "/admin/aprovar_cursinho" },
@@ -94,7 +95,6 @@ export default function Sidebar(props: props) {
         { icon: <FaCalendar />, name: "Calendário Geral", path: "/eventos" },
         { icon: <FaRegUserCircle />, name: "Perfil", path: `/${authData?.username}` },
         { icon: <FaListCheck />, name: "Criar Evento", path: "/cursinho/eventos" },
-
     ]
 
     const role = authData?.role
@@ -159,11 +159,18 @@ export default function Sidebar(props: props) {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
+    const itemHeight = innerHeight < 751 ? 45 : 56;
+
+    let top = 0;
+
+    if (activeIndex >= 0) {
+        top = activeIndex * itemHeight;
+    } else {
+        top = (navItems.length - 1) * itemHeight;
+    }
 
     return (
-
         <>
-
             {isMobile && (
                 <div
                     // style={{
@@ -216,7 +223,10 @@ export default function Sidebar(props: props) {
                         </div>
 
                         <nav
-                            style={{ '--top': `${activeIndex >= 0 ? activeIndex * (innerHeight < 751 ? 45 : 56) : (innerHeight < 751 ? 315 : role === "dono de cursinho" ? 0 : 504)}px`, '--after-height': `${innerHeight < 751 ? 45 : 56}px` } as React.CSSProperties}
+                            style={{
+                                '--top': `${top}px`,
+                                '--after-height': `${itemHeight}px`,
+                            } as React.CSSProperties}
                             className={styles.menu}
 
                         >
@@ -247,9 +257,9 @@ export default function Sidebar(props: props) {
                                             <div className={styles.almostMainDiv}>
                                                 <div className={styles.miniProfileDiv}>
                                                     <div className={styles.options}>
-                                                        <div onClick={() => router.push('/calendario')}>
+                                                        {/* <div onClick={() => router.push('/calendario')}>
                                                             <p><IoMdSettings />Configurações</p>
-                                                        </div>
+                                                        </div> */}
                                                         <div onClick={handleSignout}>
                                                             <p><MdExitToApp color="black" />Sair de {authData?.nome}</p>
                                                         </div>

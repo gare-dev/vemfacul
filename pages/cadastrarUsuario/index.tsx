@@ -10,6 +10,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function CadastrarUsuario() {
+    const [isCheckingUsername, setIsCheckingUsername] = useState(false);
+    const [isUsernameValid, setIsUsernameValid] = useState<boolean | null>(false);
     const [step, setStep] = useState(0)
     const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
     const [nivel, setNivel] = useState("")
@@ -36,7 +38,28 @@ export default function CadastrarUsuario() {
         username: ""
     })
 
+    useEffect(() => {
+        if (!user.username) {
+            setIsUsernameValid(null);
+            return;
+        }
 
+        const timeout = setTimeout(async () => {
+            try {
+                setIsCheckingUsername(true);
+                const res = await Api.getUsernameLists((user.username ?? "").trim());
+
+                setIsUsernameValid(Number(res.data.data.count) > 0 ? false : true);
+            } catch (err) {
+                console.error(err);
+                setIsUsernameValid(false);
+            } finally {
+                setIsCheckingUsername(false);
+            }
+        }, 500);
+
+        return () => clearTimeout(timeout);
+    }, [user.username]);
 
     function handleSubmit(level: string) {
         const functions = {
@@ -201,8 +224,6 @@ export default function CadastrarUsuario() {
     const checkMandatoryFields = () => {
         const currentInput = inputs[step];
 
-        console.log("PASSOU AQUI")
-
         if (!hasTriedSubmit) {
             setHasTriedSubmit(true);
             return true;
@@ -218,11 +239,16 @@ export default function CadastrarUsuario() {
             return false;
         }
 
-        if (currentInput?.type === "textUsername" && user.username?.trim() === "") {
-            showAlert("Username é obrigatório", "warning");
-            return false;
+        if (currentInput?.type === "textUsername") {
+            if (!user.username?.trim()) {
+                showAlert("Username é obrigatório", "warning");
+                return false;
+            }
+            if (isUsernameValid === false) {
+                showAlert("Este username já está em uso", "warning");
+                return false;
+            }
         }
-
         // inputs específicos por nível
         if (nivel === "Aluno EM") {
             const currentAlunoInput = inputAlunoEM[step - 5];
@@ -318,7 +344,7 @@ export default function CadastrarUsuario() {
                         <div className={s.divAlunoEMFinalizar}>
 
                             <div>
-                                <p>Conta Registrada! Aperte no botão <p style={{ color: "#777CFE", fontWeight: 600 }}>FINALIZAR</p><p> para ser redirecionado ao nosso feed.</p></p>
+                                <p>Conta Registrada! Aguarde um momento e você será redirecionado ao nosso feed.</p>
                             </div>
                         </div>
                 )
@@ -496,8 +522,6 @@ export default function CadastrarUsuario() {
         }
     }, [step])
 
-
-
     return (
         <div className={s.mainDiv}>
             <div className={s.formDiv}>
@@ -591,11 +615,21 @@ export default function CadastrarUsuario() {
                             </div>
                             <div className={s.inputDiv}>
                                 <input
-
-                                    maxLength={20} value={user.username?.trim()} onChange={(e) => {
+                                    maxLength={20}
+                                    value={user.username?.trim()}
+                                    onChange={(e) => {
                                         const cleanValue = e.target.value.replace(/[^A-Za-z0-9_]/g, "");
-                                        updateState("username", cleanValue)
-                                    }} placeholder={inputs[step].placeholder} className={s.input} type="text" />
+                                        updateState("username", cleanValue);
+                                    }}
+                                    placeholder={inputs[step].placeholder}
+                                    className={s.input}
+                                    type="text"
+                                />
+                                <div className={s.estadoUsername}>
+                                    {isCheckingUsername && <p style={{ color: "gray" }}>Verificando...</p>}
+                                    {isUsernameValid === false && <p style={{ color: "red" }}>Username já existe</p>}
+                                    {isUsernameValid === true && <p style={{ color: "green" }}>Username disponível!</p>}
+                                </div>
                             </div>
                         </>
                     ) :
