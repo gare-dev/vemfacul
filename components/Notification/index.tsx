@@ -8,6 +8,7 @@ type Notification = {
   tipo: string;
   postagem: string;
   id_postagem: string
+  content: string
 };
 
 export default function Notification() {
@@ -25,10 +26,13 @@ export default function Notification() {
       console.error(err);
     }
   };
-
   useEffect(() => {
     handleGetNotification(mode);
   }, [mode]);
+
+  useEffect(() => {
+
+  }, [notification])
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
@@ -62,20 +66,22 @@ export default function Notification() {
         {notification.length > 0 ? (
           notification.map((n, idx) => (
             <div
-              onClick={() => router.push(`postagem/${n.id_postagem}`)}
+              onClick={() => n.tipo !== "Redação" ? router.push(`postagem/${n.id_postagem}`) : router.push(`redacao`)}
               key={idx}
+              style={{ borderColor: "#778CFE" }}
               className="bg-white shadow-md rounded-xl p-4 border hover:shadow-lg transition"
             >
-              <p className="text-sm text-gray-500">
+              {(n.tipo === "Comentário" || n.tipo === "Curtida") && (<p className="text-sm text-gray-500">
                 Por: <span className="font-semibold">{n.ator}</span>
-              </p>
+              </p>)}
               <p
                 className={`font-medium ${n.tipo === "Curtida" ? "text-green-600" : "text-orange-600"
                   }`}
               >
                 {n.tipo}
               </p>
-              <p className="mt-2 text-gray-700 italic">“{n.postagem}”</p>
+              {(n.tipo === "Comentário" || n.tipo === "Curtida") && (<p className="mt-2 text-gray-700 italic">“{n.postagem}”</p>)}
+              {(n.tipo === "Redação") && <p className="mt-2 text-gray-700 italic">“{n.content}”</p>}
             </div>
           ))
         ) : (

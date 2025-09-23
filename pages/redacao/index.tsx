@@ -4,7 +4,6 @@ import Api from "@/api";
 import { GetServerSideProps } from "next";
 import AuthDataType from "@/types/authDataType";
 import Sidebar from "@/components/Sidebar";
-import formatarRedacao from "@/utils/formatEssayText"
 import LoadingBar from "@/components/LoadingBar";
 import useAlert from "@/hooks/useAlert";
 import { AxiosError } from "axios";
@@ -223,7 +222,7 @@ export default function Redacao({ userEssays, authData }: Props) {
                             <div className={styles.feedbackContainer}>
                                 <h3>Feedback:</h3>
                                 <p className={styles.feedbackTexto}>
-                                    {formatarRedacao(redacaoSelecionada.notes ?? "")}
+                                    {redacaoSelecionada.notes}
                                 </p>
                                 <p className={styles.notaTexto}>
                                     Nota:{" "}
