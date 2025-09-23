@@ -107,7 +107,7 @@ class _Api {
     }
   }
 
-
+ 
   public async editProfile(formData: any) {
 
     try {
@@ -272,7 +272,7 @@ class _Api {
 
 
   public async questoes(year: number, offset: number) {
-    return await this._instance.get(`https://api.enem.dev/v1/exams/${year}/questions?limit=10&offset=${offset}`, {
+    return await this._instance.get(`https://api.enem.dev/v1/exams/${year}/questions?limit=9&offset=${offset}`, {
       withCredentials: false
     })
   }
@@ -312,6 +312,9 @@ class _Api {
       isCorret
     })
   }
+  public async getRankingUsers() {
+    return await this._instance.get("/exercicios/questoes/ranking")
+  }
 
   public async setPersonalEventImportant(id_pevent: string) {
     return await this._instance.patch(`/user/event/important/${id_pevent}`)
@@ -338,7 +341,6 @@ class _Api {
       role,
     })
   }
-
   public async getAdminLogs() {
     return await this._instance.get("/admin/api/log")
   }
@@ -380,6 +382,9 @@ class _Api {
 
   public async getTop10Users(mode: string) {
     return await this._instance.get(`/exercicios/questoes/ranking/${mode}`)
+  }
+  public async getNotifications(mode: string) {
+    return await this._instance.get(`/notifications/${mode}`)
   }
 
   public async insertEssay(essay: string, theme: string, title: string) {
