@@ -264,7 +264,7 @@ export default function Sidebar(props: props) {
                                                             <p><IoMdSettings />Configurações</p>
                                                         </div> */}
                                                         <div onClick={handleSignout}>
-                                                            <p><MdExitToApp color="black" />Sair de {authData?.nome}</p>
+                                                            <p style={{ fontSize: "1em" }}><MdExitToApp color="black" />Sair de {authData?.username}</p>
                                                         </div>
                                                     </div>
                                                 </div>

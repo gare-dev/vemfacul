@@ -14,7 +14,8 @@ export const RESERVED_ROUTES = [
     'correcaoRedacao',
     'exercicioDiario',
     'cursinho',
-    'config', // cuidado com "admin/*", não funciona como wildcard aqui
+    'config',
+    'notificacoes',
     'alterarSenha',
     'manifest.json'
 ];

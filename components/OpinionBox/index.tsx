@@ -11,7 +11,7 @@ interface OpinionBoxProps {
 const OpinionBox: React.FC<OpinionBoxProps> = ({ name, role, opinion }) => {
     return (
         <div className={styles.box}>
-            <p className={styles.opinion}>&quot{opinion}&quot;</p>
+            <p className={styles.opinion}>&quot;{opinion}&quot;</p>
             <p className={styles.author}>
                 — {name}, <span>{role}</span>
             </p>
