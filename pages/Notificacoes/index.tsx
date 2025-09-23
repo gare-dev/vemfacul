@@ -13,7 +13,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
     try {
         const cookie = ctx.req.headers.cookie
         Api.setCookie(cookie || "")
-
         const authData = await Api.getProfileInfo()
 
         return {
