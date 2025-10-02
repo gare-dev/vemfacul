@@ -4,6 +4,10 @@ import TweetPopup from '../CreatePostagem';
 import React, { useEffect, useState } from 'react';
 import styles from '@/styles/userPost.module.scss';
 import { useRouter } from 'next/router';
+import { BsThreeDots } from 'react-icons/bs';
+import { useOptionsPopup } from '@/context/OptionsPopupContext';
+import useAlert from '@/hooks/useAlert';
+import { AxiosError } from 'axios';
 
 interface TweetProps {
   id: number | string;
@@ -16,6 +20,8 @@ interface TweetProps {
   likes: number;
   comments: number;
   date: string
+  userProfileUsername?: string
+
 }
 
 interface Postagem {
@@ -25,6 +31,7 @@ interface Postagem {
   content: string;
   content_post?: string;
   profileImage: string;
+  userProfileUsername?: string
 }
 
 const Tweet: React.FC<TweetProps> = ({
@@ -37,6 +44,7 @@ const Tweet: React.FC<TweetProps> = ({
   alredyLiked,
   likes,
   comments,
+  userProfileUsername,
 }) => {
   const router = useRouter()
   const [isLiked, setIsLiked] = useState(alredyLiked);
@@ -45,6 +53,9 @@ const Tweet: React.FC<TweetProps> = ({
   const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [postagemPai, setPostagemPai] = useState<Postagem | null>(null)
+  const { showAlert } = useAlert()
+  const { activePopupId, setActivePopupId } = useOptionsPopup();
+  const showOptionsPopup = activePopupId === id;
 
   const liked = () => {
     if (alredyLiked) {
@@ -56,9 +67,11 @@ const Tweet: React.FC<TweetProps> = ({
   const handleOpenPopup = (post: Postagem) => {
     setPostagemPai(post)
     setIsPopupOpen(true);
+    setActivePopupId(null); // Fecha o popup de opções
   };
   const handleClosePopup = () => {
     setIsPopupOpen(false);
+    setActivePopupId(null); // Fecha o popup de opções também
   };
   const handlePostTweet = (tweet: string) => {
     setCurrenComments((prev) => prev + 1)
@@ -75,6 +88,39 @@ const Tweet: React.FC<TweetProps> = ({
       alert('link copiado');
     }
   }
+
+  const handleDeletePost = async () => {
+    if (confirm('Tem certeza que deseja deletar esta postagem?')) {
+      try {
+        setActivePopupId(null);
+        const response = await Api.deletePost(id);
+        if (response.status === 204) {
+          showAlert('Postagem deletada com sucesso!', 'success');
+          router.reload();
+        }
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          if (error.response?.status === 404) {
+            setActivePopupId(null);
+            return showAlert('Postagem não encontrada', 'warning');
+          }
+        }
+        return showAlert('Erro ao deletar postagem', 'danger');
+      }
+    }
+    setActivePopupId(null);
+  };
+
+  const handleReportPost = () => {
+    alert('Postagem reportada! ' + id);
+    setActivePopupId(null);
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(`${window.location.origin}/postagem/${id}`);
+    alert('Link copiado para a área de transferência!');
+    setActivePopupId(null);
+  };
 
   const handleLike = async () => {
     if (isLiked) {
@@ -97,7 +143,26 @@ const Tweet: React.FC<TweetProps> = ({
     }
   }, [])
 
-  return (
+  // Fechar popup ao clicar fora
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+
+      // Se clicou fora do popup de opções, fecha ele
+      if (showOptionsPopup && !target.closest(`.${styles.moreOptions}`)) {
+        setActivePopupId(null);
+        event.stopPropagation(); // Impede a propagação para evitar abrir a postagem
+      }
+    };
+
+    if (showOptionsPopup) {
+      document.addEventListener('click', handleClickOutside, true); // Usa capture phase
+    }
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  }, [showOptionsPopup, setActivePopupId]); return (
     <div className={styles.tweetContainer} >
       {isVisibleSubmitPost && (id && typeof id === "string" || typeof id === "number") && (
         <TweetPopup
@@ -122,19 +187,24 @@ const Tweet: React.FC<TweetProps> = ({
           />
         </div>
 
+
         <div className={styles.tweetBody} style={{ 'cursor': 'pointer' }} onClick={() => { router.push(`/postagem/${id}`) }}>
           <div className={styles.tweetHeader}>
             <span className={styles.name}>{name}</span>
             <span className={styles.username}>@{username}</span>
-            <span className={styles.timestamp}>{timestamp}</span>
+            <span className={styles.timestamp}>• {timestamp}</span>
+
           </div>
 
           <p className={styles.tweetText}> {content}</p>
 
+
           <div className={styles.tweetActions}>
             <button className={styles.actionButton} onClick={(e) => {
               e.stopPropagation()
-              setIsVisibleSubmitPost(!isVisibleSubmitPost); handleOpenPopup({
+              setActivePopupId(null); // Fecha o popup de opções se estiver aberto
+              setIsVisibleSubmitPost(!isVisibleSubmitPost);
+              handleOpenPopup({
                 name: name,
                 username: username,
                 id_postagem: id,
@@ -192,6 +262,40 @@ const Tweet: React.FC<TweetProps> = ({
               </svg>
             </button>
           </div>
+        </div>
+        <div className={styles.moreOptions} onClick={(e) => {
+          e.stopPropagation();
+          setIsPopupOpen(false); // Fecha o popup de comentários se estiver aberto
+          setIsVisibleSubmitPost(false); // Fecha o popup de comentários se estiver aberto
+          setActivePopupId(showOptionsPopup ? null : id);
+        }}>
+          <BsThreeDots size={"1.5em"} className={styles.moreOptionsIcon} />
+          {showOptionsPopup && (
+            <div className={styles.optionsPopup} onClick={(e) => e.stopPropagation()}>
+              <button className={styles.optionItem} onClick={handleCopyLink}>
+                <svg className={styles.optionIcon} viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M18.36 5.64c-1.95-1.96-5.11-1.96-7.07 0L9.88 7.05 8.46 5.64l1.42-1.42c2.73-2.73 7.16-2.73 9.9 0 2.73 2.74 2.73 7.17 0 9.9l-1.42 1.42-1.41-1.42 1.41-1.41c1.96-1.96 1.96-5.12 0-7.07z" />
+                  <path d="M8.05 16.54c1.96 1.96 5.12 1.96 7.07 0l1.41-1.41 1.42 1.41-1.42 1.42c-2.73 2.73-7.16 2.73-9.9 0-2.73-2.74-2.73-7.17 0-9.9l1.42-1.42 1.41 1.42-1.41 1.41c-1.96 1.96-1.96 5.12 0 7.07z" />
+                  <path d="M14.12 9.88l-4.24 4.24-1.41-1.41 4.24-4.24z" />
+                </svg>
+                Copiar link
+              </button>
+
+              <button className={styles.optionItem} onClick={handleReportPost}>
+                <svg className={styles.optionIcon} viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                </svg>
+                Reportar postagem
+              </button>
+
+              {username === userProfileUsername && (<button className={styles.optionItemDelete} onClick={handleDeletePost}>
+                <svg className={styles.optionIcon} viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                </svg>
+                Deletar postagem
+              </button>)}
+            </div>
+          )}
         </div>
       </div>
     </div >
