@@ -37,7 +37,7 @@ function formatRelativeTime(timestamp: string | number | Date): string {
             day: "2-digit",
             month: "2-digit",
             year: "numeric"
-        }); 
+        });
     }
 }
 
@@ -134,6 +134,7 @@ export default function Comunidade({ postsProp, authData }: Props) {
                 <div className={styles.comunidadePosts}>
                     {posts.map((post, index) => (
                         <UserPost
+                            userProfileUsername={authData?.username}
                             alredyLiked={post.alredyliked}
                             key={0 || index}
                             id={post.id_postagem}
