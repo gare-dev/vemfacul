@@ -15,7 +15,6 @@ import { GetServerSideProps } from "next";
 import AuthDataType from "@/types/authDataType";
 import { MdVerified } from "react-icons/md";
 import ProfilePopup, { UserImages } from "@/components/ProfilePicture";
-import { io, Socket } from "socket.io-client"
 
 type Postagem = {
     id_postagem: string | number;
@@ -34,7 +33,6 @@ type Props = {
     xTraceError?: string | null;
 }
 
-let socket: Socket
 
 function formatRelativeTime(timestamp: string | number | Date): string {
     const now = new Date();
@@ -117,7 +115,6 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
     const [isVisible, setIsVisible] = useState(false);
     const [selected, setSelected] = useState<'foto' | 'header'>('foto');
     const [user, setUser] = useState<string | null>(null);
-    const [n_notifications, setNotifications] = useState<number>(0)
     const [isVisibleSubmitPost, setIsVisibleSubmitPost] = useState(false);
     const [postagens,] = useState<Postagem[]>(postagensProp || []);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -204,15 +201,6 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
                 console.log(error);
             }
 
-            socket = io("http://localhost:3002")
-
-            // mandar o token
-            // socket.emit("register", 48)
-
-            console.log("Conectei")
-            socket.on("io_notifications", (count: number) => {
-                setNotifications(count)
-            })
         })()
     }, []);
 
@@ -345,8 +333,7 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
                         <p className={styles.description}>{userProfile.descricao}</p>
                         {(userProfile.nivel !== "Cursinho" && userProfile.username) && <h3 className={styles.questoesCorretas}> Questões corretas: {userProfile.acertosuser}</h3>}
 
-                        <p className={styles.description}>{userProfile.descricao}</p>
-                        {(userProfile.nivel !== "Cursinho" && userProfile.username) && <h3 className={styles.n_notificacao}> notificaçõesa ativas: {n_notifications}</h3>}
+                      
 
                         {userProfile.username && <div className={styles.universityInterests}>
                             <h3 className={styles.interestsTitle}>{userProfile.nivel === "Aluno EM" ? "Vestibulares" : userProfile.nivel === "Cursinho" ? "" : "Matérias Lecionadas"}</h3>
