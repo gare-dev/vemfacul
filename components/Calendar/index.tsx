@@ -151,7 +151,8 @@ export const ContinuousCalendar: React.FC<ContinuousCalendarProps> = ({ onClick,
                                         className={style.title}
                                         onClick={(e) => { e.stopPropagation(); setCalendarData(opcao); popUpClick?.() }}
                                         style={{
-                                            color: opcao.color ? "#fff" : "#000",
+                                            color: opcao.color ? "#fff" : "#fff",
+                                            fontWeight: "600",
                                             backgroundColor: opcao.cursinho ? "rgba(0, 0, 0, 0.5)" : "transparent",
                                         }}
                                     >{opcao.main_title}

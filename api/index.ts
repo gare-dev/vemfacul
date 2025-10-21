@@ -109,7 +109,7 @@ class _Api {
     }
   }
 
- 
+
   public async editProfile(formData: any) {
 
     try {
@@ -409,6 +409,16 @@ class _Api {
 
   public async getUsernameLists(username: string) {
     return await this._instance.get(`/user/username/${username}`)
+  }
+
+  public async deletePost(id_postagem: string | number) {
+    return await this._instance.delete(`/user/post/${id_postagem}`)
+  }
+
+  public async reportPost(id_post: string) {
+    return await this._instance.post('/user/post/report', {
+      id_post
+    })
   }
 }
 

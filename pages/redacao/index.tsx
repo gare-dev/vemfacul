@@ -4,9 +4,9 @@ import Api from "@/api";
 import { GetServerSideProps } from "next";
 import AuthDataType from "@/types/authDataType";
 import Sidebar from "@/components/Sidebar";
-import formatarRedacao from "@/utils/formatEssayText"
 import LoadingBar from "@/components/LoadingBar";
 import useAlert from "@/hooks/useAlert";
+import { AxiosError } from "axios";
 
 type Redacao = {
     id_essay?: number;
@@ -55,8 +55,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 }
 
 export default function Redacao({ userEssays, authData }: Props) {
-    const [redacoes, setRedacoes] = useState<Redacao[]>(userEssays);
-
+    const [redacoes,] = useState<Redacao[]>(userEssays);
     const [modoCriar, setModoCriar] = useState(false);
     const [textoNovaRedacao, setTextoNovaRedacao] = useState("");
     const [titleNovaRedacao, setTitleNovaRedacao] = useState("")
@@ -94,12 +93,24 @@ export default function Redacao({ userEssays, authData }: Props) {
             startLoading()
             const response = await Api.insertEssay(textoNovaRedacao, themeNovaRedacao, titleNovaRedacao)
             if (response.status === 201) {
-                const nova_redacao = response.data.data[0];
-                setRedacoes((prev) => [...prev, nova_redacao]);
-                setRedacaoSelecionada(nova_redacao);
+                // const nova_redacao = response.data.data[0];
+                // setRedacoes((prev) => [...prev, nova_redacao]);
+                // setRedacaoSelecionada(nova_redacao);
+                showAlert("Redação enviada com sucesso! Você será notificado quando a nota estiver disponível.", "success")
+                setTextoNovaRedacao("");
+                setModoCriar(false);
+                setEnviando(false);
+                setTitleNovaRedacao("")
+                setThemeNovaRedacao("")
             }
 
         } catch (error) {
+            if (error instanceof AxiosError) {
+                if (error.response?.data.code === "ESSAYS_LIMIT") {
+                    setEnviando(false)
+                    return showAlert("Limite de 3 redações mensais atingida.", "warning")
+                }
+            }
             console.log("Erro ao inserir redação. " + error)
         } finally {
             stopLoading()
@@ -112,12 +123,6 @@ export default function Redacao({ userEssays, authData }: Props) {
 
         setEnviando(true);
         await enviarRedacao();
-
-        setTextoNovaRedacao("");
-        setModoCriar(false);
-        setEnviando(false);
-        setTitleNovaRedacao("")
-        setThemeNovaRedacao("")
     }
 
     function handleSelecionarRedacao(id: number) {
@@ -217,7 +222,7 @@ export default function Redacao({ userEssays, authData }: Props) {
                             <div className={styles.feedbackContainer}>
                                 <h3>Feedback:</h3>
                                 <p className={styles.feedbackTexto}>
-                                    {formatarRedacao(redacaoSelecionada.notes ?? "")}
+                                    {redacaoSelecionada.notes}
                                 </p>
                                 <p className={styles.notaTexto}>
                                     Nota:{" "}
