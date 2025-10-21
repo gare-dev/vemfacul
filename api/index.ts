@@ -408,6 +408,12 @@ class _Api {
   public async deletePost(id_postagem: string | number) {
     return await this._instance.delete(`/user/post/${id_postagem}`)
   }
+
+  public async reportPost(id_post: string) {
+    return await this._instance.post('/user/post/report', {
+      id_post
+    })
+  }
 }
 
 const Api = new _Api(process.env.NEXT_PUBLIC_API_URL ?? "");

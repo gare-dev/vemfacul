@@ -539,7 +539,7 @@ const badWordsList = [
     "yellow showers",
     "yiffy",
     "zoophilia",
-    "🖕",
+
 ]
 
 export default badWordsList

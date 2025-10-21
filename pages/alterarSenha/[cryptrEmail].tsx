@@ -28,7 +28,7 @@ const AlterarSenha = () => {
                     const password = (e.target as HTMLFormElement).password.value;
                     // console.log("Enviando para resetPassword:", { password, cryptrEmail });
                     try {
-                        await Api.resetPassword(password, cryptrEmail);
+                        await Api.resetPassword(password, decodeURIComponent(cryptrEmail));
                         setSucess(true);
                         setValue('Senha redefinida com sucesso.')
                         router.push('/');

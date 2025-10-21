@@ -91,6 +91,8 @@ export default function Comunidade({ postsProp, authData }: Props) {
         console.log(tweet)
     }
 
+    console.log(posts)
+
     // const handleGetPosts = async () => {
     //     try {
     //         const response = await Api.selectAllPosts();
@@ -134,6 +136,7 @@ export default function Comunidade({ postsProp, authData }: Props) {
                 <div className={styles.comunidadePosts}>
                     {posts.map((post, index) => (
                         <UserPost
+                            // id_user={post.id_user}
                             userProfileUsername={authData?.username}
                             alredyLiked={post.alredyliked}
                             key={0 || index}

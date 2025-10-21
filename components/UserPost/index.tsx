@@ -21,6 +21,7 @@ interface TweetProps {
   comments: number;
   date: string
   userProfileUsername?: string
+  // id_user: string
 
 }
 
@@ -45,6 +46,7 @@ const Tweet: React.FC<TweetProps> = ({
   likes,
   comments,
   userProfileUsername,
+
 }) => {
   const router = useRouter()
   const [isLiked, setIsLiked] = useState(alredyLiked);
@@ -67,11 +69,11 @@ const Tweet: React.FC<TweetProps> = ({
   const handleOpenPopup = (post: Postagem) => {
     setPostagemPai(post)
     setIsPopupOpen(true);
-    setActivePopupId(null); // Fecha o popup de opções
+    setActivePopupId(null);
   };
   const handleClosePopup = () => {
     setIsPopupOpen(false);
-    setActivePopupId(null); // Fecha o popup de opções também
+    setActivePopupId(null);
   };
   const handlePostTweet = (tweet: string) => {
     setCurrenComments((prev) => prev + 1)
@@ -111,8 +113,22 @@ const Tweet: React.FC<TweetProps> = ({
     setActivePopupId(null);
   };
 
-  const handleReportPost = () => {
-    alert('Postagem reportada! ' + id);
+  const handleReportPost = async () => {
+    try {
+      const response = await Api.reportPost(String(id));
+
+      if (response.status === 201) {
+        showAlert('Postagem reportada com sucesso!', 'success');
+      }
+
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 404) {
+          setActivePopupId(null);
+          return showAlert('Postagem não encontrada', 'warning');
+        }
+      }
+    }
     setActivePopupId(null);
   };
 
