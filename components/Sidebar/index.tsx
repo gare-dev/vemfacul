@@ -5,7 +5,8 @@ import { useRouter } from "next/router"
 import { JSX, useEffect, useState } from "react"
 import { FaBars, FaCalendar, FaCalendarAlt, FaRegUserCircle, FaSearch, FaUsers } from "react-icons/fa"
 import { FaListCheck } from "react-icons/fa6"
-import { FaBell } from "react-icons/fa"
+// import { FaBell } from "react-icons/fa"
+import SetNotifications from "../setNotifications"
 import { IoMdPeople } from "react-icons/io"
 import { LuFilePenLine } from "react-icons/lu"
 import { MdExitToApp, MdOutlineListAlt, MdQuiz } from "react-icons/md"
@@ -21,7 +22,7 @@ interface props {
 }
 
 type NavItemsType = {
-    icon: JSX.Element
+    icon: JSX.Element 
     name: string
     path?: string
     label?: string
