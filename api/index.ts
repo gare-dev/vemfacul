@@ -38,6 +38,8 @@ class _Api {
     //   // }
     //   return config;
     // });
+
+    
   }
   public setCookie(cookie: string) {
     this._instance.defaults.headers.common['Cookie'] = cookie;
@@ -241,6 +243,10 @@ class _Api {
 
   public async selectAllPosts() {
     return await this._instance.get('/post')
+  }
+
+  public async getNotificationsNull() {
+    return await this._instance.get("/notifications")
   }
 
   public async insertCursinho(formData: any) {

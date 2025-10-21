@@ -1,0 +1,52 @@
+.wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.icon {
+  font-size: 1.8rem;
+  color: #444;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+@keyframes ring {
+  0% { transform: rotate(0); }
+  15% { transform: rotate(15deg); }
+  30% { transform: rotate(-10deg); }
+  45% { transform: rotate(5deg); }
+  60% { transform: rotate(-5deg); }
+  75% { transform: rotate(2deg); }
+  100% { transform: rotate(0); }
+}
+
+.ring {
+  animation: ring 0.7s ease;
+}
+
+.count {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: #ff3b30;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 2px 5px;
+  border-radius: 999px;
+  line-height: 1;
+  min-width: 18px;
+  text-align: center;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+/* ✨ Pulso suave ao atualizar */
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.9; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.pulse {
+  animation: pulse 0.4s ease;
+}

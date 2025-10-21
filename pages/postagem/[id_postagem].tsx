@@ -181,7 +181,7 @@ export default function SinlgePostagem({ authData, postData, comentariosData }: 
                             profileImage={post.foto}
                             timestamp={post.created_at!}
                             alredyLiked={post.alredyliked}
-                            likes={post.total_likes}
+                            likes={+post.total_likes}
                             comments={+post.total_comments}
                             userImage={userInfo[1]}
                         />
@@ -205,8 +205,8 @@ export default function SinlgePostagem({ authData, postData, comentariosData }: 
                                 content={comentario.content}
                                 profileImage={comentario.foto}
                                 timestamp={comentario.created_at ? (typeof comentario.created_at === "string" ? comentario.created_at : new Date(comentario.created_at).getDate().toString() + " de " + monthsMap[new Date(comentario.created_at).getMonth()]) : ""}
-                                alredyLiked={false}
-                                likes={0}
+                                alredyLiked={+comentario.alredyliked}
+                                likes={comentario.total_likes}
                                 comments={comentario.total_comments}
                             />
                         ))}

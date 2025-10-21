@@ -95,8 +95,8 @@ export default function Explorar({ authData, topUsers }: Props) {
 
     return (
         <div className={styles.container}>
-            {loading && <LoadingBar progress={progress} />}
             <Sidebar authData={authData} />
+            {loading && <LoadingBar progress={progress} />}
             <aside className={styles.sidebar}>
                 <TrendingUsers
                     users={trendingUsers}

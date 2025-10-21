@@ -33,6 +33,7 @@ type Props = {
     xTraceError?: string | null;
 }
 
+
 function formatRelativeTime(timestamp: string | number | Date): string {
     const now = new Date();
     const postDate = new Date(timestamp);
@@ -199,6 +200,7 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
             } catch (error) {
                 console.log(error);
             }
+
         })()
     }, []);
 
@@ -330,6 +332,8 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
 
                         <p className={styles.description}>{userProfile.descricao}</p>
                         {(userProfile.nivel !== "Cursinho" && userProfile.username) && <h3 className={styles.questoesCorretas}> Questões corretas: {userProfile.acertosuser}</h3>}
+
+                      
 
                         {userProfile.username && <div className={styles.universityInterests}>
                             <h3 className={styles.interestsTitle}>{userProfile.nivel === "Aluno EM" ? "Vestibulares" : userProfile.nivel === "Cursinho" ? "" : "Matérias Lecionadas"}</h3>
