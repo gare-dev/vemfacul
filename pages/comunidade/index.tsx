@@ -91,34 +91,6 @@ export default function Comunidade({ postsProp, authData }: Props) {
         console.log(tweet)
     }
 
-    console.log(posts)
-
-    // const handleGetPosts = async () => {
-    //     try {
-    //         const response = await Api.selectAllPosts();
-
-    //         if (response.status === 200) {
-    //             setPosts(response.data.data);
-    //         }
-    //     } catch (error) {
-    //         if (error instanceof AxiosError) {
-    //             if (error.code === 'ERR_NETWORK') {
-    //                 showAlert('Não foi possível obter os posts, tente novamente mais tarde.', 'danger');
-    //             }
-    //             if (error.response?.data.code === "POSTAGEM_NOT_FOUND") {
-    //                 showAlert('Nenhum post encontrado.', 'danger');
-    //             }
-    //         }
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     handleGetPosts();
-    // }, [])
-
-
     return (
         <>
 

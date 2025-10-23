@@ -18,6 +18,7 @@ export const RESERVED_ROUTES = [
     'notificacoes',
     'alterarSenha',
     'manifest.json',
+    'notificacoes',
     'robots.txt',
     'sitemap.xml',
     'api',

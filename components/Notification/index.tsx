@@ -30,18 +30,11 @@ export default function Notification() {
     handleGetNotification(mode);
   }, [mode]);
 
-  useEffect(() => {
 
-  }, [notification])
-
-  useEffect(() => {
-    console.log(notification)
-  }, [notification])
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
       <h2 className="text-2xl font-bold mb-6">Notificações</h2>
-
       <div className="flex space-x-4 mb-6">
         <button
           style={{ backgroundColor: mode === "postagem" ? "#778CFE" : "" }}
