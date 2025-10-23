@@ -2,13 +2,12 @@ import { FaBell } from "react-icons/fa";
 import styles from "./styles.module.scss"
 import { useState, useEffect } from "react";
 import Io from "@/utils/ioServer";
-import { Socket } from "socket.io-client";
 
 export default function SetNotifications() {
     const [count, setCount] = useState<number>(0)
     const [animate, setAnimate] = useState(false);
-    const [isConnected, setIsConnected] = useState(false);
-    const [connection, setConnection] = useState<Socket | null>(null);
+    const [, setIsConnected] = useState(false);
+    // const [connection, setConnection] = useState<Socket | null>(null);
 
     useEffect(() => {
         console.log("🚀 Inicializando componente de notificações");
@@ -22,7 +21,7 @@ export default function SetNotifications() {
         // Verifica conexão inicial
         checkConnection();
 
-        // Configura listener para notificações
+
         Io.onNotifications((n: number) => {
             console.log("🎯 CALLBACK EXECUTADO - Notificação recebida:", n);
             setCount(n);
@@ -46,17 +45,17 @@ export default function SetNotifications() {
     }, [count])
 
     // Função de teste para debug
-    const handleTestNotification = () => {
-        console.log("🧪 Testando notificação manual...");
-        const status = Io.getConnectionStatus();
-        console.log("Status atual:", status);
+    // const handleTestNotification = () => {
+    //     console.log("🧪 Testando notificação manual...");
+    //     const status = Io.getConnectionStatus();
+    //     console.log("Status atual:", status);
 
-        // Testa callback direto
-        console.log("🎯 Executando callback diretamente...");
-        setCount(prev => prev + 1);
-        setAnimate(true);
-        setTimeout(() => setAnimate(false), 700);
-    };
+    //     // Testa callback direto
+    //     console.log("🎯 Executando callback diretamente...");
+    //     setCount(prev => prev + 1);
+    //     setAnimate(true);
+    //     setTimeout(() => setAnimate(false), 700);
+    // };
 
     return (
         <div className={styles.wrapper}>
