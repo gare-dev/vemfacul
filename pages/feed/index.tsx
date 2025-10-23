@@ -13,7 +13,6 @@ import { useCallback, useState } from "react";
 type Props = {
     cursinho: Course[] | null;
     authData?: AuthDataType | null;
-    xTraceError?: string | null;
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
@@ -29,7 +28,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
             props: {
                 cursinho: cursinho.status === 200 ? cursinho.data.data : null,
                 authData: authData.data.code === "PROFILE_INFO" ? authData.data.data : null,
-                xTraceError: null
             }
         }
     } catch (error) {
@@ -39,7 +37,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
                 props: {
                     cursinho: null,
                     authData: null,
-                    xTraceError: error.response?.headers["x-trace-id"]
                 }
             }
         }
@@ -52,7 +49,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
     }
 }
 
-export default function Feed({ cursinho, authData, xTraceError }: Props) {
+export default function Feed({ cursinho, authData }: Props) {
     const [filteredData, setFilteredData] = useState<Course[]>(cursinho || []);
 
     const handleFilter = useCallback((filtered: Course[]) => {
@@ -66,7 +63,7 @@ export default function Feed({ cursinho, authData, xTraceError }: Props) {
         <div>
             {isLoading && <LoadingComponent isLoading={isLoading} />}
 
-            <Sidebar authData={authData} traceID={xTraceError} />
+            <Sidebar authData={authData} />
 
             <div className={styles.feedPageContainer}>
                 <Filter data={cursinho!} onFilter={handleFilter} />

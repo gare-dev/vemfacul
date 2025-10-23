@@ -3,16 +3,16 @@ import AuthDataType from "@/types/authDataType"
 import getAuth from "@/utils/getAuth"
 import { useRouter } from "next/router"
 import { JSX, useEffect, useState } from "react"
-import { FaBars, FaCalendar, FaCalendarAlt, FaRegUserCircle, FaSearch, FaUsers } from "react-icons/fa"
+import { FaBars, FaBell, FaCalendar, FaCalendarAlt, FaRegUserCircle, FaSearch, FaUsers } from "react-icons/fa"
 import { FaListCheck } from "react-icons/fa6"
 // import { FaBell } from "react-icons/fa"
-import SetNotifications from "../setNotifications"
 import { IoMdPeople } from "react-icons/io"
 import { LuFilePenLine } from "react-icons/lu"
 import { MdExitToApp, MdOutlineListAlt, MdQuiz } from "react-icons/md"
 import { RiPagesLine } from "react-icons/ri"
 import PopupMissLogin from "../MissLogin"
 import Image from "next/image"
+import SetNotifications from "../setNotifications"
 
 interface props {
     setInfo?: React.Dispatch<React.SetStateAction<string[]>>
@@ -22,7 +22,7 @@ interface props {
 }
 
 type NavItemsType = {
-    icon: JSX.Element 
+    icon: JSX.Element
     name: string
     path?: string
     label?: string
@@ -65,7 +65,8 @@ export default function Sidebar(props: props) {
         { icon: <RiPagesLine />, name: "Feed", path: "/feed" },
         { icon: <FaSearch />, name: "Explorar", path: "/explorar" },
         { icon: <IoMdPeople />, name: "Comunidade", path: "/comunidade" },
-        { icon: <FaBell />, name: "Notificações", path: "/Notificacoes" },
+        { icon: <SetNotifications />, name: "Notificações", path: "/Notificacoes" },
+        // TODO componente inteiro importador ao inves de so o icone
         { icon: <FaCalendar />, name: "Calendário Geral", path: "/eventos" },
         { icon: <LuFilePenLine />, name: "Correção de Redação", path: "/redacao" },
         { icon: <MdQuiz />, name: "Exercícios", path: "/exercicios" },
@@ -78,7 +79,7 @@ export default function Sidebar(props: props) {
         { icon: <RiPagesLine />, name: "Feed", path: "/feed" },
         { icon: <FaSearch />, name: "Explorar", path: "/explorar" },
         { icon: <IoMdPeople />, name: "Comunidade", path: "/comunidade" },
-        { icon: <FaBell />, name: "Notificações", path: "/Notificacoes" },
+        { icon: <SetNotifications />, name: "Notificações", path: "/Notificacoes" },
         { icon: <FaCalendar />, name: "Calendário Geral", path: "/eventos" },
         { icon: <LuFilePenLine />, name: "Correção de Redação", path: "/redacao" },
         { icon: <MdQuiz />, name: "Exercícios", path: "/exercicios" },
@@ -117,7 +118,6 @@ export default function Sidebar(props: props) {
             return props.setInfo?.([props.authData.nome, props.authData.foto, props.authData.username, props.authData.role])
         }
         setIsMissingLoginShown(true)
-
     }, [props.authData])
 
     useEffect(() => {
