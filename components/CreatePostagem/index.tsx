@@ -37,6 +37,7 @@ const TweetPopup: React.FC<TweetPopupProps> = ({
 }) => {
     const [tweetText, setTweetText] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     if (!isOpen) return null;
 
@@ -68,7 +69,9 @@ const TweetPopup: React.FC<TweetPopupProps> = ({
 
     const handlePostTweet = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!validateTweet(tweetText)) return;
+        setLoading(true)
+
+        if (!validateTweet(tweetText)) return setLoading(false);
 
         try {
             const response = await Api.createPostagem(tweetText);
@@ -83,18 +86,22 @@ const TweetPopup: React.FC<TweetPopupProps> = ({
                     setError('Ocorreu um erro ao postar o tweet. Tente novamente mais tarde.');
                 }
             }
+        } finally {
+            setLoading(false)
         }
     };
 
     const handlePostComentario = async (e: React.FormEvent) => {
+        setLoading(true)
         e.preventDefault();
 
         if (!postagemID_pai || typeof postagemID_pai !== 'string') {
             setError('Erro: comentário sem referência à postagem pai.');
+            setLoading(false)
             return;
         }
 
-        if (!validateTweet(tweetText)) return;
+        if (!validateTweet(tweetText)) return setLoading(false);
 
         try {
             const response = await Api.createComentario(postagemID_pai, tweetText);
@@ -110,6 +117,8 @@ const TweetPopup: React.FC<TweetPopupProps> = ({
                     setError('Ocorreu um erro ao postar o tweet. Tente novamente mais tarde.');
                 }
             }
+        } finally {
+            setLoading(false)
         }
     };
 
@@ -157,8 +166,8 @@ const TweetPopup: React.FC<TweetPopupProps> = ({
                 <button
                     className={styles.postButton}
                     onClick={coment ? handlePostComentario : handlePostTweet}
-                    disabled={tweetText.trim().length === 0}
-                    aria-disabled={tweetText.trim().length === 0}
+                    disabled={tweetText.trim().length === 0 || loading}
+                    aria-disabled={tweetText.trim().length === 0 || loading}
                 >
                     Postar
                 </button>

@@ -58,7 +58,8 @@
     padding: 0;
     overflow-y: auto;
     background: white;
-    
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 .userItem {
@@ -67,8 +68,6 @@
     justify-content: space-between;
     padding: 0.75rem 1rem;
     border-bottom: 1px solid #D0D7FF;
-    border-bottom-left-radius: .5rem;
-    border-bottom-right-radius: .5rem;
 }
 
 .avatar {
