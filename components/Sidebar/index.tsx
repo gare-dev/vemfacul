@@ -5,13 +5,14 @@ import { useRouter } from "next/router"
 import { JSX, useEffect, useState } from "react"
 import { FaBars, FaCalendar, FaCalendarAlt, FaRegUserCircle, FaSearch, FaUsers } from "react-icons/fa"
 import { FaListCheck } from "react-icons/fa6"
-import { FaBell } from "react-icons/fa"
+// import { FaBell } from "react-icons/fa"
 import { IoMdPeople } from "react-icons/io"
 import { LuFilePenLine } from "react-icons/lu"
 import { MdExitToApp, MdOutlineListAlt, MdQuiz } from "react-icons/md"
 import { RiPagesLine } from "react-icons/ri"
 import PopupMissLogin from "../MissLogin"
 import Image from "next/image"
+import SetNotifications from "../setNotifications"
 
 interface props {
     setInfo?: React.Dispatch<React.SetStateAction<string[]>>
@@ -29,13 +30,28 @@ type NavItemsType = {
 }
 
 export default function Sidebar(props: props) {
+    // Constantes para manter consistência com CSS
+    const MOBILE_BREAKPOINT = 1024;
+    const HEIGHT_BREAKPOINT = 751;
+    const ITEM_HEIGHT_LARGE = 56;
+    const ITEM_HEIGHT_SMALL = 45;
+
     const router = useRouter()
     const isMobile = useIsMobile();
     const [authData,] = useState<AuthDataType | null | undefined>(props.authData)
     const [profileOptionsVisible, setProfileOptionsVisible] = useState<boolean>(false)
     const [isMissingLoginShown, setIsMissingLoginShown] = useState<boolean>(false)
     const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false)
-    const [innerHeight, setInnerHeight] = useState<number>(typeof window !== 'undefined' ? window.innerHeight : 0);
+    const [innerHeight, setInnerHeight] = useState<number>(800); // Valor padrão mais realista
+    const [isClient, setIsClient] = useState<boolean>(false); // Para detectar hidratação
+
+    // Effect para detectar quando o componente está no cliente
+    useEffect(() => {
+        setIsClient(true);
+        if (typeof window !== 'undefined') {
+            setInnerHeight(window.innerHeight);
+        }
+    }, []);
 
     const sidebarWidth = isMobile ? (isSidebarOpen ? "260px" : "0px") : undefined;
     const headerOpacity = isMobile ? (isSidebarOpen ? 1 : 0) : undefined;
@@ -49,7 +65,7 @@ export default function Sidebar(props: props) {
 
         useEffect(() => {
             function handleResize() {
-                setIsMobile(window.innerWidth < 1024);
+                setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
             }
 
             handleResize();
@@ -64,7 +80,8 @@ export default function Sidebar(props: props) {
         { icon: <RiPagesLine />, name: "Feed", path: "/feed" },
         { icon: <FaSearch />, name: "Explorar", path: "/explorar" },
         { icon: <IoMdPeople />, name: "Comunidade", path: "/comunidade" },
-        { icon: <FaBell />, name: "Notificações", path: "/Notificacoes" },
+        { icon: <SetNotifications />, name: "Notificações", path: "/Notificacoes" },
+        // TODO componente inteiro importador ao inves de so o icone
         { icon: <FaCalendar />, name: "Calendário Geral", path: "/eventos" },
         { icon: <LuFilePenLine />, name: "Correção de Redação", path: "/redacao" },
         { icon: <MdQuiz />, name: "Exercícios", path: "/exercicios" },
@@ -77,7 +94,7 @@ export default function Sidebar(props: props) {
         { icon: <RiPagesLine />, name: "Feed", path: "/feed" },
         { icon: <FaSearch />, name: "Explorar", path: "/explorar" },
         { icon: <IoMdPeople />, name: "Comunidade", path: "/comunidade" },
-        { icon: <FaBell />, name: "Notificações", path: "/Notificacoes" },
+        { icon: <SetNotifications />, name: "Notificações", path: "/Notificacoes" },
         { icon: <FaCalendar />, name: "Calendário Geral", path: "/eventos" },
         { icon: <LuFilePenLine />, name: "Correção de Redação", path: "/redacao" },
         { icon: <MdQuiz />, name: "Exercícios", path: "/exercicios" },
@@ -102,7 +119,36 @@ export default function Sidebar(props: props) {
 
     const navItems = role === "admin" ? adminItems : role === "dono de cursinho" ? cursinhoItems : userItems
 
-    const activeIndex = navItems.findIndex(item => item.path === router.pathname);
+    const isActiveRoute = (itemPath: string | undefined) => {
+        if (!itemPath) return false;
+
+        if (itemPath === `/${authData?.username}` && router.pathname === '/[username]') {
+            return true;
+        }
+
+        if (itemPath === router.pathname) {
+            return true;
+        }
+
+        if (itemPath !== '/' && router.pathname.startsWith(itemPath)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    const activeIndex = navItems.findIndex(item => isActiveRoute(item.path));
+
+    const handleNavigation = (path: string | undefined) => {
+        if (path) {
+            if (isMobile) {
+                setIsSidebarOpen(false); // Fecha o sidebar primeiro
+                setTimeout(() => router.push(path), 150); // Pequeno delay para animação
+            } else {
+                router.push(path);
+            }
+        }
+    }
 
     async function handleSignout() {
         if (await getAuth()) {
@@ -116,19 +162,36 @@ export default function Sidebar(props: props) {
             return props.setInfo?.([props.authData.nome, props.authData.foto, props.authData.username, props.authData.role])
         }
         setIsMissingLoginShown(true)
-
     }, [props.authData])
+
+    // Fecha o sidebar no mobile quando a rota muda
+    useEffect(() => {
+        if (isMobile && isSidebarOpen) {
+            setIsSidebarOpen(false)
+        }
+    }, [router.pathname, isMobile])
 
     useEffect(() => {
         if (isMobile) {
             if (isSidebarOpen) {
                 document.body.style.overflow = "hidden";
+                document.body.style.position = "fixed";
+                document.body.style.width = "100%";
             } else {
                 document.body.style.overflow = "auto";
+                document.body.style.position = "static";
+                document.body.style.width = "auto";
             }
+        } else {
+            document.body.style.overflow = "auto";
+            document.body.style.position = "static";
+            document.body.style.width = "auto";
         }
+
         return () => {
             document.body.style.overflow = "auto";
+            document.body.style.position = "static";
+            document.body.style.width = "auto";
         };
     }, [isSidebarOpen, isMobile]);
 
@@ -155,19 +218,36 @@ export default function Sidebar(props: props) {
             setInnerHeight(window.innerHeight);
         }
 
+        // Inicializar o valor correto imediatamente
+        if (typeof window !== 'undefined') {
+            setInnerHeight(window.innerHeight);
+        }
+
         window.addEventListener("resize", handleResize);
 
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    const itemHeight = innerHeight < 751 ? 45 : 56;
+    // Calcula altura do item baseado na altura da tela
+    const getItemHeight = () => {
+        if (!isClient) return ITEM_HEIGHT_LARGE; // Durante SSR, usar valor padrão
+        const currentHeight = innerHeight || window.innerHeight;
+        return currentHeight < HEIGHT_BREAKPOINT ? ITEM_HEIGHT_SMALL : ITEM_HEIGHT_LARGE;
+    };
 
+    const itemHeight = getItemHeight();
+
+    // Calcula a posição do indicador visual
     let top = 0;
+    let showIndicator = false;
 
     if (activeIndex >= 0) {
         top = activeIndex * itemHeight;
+        showIndicator = true;
     } else {
-        top = (navItems.length) * itemHeight;
+        // Esconde o indicador se nenhuma rota está ativa
+        top = -100; // Move para fora da área visível
+        showIndicator = false;
     }
 
     return (
@@ -208,13 +288,15 @@ export default function Sidebar(props: props) {
                             left: 0,
                             width: "100%",
                             height: "100%",
-                            background: "rgba(0,0,0,0.3)",
-                            zIndex: 9999,
+                            background: "rgba(0,0,0,0.5)",
+                            zIndex: 9998,
+                            backdropFilter: "blur(2px)",
                         }}
                         onClick={() => setIsSidebarOpen(false)}
+                        onTouchStart={() => setIsSidebarOpen(false)} // Adiciona suporte para toque
                     />
                 )}
-                <aside style={{ width: sidebarWidth }} className={styles.sidebar}>
+                <aside style={{ width: sidebarWidth }} className={`${styles.sidebar} ${isMobile && isSidebarOpen ? styles.sidebarOpen : ''}`}>
                     <div className={styles.inner}>
                         <div style={{ width: sidebarWidth }} className={styles.header}>
                             <Image height={80} width={80} className={styles.logo} src="/assets/img/logo.png" alt="Logo" />
@@ -225,17 +307,18 @@ export default function Sidebar(props: props) {
                             style={{
                                 '--top': `${top}px`,
                                 '--after-height': `${itemHeight}px`,
+                                '--indicator-opacity': showIndicator ? '1' : '0',
                             } as React.CSSProperties}
                             className={styles.menu}
 
                         >
                             {navItems.map((item, index) => (
                                 <button
-                                    style={isMobile ? { width: sidebarWidth, height: innerHeight < 751 ? "45px" : "56px" } : undefined}
+                                    style={isMobile ? { width: sidebarWidth, height: `${itemHeight}px` } : undefined}
                                     key={index}
-                                    onClick={() => item.path ? router.push(item.path) : null}
+                                    onClick={() => handleNavigation(item.path)}
                                     type="button"
-                                    className={`${router.pathname === item.path ? 'active' : ''} ${styles.menuItem}`}
+                                    className={`${isActiveRoute(item.path) ? 'active' : ''} ${styles.menuItem}`}
                                 >
                                     <span>{item.icon}</span>
                                     <p style={isMobile ? { opacity: headerOpacity } : undefined} className={styles.text}>{item.name}</p>

@@ -17,7 +17,13 @@ export const RESERVED_ROUTES = [
     'config',
     'notificacoes',
     'alterarSenha',
-    'manifest.json'
+    'manifest.json',
+    'notificacoes',
+    'robots.txt',
+    'sitemap.xml',
+    'api',
+    'assets',
+    'favicon.ico',
 ];
 
 export function middleware(request: NextRequest) {

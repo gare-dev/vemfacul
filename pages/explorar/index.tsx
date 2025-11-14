@@ -29,7 +29,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
             Api.getTop10Users("daily")
         ])
 
-
         return {
             props: {
                 topUsers: topUsers.status === 200 ? topUsers.data.data : null,
@@ -95,8 +94,8 @@ export default function Explorar({ authData, topUsers }: Props) {
 
     return (
         <div className={styles.container}>
-            {loading && <LoadingBar progress={progress} />}
             <Sidebar authData={authData} />
+            {loading && <LoadingBar progress={progress} />}
             <aside className={styles.sidebar}>
                 <TrendingUsers
                     users={trendingUsers}

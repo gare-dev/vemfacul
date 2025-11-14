@@ -38,6 +38,8 @@ class _Api {
     //   // }
     //   return config;
     // });
+
+    
   }
   public setCookie(cookie: string) {
     this._instance.defaults.headers.common['Cookie'] = cookie;
@@ -107,7 +109,7 @@ class _Api {
     }
   }
 
- 
+
   public async editProfile(formData: any) {
 
     try {
@@ -241,6 +243,10 @@ class _Api {
 
   public async selectAllPosts() {
     return await this._instance.get('/post')
+  }
+
+  public async getNotificationsNull() {
+    return await this._instance.get("/notifications")
   }
 
   public async insertCursinho(formData: any) {
@@ -403,6 +409,16 @@ class _Api {
 
   public async getUsernameLists(username: string) {
     return await this._instance.get(`/user/username/${username}`)
+  }
+
+  public async deletePost(id_postagem: string | number) {
+    return await this._instance.delete(`/user/post/${id_postagem}`)
+  }
+
+  public async reportPost(id_post: string) {
+    return await this._instance.post('/user/post/report', {
+      id_post
+    })
   }
 }
 

@@ -95,7 +95,9 @@
             width: 6px;
             background: #001ECB;
             translate: 0 var(--top);
-            transition: 0.3s;
+            opacity: var(--indicator-opacity, 1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
         }
 
         button {
@@ -261,12 +263,150 @@
         top: 0;
         border-radius: 0;
         height: 100%;
+        transition: width 0.3s ease;
+
+        // Remove hover effects no mobile
+        &:hover {
+            width: var(--width-closed);
+        }
+
+        // Força largura total quando aberto no mobile
+        &.sidebarOpen {
+            width: var(--width-open) !important;
+        }
+
+        .header {
+            width: 100% !important;
+            justify-content: flex-start;
+            padding-left: 20px;
+
+            h1 {
+                opacity: 1 !important;
+                margin-left: 16px;
+            }
+        }
+
+        .menu {
+            button {
+                width: 100% !important;
+                height: 56px;
+                justify-content: flex-start;
+                padding: 0 20px;
+
+                p {
+                    opacity: 1 !important;
+                    margin-left: 8px;
+                }
+
+                // Remove hover effects no mobile
+                &:not(.active):hover {
+                    background: transparent;
+                }
+
+                // Adiciona feedback visual para toque
+                &:active {
+                    background: #afbbfc;
+                    transform: scale(0.98);
+                    transition: all 0.1s ease;
+                }
+            }
+
+            // Ajusta indicador visual no mobile
+            &::after {
+                display: block;
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        .header {
+            height: 64px;
+            padding-left: 16px;
+        }
+
+        .menu button {
+            height: 52px;
+            padding: 0 16px;
+
+            >span {
+                font-size: 20px;
+            }
+
+            p {
+                font-size: 15px;
+            }
+        }
+    }
+
+    .mobileHeader {
+        top: 8px;
+        left: 8px;
+        padding: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        .header {
+            height: 60px;
+            padding-left: 12px;
+
+            h1 {
+                font-size: 18px;
+                margin-left: 12px;
+            }
+        }
+
+        .menu button {
+            height: 48px;
+            padding: 0 12px;
+
+            >span {
+                font-size: 18px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+        }
+    }
+
+    .mobileHeader {
+        top: 6px;
+        left: 6px;
+        padding: 5px;
     }
 }
 
 @media (max-height: 751px) {
     .menuItem {
+        height: 45px !important;
+    }
+
+    .sidebar .menu button {
         height: 45px;
+    }
+}
+
+@media (max-height: 640px) {
+    .sidebar {
+        .header {
+            height: 56px;
+        }
+
+        .menu button {
+            height: 42px;
+
+            >span {
+                font-size: 16px;
+            }
+
+            p {
+                font-size: 13px;
+            }
+        }
     }
 }
 
@@ -276,10 +416,23 @@
     position: fixed;
     top: 10px;
     left: 5px;
-    z-index: 100000;
+    z-index: 100001;
     background-color: #D0D7FF;
     padding: 8px;
     border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 30, 203, 0.2);
+
+    &:hover {
+        background-color: #c2cbfe;
+        transform: scale(1.05);
+    }
+
+    &:active {
+        background-color: #b1bbfd;
+        transform: scale(0.95);
+    }
 }
 
 .mobileLogo {

@@ -2,10 +2,9 @@
     display: flex;
     justify-content: center;
     /* centro na horizontal */
-    min-height: 100vh;
-    background: #f5f7ff;
     color: #001ECB;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
 }
 
 .main {
@@ -16,6 +15,8 @@
     justify-content: flex-start;
     background: white;
     box-shadow: 0 0 15px rgba(0, 30, 203, 0.1);
+
+
 }
 
 .sidebar {
@@ -26,6 +27,5 @@
     overflow-y: auto;
     width: 100%;
     max-width: 720px;
-    border: 1px solid #001ECB;
 
 }
