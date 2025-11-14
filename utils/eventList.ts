@@ -1,24 +1,21 @@
 export const eventList = [
     {
         name: "REDAÇÃO",
-        value: "redacao",
+        value: "REDAÇÃO",
     },
     {
         name: "SIMULADO",
-        value: "simulado",
+        value: "SIMULADO",
     },
     {
         name: "AULÃO",
-        value: "aulao",
+        value: "AULÃO",
     },
     {
-        name: "EXERCÍCIOS",
-        value: "exercicios",
+        name: "OUTROS",
+        value: "OUTROS",
     },
-    {
-        name: "IMPORTANTES",
-        value: "importante",
-    }
+
 ]
 
 export const cursinhoList = [

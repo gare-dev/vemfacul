@@ -13,7 +13,6 @@ export default function TrendingUsers({ users, period, onPeriodChange }: Props) 
         <section className={styles.trendingSection}>
 
             <UserSearch />
-            {/* <h2 className={styles.title}>Usuários em alta</h2> */}
             <div className={styles.content}>
                 <div className={styles.periodButtons}>
                     {['daily', 'weekly', 'monthly'].map((p) => (

@@ -29,7 +29,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
             Api.getTop10Users("daily")
         ])
 
-
         return {
             props: {
                 topUsers: topUsers.status === 200 ? topUsers.data.data : null,
