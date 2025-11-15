@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import LoadingBar from "@/components/LoadingBar";
 import { PopupOptionsProvider } from "@/context/PopupOptionsContext";
 import { OptionsPopupProvider } from "@/context/OptionsPopupContext";
+import { NotificationsProvider } from "@/context/NotificationsContext";
 
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -62,22 +63,24 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <AlertProvider>
-      <OptionsPopupProvider>
-        <PopupOptionsProvider>
-          <EmailProvider>
-            <PersonalEventDataProvider>
-              <SnackProvider>
-                <OpenPopupProvider>
-                  <CalendarDataProvider>
-                    {loading && <LoadingBar progress={progress} />}
-                    <Component {...pageProps} />
-                  </CalendarDataProvider>
-                </OpenPopupProvider>
-              </SnackProvider>
-            </PersonalEventDataProvider>
-          </EmailProvider >
-        </PopupOptionsProvider>
-      </OptionsPopupProvider>
+      <NotificationsProvider>
+        <OptionsPopupProvider>
+          <PopupOptionsProvider>
+            <EmailProvider>
+              <PersonalEventDataProvider>
+                <SnackProvider>
+                  <OpenPopupProvider>
+                    <CalendarDataProvider>
+                      {loading && <LoadingBar progress={progress} />}
+                      <Component {...pageProps} />
+                    </CalendarDataProvider>
+                  </OpenPopupProvider>
+                </SnackProvider>
+              </PersonalEventDataProvider>
+            </EmailProvider >
+          </PopupOptionsProvider>
+        </OptionsPopupProvider>
+      </NotificationsProvider>
     </AlertProvider>
   )
 
