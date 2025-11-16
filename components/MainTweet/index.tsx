@@ -75,21 +75,21 @@ const MainTweet: React.FC<TweetProps> = ({
         console.log('Tweet posted:', tweet);
     };
 
-const handleLike = async () => {
-    if (isLiked) {
-      const promise = await Api.unLinkePostagem(id);
-      if (promise.status === 201) {
-        setCurrentLikes(currentLikes - 1);
-        setIsLiked(false);
-      }
-    } else {
-      const promise = await Api.likePostagem(id);
-      if (promise.status === 201) {
-        setCurrentLikes(currentLikes + 1);
-        setIsLiked(true);
-      }
-    }
-  };
+    const handleLike = async () => {
+        if (isLiked) {
+            const promise = await Api.unLinkePostagem(id);
+            if (promise.status === 201) {
+                setCurrentLikes(currentLikes - 1);
+                setIsLiked(false);
+            }
+        } else {
+            const promise = await Api.likePostagem(id);
+            if (promise.status === 201) {
+                setCurrentLikes(currentLikes + 1);
+                setIsLiked(true);
+            }
+        }
+    };
     useEffect(() => {
         if (typeof id !== "string" && typeof id !== "number") {
             liked();
@@ -155,7 +155,9 @@ const handleLike = async () => {
                 {/* Profile Image */}
                 <div className={styles.profileImageContainer}>
                     <img
+                        onClick={(e) => { e.stopPropagation(); router.push(`/${username}`) }}
                         src={profileImage}
+                        style={{ 'cursor': 'pointer' }}
                         alt={`${name}'s profile`}
                         className={styles.profileImage}
                     />

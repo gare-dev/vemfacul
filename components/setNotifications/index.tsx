@@ -1,4 +1,4 @@
-import Api from "@/api"
+// import Api from "@/api"
 import { FaBell } from "react-icons/fa";
 import styles from "./styles.module.scss"
 import { useState, useEffect } from "react";
@@ -8,15 +8,15 @@ export default function SetNotifications() {
     const [count, setCount] = useState<number>(0)
     const [animate, setAnimate] = useState(false);
 
-    const handlerNotificationsQuantity = async () => {
-        try {
-            const promise = await Api.getNotificationsActive();
+    // const handlerNotificationsQuantity = async () => {
+    //     try {
+    //         const promise = await Api.getNotificationsActive();
 
-            if (promise.status === 200) { setCount(promise.data.data); }
-        } catch (err) {
-            console.error(err)
-        }
-    }
+    //         if (promise.status === 200) { setCount(promise.data.data); }
+    //     } catch (err) {
+    //         console.error(err)
+    //     }
+    // }
 
 
     useEffect(() => {
