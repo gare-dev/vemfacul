@@ -245,10 +245,6 @@ class _Api {
     return await this._instance.get('/post')
   }
 
-  public async getNotificationsNull() {
-    return await this._instance.get("/notifications")
-  }
-
   public async insertCursinho(formData: any) {
     return await this._instance.post('/course', formData, {
       headers: {
@@ -389,6 +385,11 @@ class _Api {
   public async getTop10Users(mode: string) {
     return await this._instance.get(`/exercicios/questoes/ranking/${mode}`)
   }
+  
+  public async getNotificationsActive() {
+    return await this._instance.get("/notifications/active/count")
+  }
+
   public async getNotifications(mode: string) {
     return await this._instance.get(`/notifications/${mode}`)
   }
