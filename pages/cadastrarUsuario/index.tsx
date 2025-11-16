@@ -522,6 +522,20 @@ export default function CadastrarUsuario() {
         }
     }, [step])
 
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Enter") {
+                e.preventDefault(); // evita submit automático do form
+                if (checkMandatoryFields()) {
+                    setStep(!isFinish ? step + 1 : step);
+                }
+            }
+        };
+
+        document.addEventListener("keydown", handleKeyDown);
+        return () => document.removeEventListener("keydown", handleKeyDown);
+    }, [step, isFinish, user]);
+
     return (
         <div className={s.mainDiv}>
             <div className={s.formDiv}>

@@ -3,8 +3,8 @@ import Api from '@/api';
 import styles from '@/styles/createPostagem.module.scss';
 import postStyles from '@/styles/userPost.module.scss';
 import { AxiosError } from 'axios';
-import containsWord from '@/utils/wordFilter';
-import badWordsList from '@/utils/badWordsList';
+// import containsWord from '@/utils/wordFilter';
+// import badWordsList from '@/utils/badWordsList';
 
 interface TweetPopupProps {
     isOpen: boolean;
@@ -50,10 +50,10 @@ const TweetPopup: React.FC<TweetPopupProps> = ({
             return false;
         }
 
-        if (containsWord(text, badWordsList.filter((w): w is string => typeof w === 'string'))) {
-            setError('Seu post contém palavras inadequadas. Por favor, revise-o.');
-            return false;
-        }
+        // if (containsWord(text, badWordsList.filter((w): w is string => typeof w === 'string'))) {
+        //     setError('Seu post contém palavras inadequadas. Por favor, revise-o.');
+        //     return false;
+        // }
 
         const urlRegex = /(https?:\/\/[^\s]+)|(www\.[^\s]+)|([a-z0-9-]+\.[a-z]{2,})/i;
         if (urlRegex.test(text)) {

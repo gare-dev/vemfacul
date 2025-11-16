@@ -9,6 +9,8 @@ import AlertProvider from "@/context/AlertContext";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import LoadingBar from "@/components/LoadingBar";
+import { PopupOptionsProvider } from "@/context/PopupOptionsContext";
+import { OptionsPopupProvider } from "@/context/OptionsPopupContext";
 
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -60,18 +62,22 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <AlertProvider>
-      <EmailProvider>
-        <PersonalEventDataProvider>
-          <SnackProvider>
-            <OpenPopupProvider>
-              <CalendarDataProvider>
-                {loading && <LoadingBar progress={progress} />}
-                <Component {...pageProps} />
-              </CalendarDataProvider>
-            </OpenPopupProvider>
-          </SnackProvider>
-        </PersonalEventDataProvider>
-      </EmailProvider >
+      <OptionsPopupProvider>
+        <PopupOptionsProvider>
+          <EmailProvider>
+            <PersonalEventDataProvider>
+              <SnackProvider>
+                <OpenPopupProvider>
+                  <CalendarDataProvider>
+                    {loading && <LoadingBar progress={progress} />}
+                    <Component {...pageProps} />
+                  </CalendarDataProvider>
+                </OpenPopupProvider>
+              </SnackProvider>
+            </PersonalEventDataProvider>
+          </EmailProvider >
+        </PopupOptionsProvider>
+      </OptionsPopupProvider>
     </AlertProvider>
   )
 

@@ -14,9 +14,15 @@ export const RESERVED_ROUTES = [
     'correcaoRedacao',
     'exercicioDiario',
     'cursinho',
-    'config', // cuidado com "admin/*", não funciona como wildcard aqui
+    'config',
+    'notificacoes',
     'alterarSenha',
-    'manifest.json'
+    'manifest.json',
+    'robots.txt',
+    'sitemap.xml',
+    'api',
+    'assets',
+    'favicon.ico',
 ];
 
 export function middleware(request: NextRequest) {

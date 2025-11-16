@@ -358,6 +358,7 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
                 <div className={styles.containerProfilePost} style={{ borderRadius: 2 }}>
                     {postagensProp?.length > 0 && postagensProp?.map((post, idx) => (
                         <UserPost
+                            userProfileUsername={authData?.username}
                             key={0 || idx}
                             id={post.id_postagem}
                             name={userProfile.nome}
