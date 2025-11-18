@@ -53,7 +53,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 
         const eventos = posts.status === 200 ? posts.data.data.map((post: PostsType) => ({
             ...post,
-            created_at: post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).getDate() === new Date().getDate() ? formatRelativeTime(post.created_at) : new Date(post.created_at).toLocaleDateString()) : "Data não informada"
+            created_at: post.created_at ? (typeof post.created_at === "string" ? post.created_at : new Date(post.created_at).getDate() === new Date().getDate() ? formatRelativeTime(post.created_at) : new Date(post.created_at).toLocaleDateString("pt-BR")) : "Data não informada"
         })) : []
 
         return {
