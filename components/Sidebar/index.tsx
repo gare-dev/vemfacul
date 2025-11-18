@@ -30,7 +30,6 @@ type NavItemsType = {
 }
 
 export default function Sidebar(props: props) {
-    // Constantes para manter consistência com CSS
     const MOBILE_BREAKPOINT = 1024;
     const HEIGHT_BREAKPOINT = 751;
     const ITEM_HEIGHT_LARGE = 56;
@@ -42,10 +41,9 @@ export default function Sidebar(props: props) {
     const [profileOptionsVisible, setProfileOptionsVisible] = useState<boolean>(false)
     const [isMissingLoginShown, setIsMissingLoginShown] = useState<boolean>(false)
     const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false)
-    const [innerHeight, setInnerHeight] = useState<number>(800); // Valor padrão mais realista
-    const [isClient, setIsClient] = useState<boolean>(false); // Para detectar hidratação
+    const [innerHeight, setInnerHeight] = useState<number>(800);
+    const [isClient, setIsClient] = useState<boolean>(false);
 
-    // Effect para detectar quando o componente está no cliente
     useEffect(() => {
         setIsClient(true);
         if (typeof window !== 'undefined') {
@@ -142,8 +140,8 @@ export default function Sidebar(props: props) {
     const handleNavigation = (path: string | undefined) => {
         if (path) {
             if (isMobile) {
-                setIsSidebarOpen(false); // Fecha o sidebar primeiro
-                setTimeout(() => router.push(path), 150); // Pequeno delay para animação
+                setIsSidebarOpen(false);
+                setTimeout(() => router.push(path), 150);
             } else {
                 router.push(path);
             }
