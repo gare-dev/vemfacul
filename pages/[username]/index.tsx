@@ -93,7 +93,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
                 ? post.created_at
                 : new Date(post.created_at).getDate() === new Date().getDate()
                     ? formatRelativeTime(post.created_at)
-                    : new Date(post.created_at).toLocaleDateString()
+                    : new Date(post.created_at).toLocaleDateString("pt-BR")
             : "Data não informada",
     }));
 
@@ -333,7 +333,7 @@ export default function UserProfile({ userProfileProp, postagensProp, authData, 
                         <p className={styles.description}>{userProfile.descricao}</p>
                         {(userProfile.nivel !== "Cursinho" && userProfile.username) && <h3 className={styles.questoesCorretas}> Questões corretas: {userProfile.acertosuser}</h3>}
 
-                      
+
 
                         {userProfile.username && <div className={styles.universityInterests}>
                             <h3 className={styles.interestsTitle}>{userProfile.nivel === "Aluno EM" ? "Vestibulares" : userProfile.nivel === "Cursinho" ? "" : "Matérias Lecionadas"}</h3>
