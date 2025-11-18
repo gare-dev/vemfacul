@@ -1,4 +1,3 @@
-import { FaCheck } from 'react-icons/fa';
 import { Course } from '@/types/coursetype';
 import styles from "@/styles/feedcourse.module.scss";
 import { MdLocationOn, MdMoneyOffCsred, MdOutlineAttachMoney, MdStar, MdStarBorder, MdStarHalf } from 'react-icons/md';
@@ -77,8 +76,8 @@ export const FeedCourseCard = ({
                         className={`${styles.btn} ${styles.follow}`}
                         aria-label="Follow course"
                     >
-                        <FaCheck />
-                        <span>Seguir</span>
+                        {/* <FaCheck /> */}
+                        {/* <span>Seguir</span> */}
                     </button>
                 </div>
             </div>

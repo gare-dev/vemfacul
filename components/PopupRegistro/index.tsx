@@ -211,9 +211,9 @@ export default function PopupRegistro(props: props) {
                             <div style={{ paddingTop: 20 }} className={styles.checkEmailDescription}>
                                 <p className={styles.checkEmailDescriptionText}>Para continuar o registro de sua conta, apenas clique no link e aguarde alguns segundos!</p>
                             </div>
-                            <div style={{ paddingTop: 20 }} className={styles.checkEmailDescription}>
+                            {/* <div style={{ paddingTop: 20 }} className={styles.checkEmailDescription}>
                                 <p className={styles.checkEmailDescriptionText}>Não conseguiu achar o email? {<span className={styles.reenviarText}>Reenviar email.</span>}</p>
-                            </div>
+                            </div> */}
                             <div onClick={handleClose} className={styles.closeDiv}>
                                 <span className={styles.closetext}>X</span>
                             </div>

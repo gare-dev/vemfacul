@@ -55,6 +55,7 @@ const MainTweet: React.FC<TweetProps> = ({
     const [postagemPai, setPostagemPai] = useState<Postagem | null>(null)
     const [answerText, setAnswerText] = useState('');
     const [, setError] = useState('');
+    const [disableButton, setDisableButton] = useState(false);
 
     const liked = () => {
         if (alredyLiked) {
@@ -75,21 +76,21 @@ const MainTweet: React.FC<TweetProps> = ({
         console.log('Tweet posted:', tweet);
     };
 
-const handleLike = async () => {
-    if (isLiked) {
-      const promise = await Api.unLinkePostagem(id);
-      if (promise.status === 201) {
-        setCurrentLikes(currentLikes - 1);
-        setIsLiked(false);
-      }
-    } else {
-      const promise = await Api.likePostagem(id);
-      if (promise.status === 201) {
-        setCurrentLikes(currentLikes + 1);
-        setIsLiked(true);
-      }
-    }
-  };
+    const handleLike = async () => {
+        if (isLiked) {
+            const promise = await Api.unLinkePostagem(id);
+            if (promise.status === 201) {
+                setCurrentLikes(currentLikes - 1);
+                setIsLiked(false);
+            }
+        } else {
+            const promise = await Api.likePostagem(id);
+            if (promise.status === 201) {
+                setCurrentLikes(currentLikes + 1);
+                setIsLiked(true);
+            }
+        }
+    };
     useEffect(() => {
         if (typeof id !== "string" && typeof id !== "number") {
             liked();
@@ -97,7 +98,6 @@ const handleLike = async () => {
     }, [])
 
     const handlePostComentario = async (e: React.FormEvent) => {
-
         if (answerText.trim()) {
             e.preventDefault();
             if (answerText.length === 0) {
@@ -107,7 +107,7 @@ const handleLike = async () => {
                 return setError("O tweet não pode exceder 280 caracteres.");
             }
             try {
-
+                setDisableButton(true);
                 const response = await Api.createComentario(id, answerText);
                 console.log('api')
                 if (response.status === 201) {
@@ -133,6 +133,8 @@ const handleLike = async () => {
                         setError("Ocorreu um erro ao postar o tweet. Tente novamente mais tarde.");
                     }
                 }
+            } finally {
+                setDisableButton(false);
             }
         }
     };
@@ -155,6 +157,8 @@ const handleLike = async () => {
                 {/* Profile Image */}
                 <div className={styles.profileImageContainer}>
                     <img
+                        onClick={(e) => { e.stopPropagation(); router.push(`/${username}`) }}
+                        style={{ 'cursor': 'pointer' }}
                         src={profileImage}
                         alt={`${name}'s profile`}
                         className={styles.profileImage}
@@ -248,9 +252,8 @@ const handleLike = async () => {
                     <div onClick={(e) => e.stopPropagation()} className={styles.respondePost}>
                         <img src={userImage} alt="User Avatar" className={styles.avatar} />
                         <input value={answerText} onChange={(e) => { setAnswerText(e.target.value) }} type="text" placeholder='Poste sua resposta' className={styles.input} />
-                        <button onClick={(e) => {
+                        <button disabled={disableButton} onClick={(e) => {
                             handlePostComentario(e);
-
                             e.stopPropagation();
                         }} className={styles.submitButton}>Enviar</button>
                     </div>
