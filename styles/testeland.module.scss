@@ -1,0 +1,728 @@
+// Paleta de Cores
+$primary: #001ECB;
+$secondary: #778CFE;
+$dark-text: #1a1a1a;
+$light-text: #666;
+$bg-light: #f8f9fc;
+$white: #ffffff;
+$card-border: rgba(0, 0, 0, 0.08);
+
+.container {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: $dark-text;
+    background-color: $white;
+    overflow-x: hidden;
+}
+
+// --- Header ---
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 5%;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    border-bottom: 1px solid $card-border;
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 0rem;
+        font-weight: 700;
+        font-size: 1.25rem;
+        color: $primary;
+
+        .logoImg {
+            height: 50px; // Ajuste conforme proporção da sua imagem
+            width: auto;
+            object-fit: contain;
+        }
+    }
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+
+    a {
+        text-decoration: none;
+        color: $light-text;
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: color 0.2s;
+
+        &:hover {
+            color: $primary;
+        }
+    }
+
+    .authButtons {
+        display: flex;
+        gap: 1rem;
+        margin-left: 1rem;
+        align-items: center; // Garante alinhamento vertical
+
+    }
+}
+
+.btnLogin {
+    background: none;
+    border: none;
+    color: $primary;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+
+    &:hover {
+        text-decoration: underline;
+    }
+
+
+}
+
+.mobileMenuBtn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+// --- Hero Section ---
+.hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    padding: 140px 5% 60px;
+    align-items: center;
+    background: linear-gradient(135deg, #fff 0%, $bg-light 100%);
+}
+
+.heroContent {
+    .badge {
+        background-color: rgba($secondary, 0.15);
+        color: $primary;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        display: inline-block;
+        margin-bottom: 1.5rem;
+    }
+
+    .slogan {
+        font-size: 3.5rem;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+        letter-spacing: -0.02em;
+        color: $dark-text;
+
+        .highlight {
+            color: $secondary;
+            position: relative;
+            font-weight: 700;
+        }
+    }
+
+    .subtext {
+        font-size: 1.125rem;
+        color: $light-text;
+        margin-bottom: 2.5rem;
+        max-width: 500px;
+        line-height: 1.6;
+    }
+}
+
+.heroActions {
+    display: flex;
+    gap: 1rem;
+
+    button {
+        padding: 1rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: all 0.2s;
+    }
+
+    .ctaPrimary {
+        background-color: $primary;
+        color: $white;
+        border: 1px solid $primary;
+
+        &:hover {
+            background-color: darken($primary, 5%);
+        }
+    }
+
+    .ctaSecondary {
+        background-color: transparent;
+        color: $primary;
+        border: 1px solid $primary;
+
+        &:hover {
+            background-color: rgba($primary, 0.05);
+        }
+    }
+}
+
+.heroVisual {
+    position: relative;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .heroImage {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; // Garante que a imagem cubra a área sem distorcer
+        border-radius: 24px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); // Sombra suave para dar destaque
+    }
+
+
+    .floatingCard {
+        position: absolute;
+        top: 50%;
+        left: -20px;
+        transform: translateY(-50%);
+        background: $white;
+        padding: 1.5rem;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        border: 1px solid $card-border;
+
+        strong {
+            display: block;
+            font-size: 0.95rem;
+        }
+
+        p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: $light-text;
+        }
+    }
+}
+
+// --- Calendar Section (NOVO) ---
+.calendarSection {
+    padding: 4rem 5%;
+    background-color: $primary; // Fundo azul para destaque
+    color: $white;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.calendarHeader {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+
+    .calendarIconWrapper {
+        background-color: rgba(255, 255, 255, 0.2);
+        padding: 1rem;
+        border-radius: 50%;
+        display: flex;
+    }
+
+    h2 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        line-height: 1.5;
+
+        strong {
+            color: lighten($secondary, 20%);
+        }
+    }
+}
+
+.calendarContainer {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    background: $white;
+    border-radius: 16px;
+    padding: 1rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    min-height: 400px; // Altura mínima para o componente
+
+    .calendarComponentPlaceholder {
+        width: 100%;
+        height: 100%;
+        min-height: 380px;
+        border: 2px dashed #ddd;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #999;
+        font-weight: 600;
+    }
+}
+
+// --- Top Rated Section (NOVO) ---
+.topRatedSection {
+    padding: 6rem 5%;
+    text-align: center;
+    background-color: $bg-light;
+
+    h2 {
+        font-size: 2rem;
+        color: $primary;
+        margin-bottom: 0.5rem;
+    }
+
+    .sectionSubtitle {
+        color: $light-text;
+        margin-bottom: 3rem;
+    }
+}
+
+.cursinhoGrid {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+
+    .cursinhoCard {
+        background: $white;
+        border-radius: 16px;
+        width: 320px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s, box-shadow 0.3s;
+        border: 1px solid $card-border;
+        text-align: left;
+
+        &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .cursinhoHeader {
+            background: linear-gradient(to right, rgba($secondary, 0.1), rgba($primary, 0.05));
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+
+            .cursinhoLogo {
+                width: 64px;
+                height: 64px;
+                border-radius: 12px;
+                background: $white;
+                object-fit: cover;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .ratingBadge {
+                background: $white;
+                padding: 0.3rem 0.6rem;
+                border-radius: 20px;
+                display: flex;
+                align-items: center;
+                gap: 0.3rem;
+                font-weight: bold;
+                font-size: 0.9rem;
+                color: $dark-text;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            }
+        }
+
+        .cursinhoInfo {
+            padding: 1.5rem;
+
+            h3 {
+                margin: 0 0 0.5rem 0;
+                color: $dark-text;
+                font-size: 1.25rem;
+            }
+
+            .location {
+                display: flex;
+                align-items: center;
+                gap: 0.4rem;
+                color: $light-text;
+                font-size: 0.9rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .btnDetails {
+                width: 100%;
+                padding: 0.8rem;
+                background-color: transparent;
+                border: 1px solid $secondary;
+                color: $primary;
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s;
+
+                &:hover {
+                    background-color: $primary;
+                    color: $white;
+                    border-color: $primary;
+                }
+            }
+        }
+    }
+}
+
+// --- Features & Testimonials ---
+.features {
+    padding: 6rem 5%;
+    text-align: center;
+
+    h2 {
+        font-size: 2rem;
+        margin-bottom: 3rem;
+        color: $primary;
+    }
+}
+
+.featureGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+
+    .card {
+        background: $white;
+        padding: 2rem;
+        border-radius: 16px;
+        border: 1px solid $card-border;
+        text-align: left;
+
+        .iconBox {
+            width: 50px;
+            height: 50px;
+            background-color: rgba($secondary, 0.15);
+            color: $primary;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+        }
+
+        p {
+            color: $light-text;
+            line-height: 1.5;
+        }
+    }
+}
+
+.testimonials {
+    background-color: $bg-light;
+    padding: 6rem 5%;
+
+    h2 {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 3rem;
+        color: $primary;
+    }
+}
+
+.testimonialsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+
+    .testimonialCard {
+        background: $white;
+        padding: 2.5rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+
+        p {
+            font-style: italic;
+            color: #444;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+
+            .avatar {
+                width: 40px;
+                height: 40px;
+                background-color: $secondary;
+                color: $white;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                font-size: 0.9rem;
+            }
+
+            strong {
+                display: block;
+                font-size: 0.95rem;
+                color: $primary;
+            }
+
+            span {
+                font-size: 0.85rem;
+                color: $light-text;
+            }
+        }
+    }
+}
+
+// --- Footer ---
+.footer {
+    background-color: darken($primary, 5%);
+    color: $white;
+    padding: 2rem 5%;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+    .footerContent {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+
+            .logoImgFooter {
+                height: 32px;
+                width: auto;
+                filter: brightness(0) invert(1); // Torna a logo branca
+            }
+        }
+
+        p {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+    }
+}
+
+.finalCta {
+    padding: 5rem 5%;
+    text-align: center;
+    margin-bottom: 100px;
+    background-color: $primary;
+    color: $white;
+
+    h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin-bottom: 2rem;
+    }
+
+    button {
+        background-color: $white;
+        color: $primary;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: transform 0.2s;
+
+        &:hover {
+            transform: scale(1.05);
+        }
+    }
+}
+
+
+// --- Responsive ---
+@media (max-width: 768px) {
+    .header {
+        padding: 1rem 5%;
+    }
+
+    .mobileMenuBtn {
+        display: block;
+    }
+
+    .nav {
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        background: $white;
+        padding: 2rem;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        display: none;
+
+        &.navOpen {
+            display: flex;
+        }
+
+        .authButtons {
+            flex-direction: column;
+            width: 100%;
+            margin-left: 0;
+            align-items: center; // Garante alinhamento vertical
+
+
+            button {
+                width: 100%;
+            }
+        }
+    }
+
+    .hero {
+        grid-template-columns: 1fr;
+        padding-top: 100px;
+        text-align: center;
+        gap: 2rem;
+
+        .slogan {
+            font-size: 2.5rem;
+        }
+
+        .subtext {
+            margin: 0 auto 2rem;
+        }
+
+        .heroActions {
+            justify-content: center;
+        }
+
+        .floatingCard {
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+        }
+    }
+
+    .footerContent {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+
+}
+
+.registerDropdown {
+    position: relative; // Essencial para o menu absoluto funcionar
+
+    .btnRegister {
+        background-color: $primary;
+        color: $white;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        display: flex;
+        align-items: center; // Alinha texto e ícone da seta
+
+        &:hover {
+            background-color: darken($primary, 10%);
+        }
+    }
+
+    // NOVO: Estilo do Menu Flutuante
+    .dropdownMenu {
+        position: absolute;
+        top: calc(100% + 10px); // 10px abaixo do botão
+        right: 0;
+        width: 220px;
+        background-color: $white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        z-index: 1100;
+        animation: fadeIn 0.2s ease-out;
+
+        &::before {
+            // Triângulo pontinha do menu (opcional, detalhe estético)
+            content: '';
+            position: absolute;
+            top: -6px;
+            right: 20px;
+            width: 12px;
+            height: 12px;
+            background: $white;
+            transform: rotate(45deg);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            border-left: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .dropdownItem {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem 1rem;
+            text-decoration: none;
+            color: $dark-text;
+            border-radius: 8px;
+            transition: background 0.2s;
+            font-size: 0.95rem;
+            font-weight: 500;
+
+            &:hover {
+                background-color: rgba($secondary, 0.1);
+                color: $primary;
+            }
+
+            svg {
+                color: $secondary;
+            }
+        }
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
