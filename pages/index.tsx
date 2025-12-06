@@ -136,7 +136,10 @@ export default function LandingPage({ CourseCard, Events }: Props) {
             </p>
 
             <div className={styles.heroActions}>
-              <button onClick={() => setIsDropdownOpen(!isDropdownOpen)} className={styles.ctaPrimary}>Sou Aluno</button>
+              <button onClick={() => {
+                setSelectedOption('Cadastro');
+                setIsOpen(true);
+              }} className={styles.ctaPrimary}>Sou Aluno</button>
               <button onClick={() => { router.push('/cursinho/cadastro') }} className={styles.ctaSecondary}>Sou Cursinho</button>
             </div>
           </div>
